@@ -13,14 +13,17 @@
       "request": 1,
       "reason": "completed",
       "summary": "Read the demo value.",
+      "summary_truncated": false,
       "calls": [
         {
           "call_id": "demo-1",
           "name": "echo",
-          "arguments": "{\"value\":\"ready\"}"
+          "arguments": "{\"value\":\"ready\"}",
+          "arguments_truncated": false
         }
       ],
-      "usage": null
+      "usage": null,
+      "elapsed_seconds": 8.124858140945435e-6
     },
     {
       "event": "tool",
@@ -28,21 +31,28 @@
       "call_id": "demo-1",
       "name": "echo",
       "arguments": "{\"value\":\"ready\"}",
-      "output_summary": "{\"error\": {\"category\": \"execution_failed\", \"message\": \"Execution of tool 'echo' failed.\"}}"
+      "arguments_truncated": false,
+      "output_summary": "{\"error\": {\"category\": \"execution_failed\", \"message\": \"Execution of tool 'echo' failed.\"}}",
+      "output_summary_truncated": false,
+      "output_bytes": 90,
+      "elapsed_seconds": 7.229112088680267e-5
     },
     {
       "event": "model",
       "request": 2,
       "reason": "completed",
       "summary": "Retry the failed demo tool.",
+      "summary_truncated": false,
       "calls": [
         {
           "call_id": "demo-2",
           "name": "echo",
-          "arguments": "{\"value\":\"ready\"}"
+          "arguments": "{\"value\":\"ready\"}",
+          "arguments_truncated": false
         }
       ],
-      "usage": null
+      "usage": null,
+      "elapsed_seconds": 9.541399776935577e-6
     },
     {
       "event": "tool",
@@ -50,20 +60,47 @@
       "call_id": "demo-2",
       "name": "echo",
       "arguments": "{\"value\":\"ready\"}",
-      "output_summary": "{\"value\": \"ready\"}"
+      "arguments_truncated": false,
+      "output_summary": "{\"value\": \"ready\"}",
+      "output_summary_truncated": false,
+      "output_bytes": 18,
+      "elapsed_seconds": 2.0625069737434387e-5
     },
     {
       "event": "model",
       "request": 3,
       "reason": "completed",
       "summary": "Offline runtime demonstration completed.",
+      "summary_truncated": false,
       "calls": [],
-      "usage": null
+      "usage": null,
+      "elapsed_seconds": 5.083158612251282e-6
     },
     {
       "event": "stop",
       "status": "completed",
       "reason": "model_finished"
     }
-  ]
+  ],
+  "run_id": "d3a8cf43-bc5d-4295-985a-89abc33324a1",
+  "data": null,
+  "question": null,
+  "model_retries": 0,
+  "output_repairs": 0,
+  "elapsed_seconds": 0.0003542080521583557,
+  "usage": null,
+  "usage_complete": false,
+  "model": null,
+  "limits": {
+    "max_tool_rounds": 2,
+    "max_model_requests": 4,
+    "max_tool_executions": 4,
+    "max_model_retries": 2,
+    "max_output_repairs": 1,
+    "max_context_bytes": 128000,
+    "max_tool_output_bytes": 32000,
+    "max_run_seconds": 120.0,
+    "retry_base_seconds": 0.5,
+    "max_retry_delay_seconds": 30.0
+  }
 }

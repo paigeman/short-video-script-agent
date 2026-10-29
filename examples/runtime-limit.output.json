@@ -13,14 +13,17 @@
       "request": 1,
       "reason": "completed",
       "summary": "Read the demo value.",
+      "summary_truncated": false,
       "calls": [
         {
           "call_id": "demo-1",
           "name": "echo",
-          "arguments": "{\"value\":\"ready\"}"
+          "arguments": "{\"value\":\"ready\"}",
+          "arguments_truncated": false
         }
       ],
-      "usage": null
+      "usage": null,
+      "elapsed_seconds": 8.249655365943909e-6
     },
     {
       "event": "tool",
@@ -28,21 +31,28 @@
       "call_id": "demo-1",
       "name": "echo",
       "arguments": "{\"value\":\"ready\"}",
-      "output_summary": "{\"value\": \"ready\"}"
+      "arguments_truncated": false,
+      "output_summary": "{\"value\": \"ready\"}",
+      "output_summary_truncated": false,
+      "output_bytes": 18,
+      "elapsed_seconds": 2.8708018362522125e-5
     },
     {
       "event": "model",
       "request": 2,
       "reason": "completed",
       "summary": "Continue calling to exercise the configured limit.",
+      "summary_truncated": false,
       "calls": [
         {
           "call_id": "demo-2",
           "name": "echo",
-          "arguments": "{\"value\":\"ready\"}"
+          "arguments": "{\"value\":\"ready\"}",
+          "arguments_truncated": false
         }
       ],
-      "usage": null
+      "usage": null,
+      "elapsed_seconds": 7.332302629947662e-6
     },
     {
       "event": "tool",
@@ -50,26 +60,54 @@
       "call_id": "demo-2",
       "name": "echo",
       "arguments": "{\"value\":\"ready\"}",
-      "output_summary": "{\"value\": \"ready\"}"
+      "arguments_truncated": false,
+      "output_summary": "{\"value\": \"ready\"}",
+      "output_summary_truncated": false,
+      "output_bytes": 18,
+      "elapsed_seconds": 1.8333084881305695e-5
     },
     {
       "event": "model",
       "request": 3,
       "reason": "completed",
       "summary": "Continue calling to exercise the configured limit.",
+      "summary_truncated": false,
       "calls": [
         {
           "call_id": "demo-3",
           "name": "echo",
-          "arguments": "{\"value\":\"ready\"}"
+          "arguments": "{\"value\":\"ready\"}",
+          "arguments_truncated": false
         }
       ],
-      "usage": null
+      "usage": null,
+      "elapsed_seconds": 4.8745423555374146e-6
     },
     {
       "event": "stop",
       "status": "incomplete",
       "reason": "max_tool_rounds_reached"
     }
-  ]
+  ],
+  "run_id": "0fef6230-b89e-4a35-8507-c16f9962fdc9",
+  "data": null,
+  "question": null,
+  "model_retries": 0,
+  "output_repairs": 0,
+  "elapsed_seconds": 0.00030579231679439545,
+  "usage": null,
+  "usage_complete": false,
+  "model": null,
+  "limits": {
+    "max_tool_rounds": 2,
+    "max_model_requests": 4,
+    "max_tool_executions": 4,
+    "max_model_retries": 2,
+    "max_output_repairs": 1,
+    "max_context_bytes": 128000,
+    "max_tool_output_bytes": 32000,
+    "max_run_seconds": 120.0,
+    "retry_base_seconds": 0.5,
+    "max_retry_delay_seconds": 30.0
+  }
 }

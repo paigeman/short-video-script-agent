@@ -6,6 +6,7 @@ class ToolExecutionErrorCategory(StrEnum):
     UNKNOWN_TOOL = "unknown_tool"
     INVALID_ARGUMENTS = "invalid_arguments"
     EXECUTION_FAILED = "execution_failed"
+    OUTPUT_TOO_LARGE = "output_too_large"
 
 
 @dataclass(frozen=True)

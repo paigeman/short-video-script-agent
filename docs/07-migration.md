@@ -49,3 +49,7 @@ def run_request(prompt, registered_tools):
 ```
 
 当前验证使用模型替身与模拟 HTTP，没有加载个人密钥或发起真实生成请求。业务场景仍需按 [评估计划](03-evaluation.md) 完成。
+
+## 后续通用扩展
+
+初次迁移之后补充的输出修复、暂停与继续、重试、运行控制和统计在本项目中实现，未从来源仓库整套复制。当前接口及验证边界见 [通用 Agent 能力](08-runtime-capabilities.md)。

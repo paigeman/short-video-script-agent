@@ -2,7 +2,7 @@
 
 第 4 题「短视频脚本 Agent」项目。
 
-**当前已完成基础 Agent 运行时迁移，包括模型适配、工具执行、受限循环和离线测试。短视频脚本生成、素材检索、时长及品牌规则检查尚未实现，也未进行真实模型业务验收。**
+**当前已完成基础 Agent 运行时迁移，包括模型适配、工具执行、受限循环、输出校验与修复、补充信息后的继续执行、失败恢复和离线测试。短视频脚本生成、素材检索、时长及品牌规则检查尚未实现，也未进行真实模型业务验收。**
 
 ## 环境与安装
 
@@ -22,10 +22,11 @@ uv sync --locked
 uv run --locked python -m src.agent.demo --scenario normal
 uv run --locked python -m src.agent.demo --scenario tool-failure
 uv run --locked python -m src.agent.demo --scenario limit
+uv run --locked python -m src.agent.demo --scenario capabilities
 uv run --locked python -m unittest discover -s tests -v
 ```
 
-输出包含状态、调用计数和实际执行 Trace，明确标注 `offline_demo`。三个场景分别演示正常结束、工具失败后继续执行、达到上限后返回未完成。这些记录验证运行机制，不能证明真实模型决策或脚本生成效果。
+输出包含状态、调用计数和实际执行 Trace，明确标注 `offline_demo`。前三个场景分别演示正常结束、工具失败后继续执行、达到上限后返回未完成。`capabilities` 串联提问、继续执行、结构修复和临时错误重试，并明确标记合成用户回答。这些记录验证运行机制，不能证明真实模型决策或脚本生成效果。
 
 原短视频输入入口保留：
 
@@ -41,13 +42,17 @@ uv run --locked python -m src.main --input examples/normal.input.json
 
 适配器已通过真实 SDK 加模拟 HTTP 的离线测试，但没有发送真实生成请求。目标服务需要支持该适配器使用的 Responses API 字段，不能仅凭“兼容接口”认定所有服务都支持。运行时接入示例见 [迁移说明](docs/07-migration.md)。
 
+通用能力、默认限制和业务接入示例见 [Agent 能力说明](docs/08-runtime-capabilities.md)。本地工具超时与取消采用协作方式，内存中的暂停状态不跨进程保存。
+
 ## 代码组织
 
 ```text
 src/
 ├── main.py                 # 尚待实现的短视频业务入口
 ├── agent/
-│   ├── runner.py           # 独立循环、结果状态和 Trace
+│   ├── runner.py           # 循环、输出校验与暂停／继续
+│   ├── control.py          # 资源策略与取消信号
+│   ├── state.py            # 结果、统计与内存继续执行句柄
 │   └── demo.py             # 明确标记的离线演示
 ├── llm/
 │   ├── types.py            # 消息、请求、响应和客户端协议
@@ -86,6 +91,8 @@ npm test
 | 取舍及后续工作       | [复盘](docs/05-retrospective.md)   |
 | 环境、格式化和 lint  | [开发指南](docs/06-development.md) |
 | 远程来源和迁移范围   | [迁移说明](docs/07-migration.md)   |
+
+通用 Agent 的完成状态只代表运行与配置的结构校验通过，业务验收由上层负责。
 
 ## 来源与交付边界
 

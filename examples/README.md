@@ -17,6 +17,7 @@
 - [正常执行](runtime-normal.output.json)：离线模型替身调用本地工具后结束。
 - [工具失败后继续执行](runtime-tool-failure.output.json)：观察错误结果后再次调用。
 - [达到执行上限](runtime-limit.output.json)：保留已有结果并明确返回未完成。
-- [实际测试结果](runtime-test-results.txt)：46 项离线测试的完整执行记录。
+- [通用能力串联](runtime-capabilities.output.json)：提问、合成回答、继续执行、输出修复和模型错误重试。
+- [实际测试结果](runtime-test-results.txt)：80 项离线测试的完整执行记录。
 
 生成命令及结果解释见 [评估](../docs/03-evaluation.md)。这些是基础运行时演示，与上表的短视频业务输入分别记录。

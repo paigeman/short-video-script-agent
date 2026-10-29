@@ -13,14 +13,17 @@
       "request": 1,
       "reason": "completed",
       "summary": "Read the demo value.",
+      "summary_truncated": false,
       "calls": [
         {
           "call_id": "demo-1",
           "name": "echo",
-          "arguments": "{\"value\":\"ready\"}"
+          "arguments": "{\"value\":\"ready\"}",
+          "arguments_truncated": false
         }
       ],
-      "usage": null
+      "usage": null,
+      "elapsed_seconds": 8.249655365943909e-6
     },
     {
       "event": "tool",
@@ -28,20 +31,47 @@
       "call_id": "demo-1",
       "name": "echo",
       "arguments": "{\"value\":\"ready\"}",
-      "output_summary": "{\"value\": \"ready\"}"
+      "arguments_truncated": false,
+      "output_summary": "{\"value\": \"ready\"}",
+      "output_summary_truncated": false,
+      "output_bytes": 18,
+      "elapsed_seconds": 2.9750168323516846e-5
     },
     {
       "event": "model",
       "request": 2,
       "reason": "completed",
       "summary": "Offline runtime demonstration completed.",
+      "summary_truncated": false,
       "calls": [],
-      "usage": null
+      "usage": null,
+      "elapsed_seconds": 7.082708179950714e-6
     },
     {
       "event": "stop",
       "status": "completed",
       "reason": "model_finished"
     }
-  ]
+  ],
+  "run_id": "180dd981-966d-4dfd-9248-e9c5068fcbf9",
+  "data": null,
+  "question": null,
+  "model_retries": 0,
+  "output_repairs": 0,
+  "elapsed_seconds": 0.00019758380949497223,
+  "usage": null,
+  "usage_complete": false,
+  "model": null,
+  "limits": {
+    "max_tool_rounds": 2,
+    "max_model_requests": 4,
+    "max_tool_executions": 4,
+    "max_model_retries": 2,
+    "max_output_repairs": 1,
+    "max_context_bytes": 128000,
+    "max_tool_output_bytes": 32000,
+    "max_run_seconds": 120.0,
+    "retry_base_seconds": 0.5,
+    "max_retry_delay_seconds": 30.0
+  }
 }

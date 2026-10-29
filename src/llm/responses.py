@@ -3,10 +3,18 @@
 import math
 import os
 from copy import deepcopy
+from datetime import UTC, datetime
+from email.utils import parsedate_to_datetime
 from typing import Self
 
 import httpx
-from openai import APIConnectionError, APIStatusError, APITimeoutError, OpenAI
+from openai import (
+    APIConnectionError,
+    APIResponseValidationError,
+    APIStatusError,
+    APITimeoutError,
+    OpenAI,
+)
 
 from src.llm.types import (
     Message,
@@ -17,6 +25,29 @@ from src.llm.types import (
     ProviderItem,
 )
 from src.tools.protocol import ToolCallRequest, ToolCallResult
+
+
+def _retry_after(headers: httpx.Headers) -> float | None:
+    value = headers.get("retry-after-ms")
+    if value is not None:
+        try:
+            delay = float(value) / 1000
+            if math.isfinite(delay) and delay >= 0:
+                return delay
+        except ValueError:
+            pass
+    value = headers.get("retry-after")
+    if value is None:
+        return None
+    try:
+        delay = float(value)
+    except ValueError:
+        try:
+            date = parsedate_to_datetime(value)
+            delay = (date - datetime.now(UTC)).total_seconds()
+        except (TypeError, ValueError, OverflowError):
+            return None
+    return max(0, delay) if math.isfinite(delay) else None
 
 
 def to_responses_item(item: ModelInputItem) -> dict[str, object]:
@@ -57,6 +88,7 @@ class ResponsesClient:
         if not math.isfinite(timeout_seconds) or timeout_seconds <= 0:
             raise ValueError("timeout_seconds must be finite and positive")
         self.model = model
+        self.timeout_seconds = timeout_seconds
         self._client = OpenAI(
             api_key=api_key,
             base_url=base_url,
@@ -82,6 +114,16 @@ class ResponsesClient:
             "store": False,
             "include": ["reasoning.encrypted_content"],
         }
+        if request.timeout_seconds is not None:
+            timeout = request.timeout_seconds
+            if (
+                isinstance(timeout, bool)
+                or not isinstance(timeout, (int, float))
+                or not math.isfinite(timeout)
+                or timeout <= 0
+            ):
+                raise ValueError("timeout_seconds must be finite and positive")
+            options["timeout"] = min(self.timeout_seconds, timeout)
         if request.tools:
             options["tools"] = [
                 {
@@ -97,12 +139,47 @@ class ResponsesClient:
         try:
             response = self._client.responses.create(**options)
         except APITimeoutError:
-            raise ModelCallError("model_timeout") from None
+            raise ModelCallError("model_timeout", retryable=True) from None
         except APIConnectionError:
-            raise ModelCallError("connection_failed") from None
+            raise ModelCallError("connection_failed", retryable=True) from None
         except APIStatusError as exc:
-            raise ModelCallError(f"http_{exc.status_code}") from None
+            permanent_codes = {
+                "insufficient_quota",
+                "billing_hard_limit_reached",
+                "organization_spend_limit_exceeded",
+                "project_spend_limit_exceeded",
+                "organization_usage_limit_exceeded",
+                "billing_not_active",
+            }
+            retryable = (
+                exc.status_code in {408, 409, 429, 500, 502, 503, 504}
+                and (exc.code is None or isinstance(exc.code, str))
+                and exc.code not in permanent_codes
+                and exc.type != "insufficient_quota"
+                and exc.response.headers.get("x-should-retry", "").lower() != "false"
+            )
+            raise ModelCallError(
+                f"http_{exc.status_code}",
+                retryable=retryable,
+                retry_after=_retry_after(exc.response.headers),
+            ) from None
+        except (APIResponseValidationError, ValueError):
+            raise ModelCallError("invalid_response") from None
 
+        try:
+            return self._decode(response)
+        except (AttributeError, TypeError, ValueError, KeyError):
+            raise ModelCallError("invalid_response") from None
+
+    @staticmethod
+    def _decode(response) -> ModelResponse:
+        if not isinstance(response.output, list):
+            raise ModelCallError("invalid_response")
+        if any(
+            item.type not in {"message", "reasoning", "function_call"}
+            for item in response.output
+        ):
+            raise ModelCallError("unsupported_output_item")
         calls = [
             ToolCallRequest(item.call_id, item.name, item.arguments)
             for item in response.output
@@ -130,6 +207,12 @@ class ResponsesClient:
             for part in item.content
         ):
             reason = "model_refused"
+        if response.usage is not None and any(
+            type(getattr(response.usage, key)) is not int
+            or getattr(response.usage, key) < 0
+            for key in ("input_tokens", "output_tokens", "total_tokens")
+        ):
+            raise ModelCallError("invalid_response")
         return ModelResponse(
             text=response.output_text,
             reason=reason,

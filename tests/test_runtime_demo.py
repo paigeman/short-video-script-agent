@@ -6,6 +6,25 @@ from pathlib import Path
 
 
 class RuntimeDemoTests(unittest.TestCase):
+    def test_capabilities_cli_preserves_pause_and_final_evidence(self):
+        process = subprocess.run(
+            [sys.executable, "-m", "src.agent.demo", "--scenario", "capabilities"],
+            cwd=Path(__file__).resolve().parents[1],
+            capture_output=True,
+            text=True,
+            timeout=10,
+            check=True,
+        )
+        output = json.loads(process.stdout)
+        self.assertEqual(output["paused"]["status"], "needs_input")
+        final = output["final"]
+        self.assertEqual(final["status"], "completed")
+        self.assertEqual(final["data"], {"value": 7})
+        self.assertEqual((final["model_requests"], final["tool_executions"]), (5, 1))
+        self.assertEqual((final["output_repairs"], final["model_retries"]), (1, 1))
+        self.assertEqual(output["paused"]["run_id"], final["run_id"])
+        self.assertNotIn("checkpoint", process.stdout)
+
     def test_actual_cli_runs_all_offline_scenarios(self):
         cases = [
             ("normal", "completed", 1),

@@ -29,6 +29,7 @@ class ModelRequest:
     input: list[ModelInputItem]
     tools: list[ToolDefinition] = field(default_factory=list)
     max_output_tokens: int = 2048
+    timeout_seconds: float | None = None
 
 
 @dataclass
@@ -43,8 +44,12 @@ class ModelResponse:
 class ModelCallError(RuntimeError):
     """Sanitized provider failure that the runner can report safely."""
 
-    def __init__(self, code: str):
+    def __init__(
+        self, code: str, *, retryable: bool = False, retry_after: float | None = None
+    ):
         self.code = code
+        self.retryable = retryable
+        self.retry_after = retry_after
         super().__init__(code)
 
 

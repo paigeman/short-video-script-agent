@@ -14,7 +14,7 @@ Codex 参考 [FadeDemo/AI-demo](https://github.com/FadeDemo/AI-demo) 配置了 P
 
 按用户确定的范围，Codex 从 [FadeDemo/AI-demo](https://github.com/FadeDemo/AI-demo) 的固定提交迁移工具定义、协议、执行与测试，提取同步模型适配和循环，并补充 Trace、离线演示及集成验证。具体文件、裁剪范围和新写部分见 [迁移说明](07-migration.md)。
 
-当前 46 项测试通过，证据见 [实际测试记录](../examples/runtime-test-results.txt)。未读取原项目的个人密钥，也未执行真实模型业务评估。复用代码与 AI 辅助内容应在后续个人贡献说明中如实区分。
+初次迁移的 46 项测试通过，证据见 [实际测试记录](../examples/runtime-test-results.txt)。未读取原项目的个人密钥，也未执行真实模型业务评估。复用代码与 AI 辅助内容应在后续个人贡献说明中如实区分。
 
 ## 后续记录方式
 
@@ -26,3 +26,7 @@ Codex 参考 [FadeDemo/AI-demo](https://github.com/FadeDemo/AI-demo) 配置了 P
 - 验证命令、实际结果和对应证据文件。
 
 当前尚未填写个人实现、修改或验证贡献。后续须根据真实工作补充，不能将 AI 产出直接记为个人独立完成，也不能把计划验证记为实际结果。无需提交全部聊天记录。
+
+## 通用能力补全
+
+Codex 在已有循环上补充通用 Schema 校验与有限修复、用户补充信息后的继续执行、临时模型错误重试、时间及上下文控制、取消和运行统计；使用现有依赖，未增加短视频业务逻辑。通过模型替身、模拟 HTTP、可控时钟和真实离线 CLI 验证，当前 80 项测试结果见 [记录](../examples/runtime-test-results.txt)。

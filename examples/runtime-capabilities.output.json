@@ -1,0 +1,197 @@
+{
+  "mode": "offline_demo",
+  "scenario": "capabilities",
+  "answer_source": "synthetic demo answer, not a human response",
+  "paused": {
+    "status": "needs_input",
+    "reason": "user_input_required",
+    "text": "",
+    "model_requests": 1,
+    "tool_rounds": 1,
+    "tool_executions": 0,
+    "trace": [
+      {
+        "event": "model",
+        "request": 1,
+        "reason": "completed",
+        "summary": "",
+        "summary_truncated": false,
+        "calls": [
+          {
+            "call_id": "question-1",
+            "name": "ask_user",
+            "arguments": "{\"question\":\"Which synthetic integer should I use?\"}",
+            "arguments_truncated": false
+          }
+        ],
+        "usage": null,
+        "elapsed_seconds": 9.125098586082458e-6
+      },
+      {
+        "event": "clarification",
+        "call_id": "question-1",
+        "question": "Which synthetic integer should I use?"
+      },
+      {
+        "event": "stop",
+        "status": "needs_input",
+        "reason": "user_input_required"
+      }
+    ],
+    "run_id": "8af800fb-5dd4-4dec-bc37-5cf78169016c",
+    "data": null,
+    "question": "Which synthetic integer should I use?",
+    "model_retries": 0,
+    "output_repairs": 0,
+    "elapsed_seconds": 0.0004765838384628296,
+    "usage": null,
+    "usage_complete": false,
+    "model": "offline-capabilities-model",
+    "limits": {
+      "max_tool_rounds": 3,
+      "max_model_requests": 6,
+      "max_tool_executions": 8,
+      "max_model_retries": 2,
+      "max_output_repairs": 1,
+      "max_context_bytes": 128000,
+      "max_tool_output_bytes": 32000,
+      "max_run_seconds": 120.0,
+      "retry_base_seconds": 0,
+      "max_retry_delay_seconds": 30.0
+    }
+  },
+  "final": {
+    "status": "completed",
+    "reason": "model_finished",
+    "text": "{\"value\": 7}",
+    "model_requests": 5,
+    "tool_rounds": 2,
+    "tool_executions": 1,
+    "trace": [
+      {
+        "event": "model",
+        "request": 1,
+        "reason": "completed",
+        "summary": "",
+        "summary_truncated": false,
+        "calls": [
+          {
+            "call_id": "question-1",
+            "name": "ask_user",
+            "arguments": "{\"question\":\"Which synthetic integer should I use?\"}",
+            "arguments_truncated": false
+          }
+        ],
+        "usage": null,
+        "elapsed_seconds": 9.125098586082458e-6
+      },
+      {
+        "event": "clarification",
+        "call_id": "question-1",
+        "question": "Which synthetic integer should I use?"
+      },
+      {
+        "event": "stop",
+        "status": "needs_input",
+        "reason": "user_input_required"
+      },
+      {
+        "event": "user_input",
+        "call_id": "question-1",
+        "answer_chars": 1
+      },
+      {
+        "event": "model",
+        "request": 2,
+        "reason": "completed",
+        "summary": "",
+        "summary_truncated": false,
+        "calls": [
+          {
+            "call_id": "echo-1",
+            "name": "echo",
+            "arguments": "{\"value\": 7}",
+            "arguments_truncated": false
+          }
+        ],
+        "usage": null,
+        "elapsed_seconds": 1.1708587408065796e-5
+      },
+      {
+        "event": "tool",
+        "round": 2,
+        "call_id": "echo-1",
+        "name": "echo",
+        "arguments": "{\"value\": 7}",
+        "arguments_truncated": false,
+        "output_summary": "{\"value\": 7}",
+        "output_summary_truncated": false,
+        "output_bytes": 12,
+        "elapsed_seconds": 2.645794302225113e-5
+      },
+      {
+        "event": "model",
+        "request": 3,
+        "reason": "completed",
+        "summary": "{\"value\": \"7\"}",
+        "summary_truncated": false,
+        "calls": [],
+        "usage": null,
+        "elapsed_seconds": 8.417293429374695e-6
+      },
+      {
+        "event": "output_validation_error",
+        "category": "schema_validation_error",
+        "field_path": "value"
+      },
+      {
+        "event": "model_error",
+        "request": 4,
+        "code": "connection_failed",
+        "elapsed_seconds": 7.625669240951538e-6
+      },
+      {
+        "event": "model_retry",
+        "delay_seconds": 0.0
+      },
+      {
+        "event": "model",
+        "request": 5,
+        "reason": "completed",
+        "summary": "{\"value\": 7}",
+        "summary_truncated": false,
+        "calls": [],
+        "usage": null,
+        "elapsed_seconds": 5.875714123249054e-6
+      },
+      {
+        "event": "stop",
+        "status": "completed",
+        "reason": "model_finished"
+      }
+    ],
+    "run_id": "8af800fb-5dd4-4dec-bc37-5cf78169016c",
+    "data": {
+      "value": 7
+    },
+    "question": null,
+    "model_retries": 1,
+    "output_repairs": 1,
+    "elapsed_seconds": 0.0014319997280836105,
+    "usage": null,
+    "usage_complete": false,
+    "model": "offline-capabilities-model",
+    "limits": {
+      "max_tool_rounds": 3,
+      "max_model_requests": 6,
+      "max_tool_executions": 8,
+      "max_model_retries": 2,
+      "max_output_repairs": 1,
+      "max_context_bytes": 128000,
+      "max_tool_output_bytes": 32000,
+      "max_run_seconds": 120.0,
+      "retry_base_seconds": 0,
+      "max_retry_delay_seconds": 30.0
+    }
+  }
+}
