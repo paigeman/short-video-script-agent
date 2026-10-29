@@ -1,107 +1,94 @@
 # Short Video Script Agent
 
-第 4 题「短视频脚本 Agent」的项目骨架。
+第 4 题「短视频脚本 Agent」项目。
 
-**当前状态：已完成目录初始化、CLI 输入读取、文档骨架和开发质量工具配置。尚未接入模型，也未实现脚本生成、工具调用或 ReAct 决策。此版本不作为完整交付或业务验收通过的证据。**
+**当前已完成基础 Agent 运行时迁移，包括模型适配、工具执行、受限循环和离线测试。短视频脚本生成、素材检索、时长及品牌规则检查尚未实现，也未进行真实模型业务验收。**
 
-## 环境与运行
+## 环境与安装
 
-- Python 3.10+
-- CLI 运行时没有第三方依赖，无需密钥或环境变量
-- 在仓库根目录运行
+使用 Python 3.13+ 和 `uv` 管理项目环境与依赖：
 
-```bash
-python3 -m src.main --input examples/normal.input.json
+```shell
+uv sync --locked
 ```
 
-当前入口只验证文件可读取且输入为 JSON 对象，随后返回 `not_implemented` 状态与空 Trace。退出码 0 仅表示入口正常执行，不表示业务任务完成。输入文件、编码或 JSON 格式有误时，返回 `invalid_input` 和非零退出码。
+运行时依赖为 OpenAI SDK、HTTPX 和 jsonschema，具体版本及传递依赖由 `pyproject.toml` 和 `uv.lock` 管理。`requirements.txt` 是从锁文件导出的运行时兼容清单，推荐使用 `uv`。
 
-`missing.input.json` 与 `tool-failure.input.json` 是后续验收输入；当前入口尚未解释缺失的业务字段或模拟失败开关。
+## 验证基础运行时
+
+以下入口使用确定性模型替身和本地演示工具，无需密钥，不联网：
+
+```shell
+uv run --locked python -m src.agent.demo --scenario normal
+uv run --locked python -m src.agent.demo --scenario tool-failure
+uv run --locked python -m src.agent.demo --scenario limit
+uv run --locked python -m unittest discover -s tests -v
+```
+
+输出包含状态、调用计数和实际执行 Trace，明确标注 `offline_demo`。三个场景分别演示正常结束、工具失败后继续执行、达到上限后返回未完成。这些记录验证运行机制，不能证明真实模型决策或脚本生成效果。
+
+原短视频输入入口保留：
+
+```shell
+uv run --locked python -m src.main --input examples/normal.input.json
+```
+
+该入口仍返回 `not_implemented`；JSON 文件读取或格式错误返回 `invalid_input` 和非零退出码。短视频业务功能应在基础运行时之上继续实现。
+
+## 模型接入
+
+`src/llm/responses.py` 提供同步 Responses API 适配器。通过 `ResponsesClient.from_env()` 读取进程环境中的 `MODEL`、`API_KEY`，以及可选 `BASE_URL` 和 `MODEL_TIMEOUT_SECONDS`；不自动读取 `.env` 文件。字段说明见 `.env.example`。
+
+适配器已通过真实 SDK 加模拟 HTTP 的离线测试，但没有发送真实生成请求。目标服务需要支持该适配器使用的 Responses API 字段，不能仅凭“兼容接口”认定所有服务都支持。运行时接入示例见 [迁移说明](docs/07-migration.md)。
+
+## 代码组织
+
+```text
+src/
+├── main.py                 # 尚待实现的短视频业务入口
+├── agent/
+│   ├── runner.py           # 独立循环、结果状态和 Trace
+│   └── demo.py             # 明确标记的离线演示
+├── llm/
+│   ├── types.py            # 消息、请求、响应和客户端协议
+│   └── responses.py        # 同步 Responses API 适配
+├── tools/
+│   ├── definition.py       # 工具定义及处理函数
+│   ├── protocol.py         # 调用与结果协议
+│   ├── registry.py         # 注册表
+│   ├── executor.py         # 参数校验、执行和错误回传
+│   ├── limits.py           # 次数上限和执行预算
+│   └── errors.py           # 工具错误和上限停止原因
+└── validation.py           # JSON 解析及 Schema 校验
+```
+
+`tests/` 保存迁移回归和集成测试，`examples/` 保存实际离线运行证据，`data/` 保存尚未接入业务工具的合成素材。项目不依赖原仓库的目录、环境或配置文件。
 
 ## 开发质量检查
 
-Python 开发环境使用 `uv` 管理；Markdown、JSON 和 JSONC 使用项目本地的 Prettier，Markdown lint 使用 markdownlint-cli2，Python 格式化和 lint 使用 Ruff。
-
 ```shell
 npm ci --ignore-scripts
-uv sync --locked
 npm run format
 npm run check
+npm test
 ```
 
-安装要求、规则和分项命令见 [开发与质量检查](docs/06-development.md)。
-
-## 计划实现
-
-模型根据用户要求选择素材检索、脚本编写、时长检查与规则检查动作，观察工具返回后决定修改、补查、请求补充或结束。每次执行设置步数上限，并记录可审查的工具调用与结果。
-
-交付输出计划包含标题、分镜、旁白或字幕、预计时长、素材来源、风险和任务状态。时长估算的假设与误差应单独说明。
-
-## 项目目录
-
-```text
-.
-├── README.md
-├── requirements.txt
-├── pyproject.toml
-├── uv.lock
-├── package.json
-├── package-lock.json
-├── AGENTS.md
-├── .editorconfig
-├── .prettierrc.json
-├── .prettierignore
-├── .markdownlint-cli2.jsonc
-├── .env.example
-├── .gitignore
-├── src/
-│   ├── __init__.py
-│   └── main.py
-├── scripts/
-│   └── check_json.py
-├── tests/
-│   └── README.md
-├── examples/
-│   ├── README.md
-│   ├── normal.input.json
-│   ├── missing.input.json
-│   └── tool-failure.input.json
-├── data/
-│   ├── README.md
-│   ├── materials.json
-│   └── brand_rules.json
-└── docs/
-    ├── 01-requirements.md
-    ├── 02-solution.md
-    ├── 03-evaluation.md
-    ├── 04-ai-usage.md
-    ├── 05-retrospective.md
-    └── 06-development.md
-```
+格式化与 lint 使用项目本地的 Prettier、markdownlint-cli2 和 Ruff。规则与分项命令见 [开发指南](docs/06-development.md)。
 
 ## 评审导航
 
-| 内容                       | 入口                               |
-| -------------------------- | ---------------------------------- |
-| 用户、目标、范围和成功标准 | [需求](docs/01-requirements.md)    |
-| 动态决策、模块与取舍       | [方案](docs/02-solution.md)        |
-| 验收计划、实际结果与限制   | [评估](docs/03-evaluation.md)      |
-| AI 辅助范围与个人验证      | [AI 使用记录](docs/04-ai-usage.md) |
-| 学习、问题与改进           | [复盘](docs/05-retrospective.md)   |
-| 测试范围                   | [测试说明](tests/README.md)        |
-| 输入与运行证据约定         | [示例说明](examples/README.md)     |
-| 开发环境、格式化和 lint    | [开发指南](docs/06-development.md) |
+| 内容                 | 入口                               |
+| -------------------- | ---------------------------------- |
+| 用户、目标和成功标准 | [需求](docs/01-requirements.md)    |
+| 当前结构及业务待办   | [方案](docs/02-solution.md)        |
+| 测试证据及验证边界   | [评估](docs/03-evaluation.md)      |
+| AI 辅助和复用记录    | [AI 使用](docs/04-ai-usage.md)     |
+| 取舍及后续工作       | [复盘](docs/05-retrospective.md)   |
+| 环境、格式化和 lint  | [开发指南](docs/06-development.md) |
+| 远程来源和迁移范围   | [迁移说明](docs/07-migration.md)   |
 
-## 交付前检查
+## 来源与交付边界
 
-- 接入真实模型，完成模型根据工具结果调整动作的循环。
-- 提供至少两条不同的实际执行路径，并设置执行步数上限。
-- 保存至少三组输入、实际输出和 Trace，覆盖正常、信息不足和工具失败，并覆盖全部验收点。
-- 添加可执行测试，把实际测试记录和运行证据放入 `examples/`，在评估文档中引用。
-- 补全依赖、配置、运行命令、实际用时、个人修改记录和已知限制。
-- 提交题号、仓库 URL 与最终 commit SHA；确认评审可读取仓库。
-- 仅使用合成资料，不提交真实密钥、个人信息或业务私有数据。
+目录组织参考 [agent-campus-submission-example](https://github.com/lwz1357/agent-campus-submission-example)。基础运行时按需迁移自 [FadeDemo/AI-demo](https://github.com/FadeDemo/AI-demo)，来源 commit 与文件映射见迁移说明。
 
-## 参考
-
-目录与文档分类参考 [agent-campus-submission-example](https://github.com/lwz1357/agent-campus-submission-example)。本项目独立编写初始化文件，未复制其离线模板实现。参考仓库展示的是交付组织；其中的题号与当前试卷编号可能不同，本项目使用当前试卷的第 4 题。
+当前试卷中本项目对应第 4 题。后续仍需完成真实模型业务流程、全部题目验收场景和实际运行证据；最终提交题号、仓库 URL 与最终 commit SHA。禁止提交真实密钥、个人信息或私有业务资料。

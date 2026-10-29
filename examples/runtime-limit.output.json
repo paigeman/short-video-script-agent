@@ -1,0 +1,75 @@
+{
+  "mode": "offline_demo",
+  "scenario": "limit",
+  "status": "incomplete",
+  "reason": "max_tool_rounds_reached",
+  "text": "",
+  "model_requests": 3,
+  "tool_rounds": 2,
+  "tool_executions": 2,
+  "trace": [
+    {
+      "event": "model",
+      "request": 1,
+      "reason": "completed",
+      "summary": "Read the demo value.",
+      "calls": [
+        {
+          "call_id": "demo-1",
+          "name": "echo",
+          "arguments": "{\"value\":\"ready\"}"
+        }
+      ],
+      "usage": null
+    },
+    {
+      "event": "tool",
+      "round": 1,
+      "call_id": "demo-1",
+      "name": "echo",
+      "arguments": "{\"value\":\"ready\"}",
+      "output_summary": "{\"value\": \"ready\"}"
+    },
+    {
+      "event": "model",
+      "request": 2,
+      "reason": "completed",
+      "summary": "Continue calling to exercise the configured limit.",
+      "calls": [
+        {
+          "call_id": "demo-2",
+          "name": "echo",
+          "arguments": "{\"value\":\"ready\"}"
+        }
+      ],
+      "usage": null
+    },
+    {
+      "event": "tool",
+      "round": 2,
+      "call_id": "demo-2",
+      "name": "echo",
+      "arguments": "{\"value\":\"ready\"}",
+      "output_summary": "{\"value\": \"ready\"}"
+    },
+    {
+      "event": "model",
+      "request": 3,
+      "reason": "completed",
+      "summary": "Continue calling to exercise the configured limit.",
+      "calls": [
+        {
+          "call_id": "demo-3",
+          "name": "echo",
+          "arguments": "{\"value\":\"ready\"}"
+        }
+      ],
+      "usage": null
+    },
+    {
+      "event": "stop",
+      "status": "incomplete",
+      "reason": "max_tool_rounds_reached"
+    }
+  ]
+}

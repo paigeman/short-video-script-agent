@@ -1,7 +1,21 @@
-# 测试计划
+# 测试
 
-当前没有业务测试，尚未验证真实模型效果。实现对应能力时再添加可执行测试。
+在仓库根目录执行：
 
-优先覆盖输入字段与类型、素材检索、引用有效性、时长估算、规则检查、工具异常、执行上限和输出状态。确定性工具可以用单元测试验证；模型根据观察结果调整动作，需要额外的真实模型运行记录。
+```shell
+uv run --locked python -m unittest discover -s tests -v
+```
 
-完整场景清单见 [评估计划](../docs/03-evaluation.md)。测试运行后保存实际命令与结果，不能预先填写通过数量。离线 Mock 必须单独标识，其通过不代表真实模型效果通过。
+也可执行 `npm test`。默认测试全部离线，不需要密钥。工具、注册表及预算测试按需迁移自 [FadeDemo/AI-demo](https://github.com/FadeDemo/AI-demo)，详细映射见 [迁移说明](../docs/07-migration.md)。
+
+| 测试模块                   | 验证范围                                                         |
+| -------------------------- | ---------------------------------------------------------------- |
+| `test_tool_executor.py`    | 参数校验、未知工具、执行错误、预算、JSON 边界                    |
+| `test_tool_registry.py`    | 注册顺序、重复名称和未知工具                                     |
+| `test_tool_limits.py`      | 执行预算耗尽后禁止额外执行                                       |
+| `test_agent_runner.py`     | 多轮与批量调用、观察结果、三类上限、状态、Trace 和输入保护       |
+| `test_responses_client.py` | 真实 SDK 与模拟 HTTP、协议映射、上下文回传、错误、超时、资源关闭 |
+| `test_validation.py`       | JSON 解析、Schema 校验和错误区别                                 |
+| `test_runtime_demo.py`     | 从真实 CLI 入口执行三个离线场景                                  |
+
+SDK 测试通过 `httpx.MockTransport` 拦截请求。演示测试使用确定性模型替身，不能替代真实模型决策测试。短视频业务测试尚待实现。实际执行记录见 [测试结果](../examples/runtime-test-results.txt)。

@@ -26,7 +26,7 @@ def main(argv: list[str] | None = None) -> int:
         else:
             result = {
                 "status": "not_implemented",
-                "message": "Project scaffold only; model and tools are not implemented.",
+                "message": "Video-script business flow is not implemented; use src.agent.demo to verify the runtime.",
                 "trace": [],
             }
             exit_code = 0

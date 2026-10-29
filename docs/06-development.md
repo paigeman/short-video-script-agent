@@ -2,7 +2,7 @@
 
 ## 工具选择
 
-质量体系参考 `AI-demo` 的仓库级 Prettier、markdownlint-cli2 和 Python 项目的 Ruff 配置。
+质量体系参考 [FadeDemo/AI-demo](https://github.com/FadeDemo/AI-demo) 的仓库级 Prettier、markdownlint-cli2 和 Python 项目的 Ruff 配置。
 
 | 范围       | 格式化      | Lint 或内容校验                         |
 | ---------- | ----------- | --------------------------------------- |
@@ -11,11 +11,11 @@
 | JSON       | Prettier    | Python 标准库解析、重复键与非有限数检查 |
 | JSONC 配置 | Prettier    | markdownlint-cli2 加载配置时校验        |
 
-Node.js 仅用于开发质量工具；CLI 的运行时仍不需要第三方依赖。Python 开发环境由 `uv` 管理，不依赖其他仓库中的虚拟环境或全局 Ruff。
+Node.js 仅用于开发质量工具；基础运行时依赖 OpenAI SDK、HTTPX 和 jsonschema。Python 开发环境由 `uv` 管理，不依赖其他仓库中的虚拟环境或全局 Ruff。
 
 ## 安装
 
-需要 Python 3.10+、`uv`，以及满足 `package.json` 中版本范围的 Node.js 和 npm。
+需要 Python 3.13+、`uv`，以及满足 `package.json` 中版本范围的 Node.js 和 npm。
 
 ```shell
 npm ci --ignore-scripts
@@ -57,8 +57,8 @@ uv run --locked ruff check src/main.py
 - `.editorconfig`：UTF-8、LF、文件末尾换行和空格缩进；Python 使用四个空格，其他文件默认两个空格。
 - `.prettierrc.json`：沿用 100 列配置，保留中文段落现有换行，使用 LF。
 - `.markdownlint-cli2.jsonc`：开启默认规则，关闭中文不适用的固定行长检查；同级标题不能重复，使用围栏代码块和星号强调。
-- `pyproject.toml`：Ruff 以 Python 3.10 为目标，88 列、双引号，开启基础错误、导入排序、常见缺陷、现代语法、简化与 Ruff 规则。注释和文档字符串中的正常中文标点排除 `RUF002`、`RUF003`。
+- `pyproject.toml`：Ruff 以 Python 3.13 为目标，88 列、双引号，开启基础错误、导入排序、常见缺陷、现代语法、简化与 Ruff 规则。注释和文档字符串中的正常中文标点排除 `RUF002`、`RUF003`。
 - `scripts/check_json.py`：校验根目录 JSON 配置及 `data/`、`examples/` 下的 JSON，拒绝重复键与 `NaN`、`Infinity` 等非法 JSON 常量；不替代业务 Schema 验证。
 - 忽略虚拟环境、依赖、缓存、构建产物和 `.agent-tmp/`，避免质量检查扫描生成文件。
 
-当前没有业务测试，质量检查通过只表明格式、静态规则和 JSON 有效性满足配置要求。业务验收仍按 [评估计划](03-evaluation.md) 单独执行。
+已有基础运行时测试，可执行 `npm test`；短视频业务测试尚待实现。质量检查通过只表明格式、静态规则和 JSON 有效性满足配置要求。业务验收仍按 [评估计划](03-evaluation.md) 单独执行。

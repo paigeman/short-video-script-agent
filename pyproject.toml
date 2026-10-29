@@ -1,10 +1,10 @@
 [project]
 name = "short-video-script-agent"
 version = "0.1.0"
-description = "A short video script agent project scaffold"
+description = "A short video script agent with a bounded tool-calling runtime"
 readme = "README.md"
-requires-python = ">=3.10"
-dependencies = []
+requires-python = ">=3.13"
+dependencies = ["httpx==0.28.1", "jsonschema==4.26.0", "openai==2.53.0"]
 
 [dependency-groups]
 dev = ["ruff==0.16.1"]
@@ -13,7 +13,7 @@ dev = ["ruff==0.16.1"]
 package = false
 
 [tool.ruff]
-target-version = "py310"
+target-version = "py313"
 line-length = 88
 extend-exclude = [".agent-tmp", ".cache", "node_modules"]
 

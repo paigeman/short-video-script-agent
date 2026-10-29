@@ -1,0 +1,69 @@
+{
+  "mode": "offline_demo",
+  "scenario": "tool-failure",
+  "status": "completed",
+  "reason": "model_finished",
+  "text": "Offline runtime demonstration completed.",
+  "model_requests": 3,
+  "tool_rounds": 2,
+  "tool_executions": 2,
+  "trace": [
+    {
+      "event": "model",
+      "request": 1,
+      "reason": "completed",
+      "summary": "Read the demo value.",
+      "calls": [
+        {
+          "call_id": "demo-1",
+          "name": "echo",
+          "arguments": "{\"value\":\"ready\"}"
+        }
+      ],
+      "usage": null
+    },
+    {
+      "event": "tool",
+      "round": 1,
+      "call_id": "demo-1",
+      "name": "echo",
+      "arguments": "{\"value\":\"ready\"}",
+      "output_summary": "{\"error\": {\"category\": \"execution_failed\", \"message\": \"Execution of tool 'echo' failed.\"}}"
+    },
+    {
+      "event": "model",
+      "request": 2,
+      "reason": "completed",
+      "summary": "Retry the failed demo tool.",
+      "calls": [
+        {
+          "call_id": "demo-2",
+          "name": "echo",
+          "arguments": "{\"value\":\"ready\"}"
+        }
+      ],
+      "usage": null
+    },
+    {
+      "event": "tool",
+      "round": 2,
+      "call_id": "demo-2",
+      "name": "echo",
+      "arguments": "{\"value\":\"ready\"}",
+      "output_summary": "{\"value\": \"ready\"}"
+    },
+    {
+      "event": "model",
+      "request": 3,
+      "reason": "completed",
+      "summary": "Offline runtime demonstration completed.",
+      "calls": [],
+      "usage": null
+    },
+    {
+      "event": "stop",
+      "status": "completed",
+      "reason": "model_finished"
+    }
+  ]
+}

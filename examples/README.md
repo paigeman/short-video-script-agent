@@ -10,4 +10,13 @@
 
 每组实际运行证据采用相同文件前缀，例如 `normal.input.json`、`normal.output.json` 和 `normal.trace.json`。记录模型标识、运行模式、工具参数、返回摘要、后续动作与简要依据；不要记录密钥或模型内部思维过程。
 
-测试命令与实际输出可保存在 `test-results.txt`。当前没有生成业务输出、Trace 或测试成绩，后续应从实际执行结果保存，不能手写成成功样例。
+测试命令与实际输出可保存在 `test-results.txt`。当前尚未生成短视频业务输出与真实模型 Trace，后续应从实际执行结果保存，不能手写成成功样例。
+
+## 已生成的运行时证据
+
+- [正常执行](runtime-normal.output.json)：离线模型替身调用本地工具后结束。
+- [工具失败后继续执行](runtime-tool-failure.output.json)：观察错误结果后再次调用。
+- [达到执行上限](runtime-limit.output.json)：保留已有结果并明确返回未完成。
+- [实际测试结果](runtime-test-results.txt)：46 项离线测试的完整执行记录。
+
+生成命令及结果解释见 [评估](../docs/03-evaluation.md)。这些是基础运行时演示，与上表的短视频业务输入分别记录。

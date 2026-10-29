@@ -1,0 +1,47 @@
+{
+  "mode": "offline_demo",
+  "scenario": "normal",
+  "status": "completed",
+  "reason": "model_finished",
+  "text": "Offline runtime demonstration completed.",
+  "model_requests": 2,
+  "tool_rounds": 1,
+  "tool_executions": 1,
+  "trace": [
+    {
+      "event": "model",
+      "request": 1,
+      "reason": "completed",
+      "summary": "Read the demo value.",
+      "calls": [
+        {
+          "call_id": "demo-1",
+          "name": "echo",
+          "arguments": "{\"value\":\"ready\"}"
+        }
+      ],
+      "usage": null
+    },
+    {
+      "event": "tool",
+      "round": 1,
+      "call_id": "demo-1",
+      "name": "echo",
+      "arguments": "{\"value\":\"ready\"}",
+      "output_summary": "{\"value\": \"ready\"}"
+    },
+    {
+      "event": "model",
+      "request": 2,
+      "reason": "completed",
+      "summary": "Offline runtime demonstration completed.",
+      "calls": [],
+      "usage": null
+    },
+    {
+      "event": "stop",
+      "status": "completed",
+      "reason": "model_finished"
+    }
+  ]
+}

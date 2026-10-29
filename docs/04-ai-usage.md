@@ -8,7 +8,13 @@ Codex 根据已阅读的公开示例仓库及选定项目方向，辅助建立�
 
 ## 开发质量工具
 
-Codex 参考 `AI-demo` 配置了 Prettier、markdownlint-cli2、Ruff、统一 npm 命令及 JSON 校验脚本。Python 虚拟环境和 Ruff 依赖由 `uv` 管理；开发依赖版本记录在 `package-lock.json` 和 `uv.lock`。这些工具用于开发质量检查，不能证明 Agent 业务效果。
+Codex 参考 [FadeDemo/AI-demo](https://github.com/FadeDemo/AI-demo) 配置了 Prettier、markdownlint-cli2、Ruff、统一 npm 命令及 JSON 校验脚本。Python 虚拟环境和 Ruff 依赖由 `uv` 管理；开发依赖版本记录在 `package-lock.json` 和 `uv.lock`。这些工具用于开发质量检查，不能证明 Agent 业务效果。
+
+## 基础运行时迁移
+
+按用户确定的范围，Codex 从 [FadeDemo/AI-demo](https://github.com/FadeDemo/AI-demo) 的固定提交迁移工具定义、协议、执行与测试，提取同步模型适配和循环，并补充 Trace、离线演示及集成验证。具体文件、裁剪范围和新写部分见 [迁移说明](07-migration.md)。
+
+当前 46 项测试通过，证据见 [实际测试记录](../examples/runtime-test-results.txt)。未读取原项目的个人密钥，也未执行真实模型业务评估。复用代码与 AI 辅助内容应在后续个人贡献说明中如实区分。
 
 ## 后续记录方式
 

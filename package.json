@@ -15,7 +15,8 @@
     "lint:python": "uv run --locked ruff check .",
     "lint:python:fix": "uv run --locked ruff check --fix .",
     "lint:json": "uv run --locked python scripts/check_json.py",
-    "check": "npm run format:check && npm run lint"
+    "check": "npm run format:check && npm run lint",
+    "test": "uv run --locked python -m unittest discover -s tests -v"
   },
   "devDependencies": {
     "markdownlint-cli2": "0.23.2",
