@@ -1,0 +1,3 @@
+# Scaffold runtime: Python 3.10+ standard library only.
+# Declare model SDK dependencies and versions when integration is implemented.
+# Development tools are managed by uv in pyproject.toml and uv.lock.

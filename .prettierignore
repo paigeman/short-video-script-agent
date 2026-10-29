@@ -1,0 +1,15 @@
+.git/
+.agent-tmp/
+.cache/
+.idea/
+.vscode/
+.venv/
+venv/
+node_modules/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+build/
+dist/
+htmlcov/

@@ -1,0 +1,27 @@
+{
+  "name": "short-video-script-agent",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Development quality tools for the short video script agent",
+  "scripts": {
+    "format": "npm run format:files && npm run format:python",
+    "format:files": "prettier --write \"**/*.{md,json,jsonc}\"",
+    "format:python": "uv run --locked ruff format .",
+    "format:check": "npm run format:files:check && npm run format:python:check",
+    "format:files:check": "prettier --check \"**/*.{md,json,jsonc}\"",
+    "format:python:check": "uv run --locked ruff format --check .",
+    "lint": "npm run lint:markdown && npm run lint:python && npm run lint:json",
+    "lint:markdown": "markdownlint-cli2",
+    "lint:python": "uv run --locked ruff check .",
+    "lint:python:fix": "uv run --locked ruff check --fix .",
+    "lint:json": "uv run --locked python scripts/check_json.py",
+    "check": "npm run format:check && npm run lint"
+  },
+  "devDependencies": {
+    "markdownlint-cli2": "0.23.2",
+    "prettier": "3.9.5"
+  },
+  "engines": {
+    "node": "^22.22.0 || >=24.8.0"
+  }
+}

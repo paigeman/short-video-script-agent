@@ -1,0 +1,12 @@
+{
+  "synthetic": true,
+  "materials": [
+    {
+      "id": "M01",
+      "product_id": "P01",
+      "title": "演示产品的字幕功能",
+      "facts": ["支持生成字幕草稿", "支持手动修改字幕文本"],
+      "source": "项目合成测试资料"
+    }
+  ]
+}
