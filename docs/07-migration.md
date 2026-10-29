@@ -53,3 +53,15 @@ def run_request(prompt, registered_tools):
 ## 后续通用扩展
 
 初次迁移之后补充的输出修复、暂停与继续、重试、运行控制和统计在本项目中实现，未从来源仓库整套复制。当前接口及验证边界见 [通用 Agent 能力](08-runtime-capabilities.md)。
+
+## 真实模型配置迁移
+
+本轮仍以同一远程 commit 为来源，裁剪并改写以下内容：
+
+| 远程源文件                                                                                                                                                                                | 本项目位置             | 迁移与调整                                                                                                 |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- | ---------------------------------------------------------------------------------------------------------- |
+| [config.py](https://github.com/FadeDemo/AI-demo/blob/d50aab30a226e3ce8eeedcad96ec1e6fba460081/projects/llm-terminal-assistant/src/llm_terminal_assistant/config.py)                       | `src/config.py`        | 提取 ModelConfig、环境变量读取和数值检查；移除模型档案、流式与预算耦合，增加字段级安全错误和公开参数白名单 |
+| [model.py](https://github.com/FadeDemo/AI-demo/blob/d50aab30a226e3ce8eeedcad96ec1e6fba460081/projects/llm-terminal-assistant/src/llm_terminal_assistant/model.py)                         | `src/llm/types.py`     | 按需增加请求推理强度及安全的未完成原因字段                                                                 |
+| [openai_client.py](https://github.com/FadeDemo/AI-demo/blob/d50aab30a226e3ce8eeedcad96ec1e6fba460081/projects/llm-terminal-assistant/src/llm_terminal_assistant/adapter/openai_client.py) | `src/llm/responses.py` | 提取 reasoning.effort 传递和 incomplete_details 原因处理，沿用已有同步 SDK 适配                            |
+
+配置预检入口、业务参数接线、脱敏模型设置和新增测试为本项目实现。输出 Token 上限复用已有 `max_output_tokens` 字段；整轮时限复用已有 RuntimePolicy，不新增预算器。使用 uv 显式加载 `.env`，没有迁移 dotenv 或新增依赖。实际用法见 [真实模型验收指南](10-live-validation.md)。

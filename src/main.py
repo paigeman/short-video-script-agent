@@ -7,6 +7,7 @@ from pathlib import Path
 
 from jsonschema.exceptions import ValidationError
 
+from src.config import ConfigurationError
 from src.validation import StructuredOutputError, parse_json
 from src.video.catalog import Catalog
 from src.video.offline import SCENARIOS
@@ -49,6 +50,13 @@ def main(argv: list[str] | None = None) -> int:
                 mode=args.mode,
                 offline_scenario=args.offline_scenario,
                 answer_provider=read_answer if args.interactive else None,
+            )
+        except ConfigurationError as exc:
+            report = empty_report(
+                args.mode,
+                "configuration_error",
+                "invalid_model_configuration",
+                issues=[{"field": exc.field_name, "code": "invalid_configuration"}],
             )
         except (OSError, UnicodeError, ValueError, ValidationError):
             report = empty_report(

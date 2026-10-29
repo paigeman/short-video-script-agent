@@ -201,3 +201,71 @@ class ResponsesClientTests(unittest.TestCase):
         with client:
             self.assertFalse(client._client.is_closed())
         self.assertTrue(client._client.is_closed())
+
+    def test_plain_reasoning_context_survives_tool_rounds_without_trace_export(self):
+        requests = []
+        reasoning = {
+            "type": "reasoning",
+            "id": "rs-plain",
+            "summary": [],
+            "content": [
+                {"type": "reasoning_text", "text": "synthetic-private-reasoning"}
+            ],
+        }
+        call = {
+            "type": "function_call",
+            "id": "fc-1",
+            "call_id": "c1",
+            "name": "echo",
+            "arguments": '{"value":1}',
+            "status": "completed",
+        }
+
+        def handle(request):
+            body = json.loads(request.content)
+            requests.append(body)
+            output = [reasoning, call] if len(requests) == 1 else [text_item()]
+            return httpx.Response(200, json=response_body(output))
+
+        result = AgentRunner(self.make_client(handle), echo_registry([])).run(
+            ModelRequest([Message("user", "test")])
+        )
+        self.assertEqual(result.status, "completed")
+        self.assertEqual(requests[1]["input"][1], reasoning)
+        self.assertNotIn("reasoning", requests[0])
+        self.assertNotIn("synthetic-private-reasoning", json.dumps(result.to_dict()))
+
+    def test_incomplete_detail_is_recorded_without_arbitrary_provider_text(self):
+        for detail, expected in (
+            ("max_output_tokens", "max_output_tokens"),
+            ("content_filter", "content_filter"),
+            ("synthetic-private-error", "unknown"),
+        ):
+            with self.subTest(detail=detail):
+                body = {
+                    **response_body([], status="incomplete"),
+                    "incomplete_details": {"reason": detail},
+                }
+                client = self.make_client(
+                    lambda request, body=body: httpx.Response(200, json=body)
+                )
+                result = AgentRunner(client, echo_registry([])).run(
+                    ModelRequest([Message("user", "test")])
+                )
+                self.assertEqual(result.reason, "model_incomplete")
+                self.assertEqual(result.trace[0]["incomplete_reason"], expected)
+                self.assertNotIn(
+                    "synthetic-private-error", json.dumps(result.to_dict())
+                )
+
+    def test_invalid_reasoning_effort_never_reaches_transport(self):
+        client = self.make_client(lambda request: self.fail("Unexpected request"))
+        for effort in ("typo", "", [], True):
+            with self.subTest(effort=effort):
+                request = ModelRequest(
+                    [Message("user", "test")], reasoning_effort=effort
+                )
+                with self.assertRaises(ValueError):
+                    client.send(request)
+                with self.assertRaises(ValueError):
+                    AgentRunner(client, echo_registry([])).run(request)

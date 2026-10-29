@@ -180,7 +180,11 @@ class ModelResilienceTests(unittest.TestCase):
         runner = AgentRunner(self.make_client(handle), ToolRegistry([]))
         control = FakeControl()
         paused = runner.run(
-            ModelRequest([Message("user", "test")]),
+            ModelRequest(
+                [Message("user", "test")],
+                reasoning_effort="high",
+                max_output_tokens=8192,
+            ),
             output_schema={"type": "object", "required": ["value"]},
             control=control,
         )
@@ -198,3 +202,7 @@ class ModelResilienceTests(unittest.TestCase):
         )
         self.assertEqual(json.loads(answer["output"]), {"answer": "Three"})
         self.assertEqual(final.model, "test-model")
+        self.assertTrue(
+            all(body["reasoning"] == {"effort": "high"} for body in requests)
+        )
+        self.assertTrue(all(body["max_output_tokens"] == 8192 for body in requests))

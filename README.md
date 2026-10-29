@@ -21,13 +21,16 @@ uv run --locked python -m src.main --mode offline --input examples/tool-failure.
 
 ## 真实模型入口
 
-在进程环境中配置 `MODEL`、`API_KEY`，可选 `BASE_URL` 和 `MODEL_TIMEOUT_SECONDS`，然后运行：
+在进程环境中配置 `MODEL`、`API_KEY`，按需设置服务地址、推理强度、输出 Token 上限与超时。先做不调用模型的配置检查，再启动业务：
 
 ```shell
+uv run --locked python -m src.config
 uv run --locked python -m src.main --mode live --input examples/normal.input.json
 ```
 
-`.env` 不会被自动加载。变量说明见 `.env.example`；不要把真实值提交到仓库。服务需要支持当前适配器使用的 Responses API。默认模式为 `live`，配置错误时明确失败，不会自动切换到 Mock。
+Python 不会自动读取 `.env`，可在上述 `uv run` 命令中显式增加 `--env-file .env`。无需安装 dotenv。变量与两条真实执行路径见 [真实模型验收指南](docs/10-live-validation.md)；不要把真实值提交到仓库。服务需要支持 Responses API。默认模式为 `live`，配置错误时明确失败，不会自动切换到 Mock。
+
+运行输出的 `model_settings` 记录配置的模型与请求参数，不含密钥或完整服务地址。模型返回的 `max_output_tokens` 中断原因会保留在 Trace 中。配置检查与模拟 HTTP 测试都不代表真实模型验收通过。
 
 | CLI 参数                  | 用途                                                                                |
 | ------------------------- | ----------------------------------------------------------------------------------- |
@@ -55,6 +58,7 @@ uv run --locked python -m src.main --mode live --input examples/normal.input.jso
 
 ```text
 src/
+├── config.py            # 轻量真实模型配置、校验和脱敏参数记录
 ├── main.py              # 业务 CLI，明确区分 live 和 offline
 ├── video/
 │   ├── schemas.py       # 请求、草稿和最终动作结构
@@ -93,6 +97,7 @@ npm test
 | 远程代码来源          | [迁移说明](docs/07-migration.md)              |
 | 通用运行时接口        | [Agent 能力](docs/08-runtime-capabilities.md) |
 | 检索、时长与品牌规则  | [业务说明](docs/09-business-rules.md)         |
+| 真实模型配置与执行    | [验收指南](docs/10-live-validation.md)        |
 
 目录组织参考 [agent-campus-submission-example](https://github.com/lwz1357/agent-campus-submission-example)，基础运行时按需迁移自 [FadeDemo/AI-demo](https://github.com/FadeDemo/AI-demo)。迁移文档记录固定 commit 与文件映射；本轮业务实现独立编写。
 

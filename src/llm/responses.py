@@ -1,7 +1,6 @@
 """Synchronous Responses API adapter adapted from AI-demo's OpenAIClient."""
 
 import math
-import os
 from copy import deepcopy
 from datetime import UTC, datetime
 from email.utils import parsedate_to_datetime
@@ -16,7 +15,9 @@ from openai import (
     OpenAI,
 )
 
+from src.config import ModelConfig
 from src.llm.types import (
+    REASONING_EFFORTS,
     Message,
     ModelCallError,
     ModelInputItem,
@@ -99,11 +100,19 @@ class ResponsesClient:
 
     @classmethod
     def from_env(cls) -> Self:
+        return cls.from_config(ModelConfig.from_env())
+
+    @classmethod
+    def from_config(
+        cls, config: ModelConfig, *, http_client: httpx.Client | None = None
+    ) -> Self:
+        """Build the transport; generation settings belong to each ModelRequest."""
         return cls(
-            model=os.environ.get("MODEL", ""),
-            api_key=os.environ.get("API_KEY", ""),
-            base_url=os.environ.get("BASE_URL") or None,
-            timeout_seconds=float(os.environ.get("MODEL_TIMEOUT_SECONDS", "30")),
+            model=config.model,
+            api_key=config.api_key,
+            base_url=config.base_url,
+            timeout_seconds=config.timeout_seconds,
+            http_client=http_client,
         )
 
     def send(self, request: ModelRequest) -> ModelResponse:
@@ -114,6 +123,13 @@ class ResponsesClient:
             "store": False,
             "include": ["reasoning.encrypted_content"],
         }
+        if request.reasoning_effort is not None:
+            if (
+                not isinstance(request.reasoning_effort, str)
+                or request.reasoning_effort not in REASONING_EFFORTS
+            ):
+                raise ValueError("Invalid reasoning_effort")
+            options["reasoning"] = {"effort": request.reasoning_effort}
         if request.timeout_seconds is not None:
             timeout = request.timeout_seconds
             if (
@@ -213,6 +229,14 @@ class ResponsesClient:
             for key in ("input_tokens", "output_tokens", "total_tokens")
         ):
             raise ModelCallError("invalid_response")
+        incomplete_reason = None
+        if response.status == "incomplete" and response.incomplete_details is not None:
+            detail = response.incomplete_details.reason
+            incomplete_reason = (
+                detail
+                if detail in {"max_output_tokens", "content_filter"}
+                else "unknown"
+            )
         return ModelResponse(
             text=response.output_text,
             reason=reason,
@@ -232,6 +256,7 @@ class ResponsesClient:
                 if response.usage is not None
                 else None
             ),
+            incomplete_reason=incomplete_reason,
         )
 
     def close(self) -> None:

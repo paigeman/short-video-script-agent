@@ -12,6 +12,7 @@ from jsonschema import Draft202012Validator
 from src.agent.control import RunControl, RuntimePolicy
 from src.agent.state import RunCheckpoint, RunResult
 from src.llm.types import (
+    REASONING_EFFORTS,
     Message,
     ModelCallError,
     ModelClient,
@@ -92,6 +93,11 @@ class AgentRunner:
             raise ValueError("A run requires at least one input item")
         if type(request.max_output_tokens) is not int or request.max_output_tokens <= 0:
             raise ValueError("max_output_tokens must be a positive integer")
+        if request.reasoning_effort is not None and (
+            not isinstance(request.reasoning_effort, str)
+            or request.reasoning_effort not in REASONING_EFFORTS
+        ):
+            raise ValueError("Invalid reasoning_effort")
         timeout = request.timeout_seconds
         if timeout is not None and (
             isinstance(timeout, bool)
@@ -325,6 +331,11 @@ class AgentRunner:
                     "event": "model",
                     "request": result.model_requests,
                     "reason": response.reason,
+                    **(
+                        {"incomplete_reason": response.incomplete_reason}
+                        if response.incomplete_reason is not None
+                        else {}
+                    ),
                     "summary": response.text[:1000],
                     "summary_truncated": len(response.text) > 1000,
                     "calls": [

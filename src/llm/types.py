@@ -6,6 +6,10 @@ from typing import Literal, Protocol
 from src.tools.definition import ToolDefinition
 from src.tools.protocol import ToolCallRequest, ToolCallResult
 
+REASONING_EFFORTS = frozenset(
+    {"none", "minimal", "low", "medium", "high", "xhigh", "max", "ultra"}
+)
+
 
 @dataclass(frozen=True)
 class Message:
@@ -30,6 +34,7 @@ class ModelRequest:
     tools: list[ToolDefinition] = field(default_factory=list)
     max_output_tokens: int = 2048
     timeout_seconds: float | None = None
+    reasoning_effort: str | None = None
 
 
 @dataclass
@@ -39,6 +44,7 @@ class ModelResponse:
     tool_calls: list[ToolCallRequest] = field(default_factory=list)
     continuation: list[ProviderItem] = field(default_factory=list, repr=False)
     usage: dict[str, int] | None = None
+    incomplete_reason: str | None = None
 
 
 class ModelCallError(RuntimeError):

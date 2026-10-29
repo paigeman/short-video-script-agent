@@ -6,6 +6,7 @@ from copy import deepcopy
 
 from src.agent.control import RunControl, RuntimePolicy
 from src.agent.runner import AgentRunner
+from src.config import DEFAULT_MAX_OUTPUT_TOKENS, DEFAULT_MAX_RUN_SECONDS, ModelConfig
 from src.llm.responses import ResponsesClient
 from src.llm.types import Message, ModelClient, ModelRequest
 from src.tools.limits import ToolLoopLimits
@@ -58,6 +59,7 @@ def run_script(
     request: object,
     *,
     client: ModelClient | None = None,
+    config: ModelConfig | None = None,
     catalog: Catalog | None = None,
     mode: str = "live",
     offline_scenario: str = "normal",
@@ -67,6 +69,8 @@ def run_script(
 ) -> dict:
     if mode not in {"live", "offline"}:
         raise ValueError("Unknown run mode")
+    if mode == "offline" and config is not None:
+        raise ValueError("ModelConfig is only used in live mode")
     brief, missing, errors = validate_brief(request)
     if mode == "live" and brief.get("simulate_tool_failure"):
         errors.append({"field": "simulate_tool_failure", "code": "offline_only"})
@@ -113,13 +117,18 @@ def run_script(
         client = OfflineModel(brief, catalog.policy, offline_scenario)
     owned_client = client is None
     if owned_client:
-        client = ResponsesClient.from_env()
+        config = config if config is not None else ModelConfig.from_env()
+        client = ResponsesClient.from_config(config)
+    max_run_seconds = config.max_run_seconds if config else DEFAULT_MAX_RUN_SECONDS
+    max_output_tokens = (
+        config.max_output_tokens if config else DEFAULT_MAX_OUTPUT_TOKENS
+    )
     tools = VideoTools(brief, catalog, failures)
     runner = AgentRunner(
         client,
         tools.registry(),
         limits or BUSINESS_LIMITS,
-        policy=RuntimePolicy(max_run_seconds=180, max_output_repairs=2),
+        policy=RuntimePolicy(max_run_seconds=max_run_seconds, max_output_repairs=2),
     )
     control = control if control is not None else RunControl()
     try:
@@ -129,7 +138,9 @@ def run_script(
                     Message("system", system_prompt(catalog)),
                     Message("user", json.dumps(brief, ensure_ascii=False)),
                 ],
-                max_output_tokens=4096,
+                max_output_tokens=max_output_tokens,
+                reasoning_effort=config.reasoning_effort if config else None,
+                timeout_seconds=config.timeout_seconds if config else None,
             ),
             output_schema=FINAL_SCHEMA,
             control=control,
@@ -163,6 +174,8 @@ def run_script(
             for key, draft in tools.drafts.items()
         ],
     )
+    if config is not None:
+        report["model_settings"] = config.public_settings()
     if result.status == "completed":
         decision = result.data
         if decision["status"] == "incomplete":

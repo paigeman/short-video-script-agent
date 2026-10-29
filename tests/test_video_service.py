@@ -4,6 +4,7 @@ from copy import deepcopy
 
 import httpx
 
+from src.config import ModelConfig
 from src.llm.responses import ResponsesClient
 from src.llm.types import Message, ModelRequest, ModelResponse
 from src.tools.limits import ToolLoopLimits
@@ -188,7 +189,7 @@ class VideoServiceTests(unittest.TestCase):
                 self.assertEqual(report["issues"][0]["code"], "missing_checks")
                 self.assertIsNone(report["script"])
 
-    def test_sdk_business_path_uses_actual_function_results(self):
+    def test_configured_sdk_business_path_uses_actual_function_results(self):
         loaded = catalog()
         offline = OfflineModel(
             brief(duration_seconds=10), loaded.policy, "duration-repair"
@@ -219,20 +220,32 @@ class VideoServiceTests(unittest.TestCase):
             )
             return httpx.Response(200, json=response_body(output))
 
-        with ResponsesClient(
-            "test-model",
-            "unit-test-placeholder",
+        config = ModelConfig(
+            model="test-model",
+            api_key="unit-test-placeholder",
             base_url="https://model.example.invalid/v1",
+            max_output_tokens=8192,
+            reasoning_effort="high",
+            max_run_seconds=300,
+        )
+        with ResponsesClient.from_config(
+            config,
             http_client=httpx.Client(transport=httpx.MockTransport(handle)),
         ) as client:
             report = run_script(
                 brief(duration_seconds=10),
                 client=client,
+                config=config,
                 catalog=loaded,
-                mode="offline",
+                mode="live",
             )
         self.assertEqual(report["status"], "completed")
         self.assertEqual(len(requests), 5)
+        self.assertTrue(
+            all(item["reasoning"] == {"effort": "high"} for item in requests)
+        )
+        self.assertTrue(all(item["max_output_tokens"] == 8192 for item in requests))
+        self.assertEqual(report["model_settings"], config.public_settings())
         self.assertTrue(
             {"search_materials", "estimate_duration", "check_rules"}
             <= {tool["name"] for tool in requests[0]["tools"]}

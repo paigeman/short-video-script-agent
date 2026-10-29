@@ -14,6 +14,6 @@
 | `persistent-failure` | 持续工具故障，使用 normal 输入     | incomplete  |
 | `limit`              | 持续调用达到上限，使用 normal 输入 | incomplete  |
 
-执行命令及逐项结果见 [评估](../docs/03-evaluation.md)，全部测试记录见 [业务阶段测试结果](business-test-results.txt)。真实模型执行记录尚未生成。
+执行命令及逐项结果见 [评估](../docs/03-evaluation.md)，最新测试记录见 [真实接入准备阶段测试结果](live-readiness-test-results.txt)。此前的 [业务阶段测试结果](business-test-results.txt)保留为阶段记录。真实模型执行记录尚未生成，接入步骤见 [验收指南](../docs/10-live-validation.md)。
 
 `runtime-*` 文件是此前通用运行时的实际演示与测试证据，与业务示例分开保存。所有离线模型都是明确标记的替身，不能用于证明真实模型的自主决策效果。
