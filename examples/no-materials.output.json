@@ -1,0 +1,170 @@
+{
+  "status": "needs_input",
+  "reason": "user_input_required",
+  "mode": "offline",
+  "script": null,
+  "question": "未找到指定产品的可引用素材，请补充合成素材文件或确认产品 ID 后重新运行。",
+  "missing_fields": [],
+  "issues": [],
+  "runtime": {
+    "status": "needs_input",
+    "reason": "user_input_required",
+    "text": "",
+    "model_requests": 3,
+    "tool_rounds": 3,
+    "tool_executions": 2,
+    "run_id": "805f7957-4df6-4114-bc43-bf539ce71b32",
+    "data": null,
+    "question": "未找到指定产品的可引用素材，请补充合成素材文件或确认产品 ID 后重新运行。",
+    "model_retries": 0,
+    "output_repairs": 0,
+    "elapsed_seconds": 0.0037981243804097176,
+    "usage": null,
+    "usage_complete": false,
+    "model": "offline-video-test-double",
+    "limits": {
+      "max_tool_rounds": 10,
+      "max_model_requests": 14,
+      "max_tool_executions": 16,
+      "max_model_retries": 2,
+      "max_output_repairs": 2,
+      "max_context_bytes": 128000,
+      "max_tool_output_bytes": 32000,
+      "max_run_seconds": 180,
+      "retry_base_seconds": 0.5,
+      "max_retry_delay_seconds": 30.0
+    }
+  },
+  "trace": [
+    {
+      "event": "model",
+      "request": 1,
+      "reason": "completed",
+      "summary": "先查找主题相关的产品事实。",
+      "summary_truncated": false,
+      "calls": [
+        {
+          "call_id": "offline-1",
+          "name": "search_materials",
+          "arguments": "{\"query\": \"介绍字幕编辑功能\", \"reason\": \"先查找主题相关的产品事实。\"}",
+          "arguments_truncated": false
+        }
+      ],
+      "usage": null,
+      "elapsed_seconds": 1.4457851648330688e-5
+    },
+    {
+      "event": "tool",
+      "round": 1,
+      "call_id": "offline-1",
+      "name": "search_materials",
+      "arguments": "{\"query\": \"介绍字幕编辑功能\", \"reason\": \"先查找主题相关的产品事实。\"}",
+      "arguments_truncated": false,
+      "output_summary": "{\"query\": \"\\u4ecb\\u7ecd\\u5b57\\u5e55\\u7f16\\u8f91\\u529f\\u80fd\", \"product_id\": \"P404\", \"materials\": [], \"count\": 0, \"truncated\": false, \"synthetic\": true}",
+      "output_summary_truncated": false,
+      "output_bytes": 151,
+      "elapsed_seconds": 0.0025610830634832382
+    },
+    {
+      "event": "model",
+      "request": 2,
+      "reason": "completed",
+      "summary": "主题检索为空，改用指定产品 ID 检索。",
+      "summary_truncated": false,
+      "calls": [
+        {
+          "call_id": "offline-2",
+          "name": "search_materials",
+          "arguments": "{\"query\": \"P404\", \"reason\": \"主题检索为空，改用指定产品 ID 检索。\"}",
+          "arguments_truncated": false
+        }
+      ],
+      "usage": null,
+      "elapsed_seconds": 2.2250227630138397e-5
+    },
+    {
+      "event": "tool",
+      "round": 2,
+      "call_id": "offline-2",
+      "name": "search_materials",
+      "arguments": "{\"query\": \"P404\", \"reason\": \"主题检索为空，改用指定产品 ID 检索。\"}",
+      "arguments_truncated": false,
+      "output_summary": "{\"query\": \"P404\", \"product_id\": \"P404\", \"materials\": [], \"count\": 0, \"truncated\": false, \"synthetic\": true}",
+      "output_summary_truncated": false,
+      "output_bytes": 107,
+      "elapsed_seconds": 4.99160960316658e-5
+    },
+    {
+      "event": "model",
+      "request": 3,
+      "reason": "completed",
+      "summary": "两次检索均无依据，请求补充资料。",
+      "summary_truncated": false,
+      "calls": [
+        {
+          "call_id": "offline-3",
+          "name": "ask_user",
+          "arguments": "{\"question\": \"未找到指定产品的可引用素材，请补充合成素材文件或确认产品 ID 后重新运行。\"}",
+          "arguments_truncated": false
+        }
+      ],
+      "usage": null,
+      "elapsed_seconds": 1.2166798114776611e-5
+    },
+    {
+      "event": "clarification",
+      "call_id": "offline-3",
+      "question": "未找到指定产品的可引用素材，请补充合成素材文件或确认产品 ID 后重新运行。"
+    },
+    {
+      "event": "stop",
+      "status": "needs_input",
+      "reason": "user_input_required"
+    }
+  ],
+  "tool_records": [
+    {
+      "tool": "search_materials",
+      "reason": "先查找主题相关的产品事实。",
+      "arguments": {
+        "query": "介绍字幕编辑功能",
+        "reason": "先查找主题相关的产品事实。"
+      },
+      "status": "returned",
+      "result": {
+        "query": "介绍字幕编辑功能",
+        "product_id": "P404",
+        "materials": [],
+        "count": 0,
+        "truncated": false,
+        "synthetic": true
+      }
+    },
+    {
+      "tool": "search_materials",
+      "reason": "主题检索为空，改用指定产品 ID 检索。",
+      "arguments": {
+        "query": "P404",
+        "reason": "主题检索为空，改用指定产品 ID 检索。"
+      },
+      "status": "returned",
+      "result": {
+        "query": "P404",
+        "product_id": "P404",
+        "materials": [],
+        "count": 0,
+        "truncated": false,
+        "synthetic": true
+      }
+    }
+  ],
+  "drafts": [],
+  "input": {
+    "topic": "介绍字幕编辑功能",
+    "audience": "首次制作短视频的创作者",
+    "platform": "短视频平台",
+    "duration_seconds": 30,
+    "style": "简洁直观",
+    "product_id": "P404"
+  }
+}

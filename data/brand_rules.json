@@ -13,5 +13,22 @@
       "id": "R03",
       "description": "缺少证据时，不使用绝对保证或效果承诺。"
     }
-  ]
+  ],
+  "neutral_copy": [
+    "功能小演示",
+    "创作小技巧",
+    "一起看看",
+    "先看这里",
+    "接下来",
+    "操作演示",
+    "试试看",
+    "请按实际需求选择"
+  ],
+  "prohibited_phrases": ["保证", "百分之百", "100%", "行业第一", "绝对有效", "零风险", "稳赚"],
+  "timing": {
+    "speech_units_per_second": 4.0,
+    "subtitle_units_per_second": 6.0,
+    "punctuation_pause_seconds": 0.15,
+    "transition_seconds": 0.4
+  }
 }

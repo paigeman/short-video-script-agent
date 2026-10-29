@@ -61,4 +61,4 @@ uv run --locked ruff check src/main.py
 - `scripts/check_json.py`：校验根目录 JSON 配置及 `data/`、`examples/` 下的 JSON，拒绝重复键与 `NaN`、`Infinity` 等非法 JSON 常量；不替代业务 Schema 验证。
 - 忽略虚拟环境、依赖、缓存、构建产物和 `.agent-tmp/`，避免质量检查扫描生成文件。
 
-已有基础运行时测试，可执行 `npm test`；短视频业务测试尚待实现。质量检查通过只表明格式、静态规则和 JSON 有效性满足配置要求。业务验收仍按 [评估计划](03-evaluation.md) 单独执行。
+基础运行时与短视频业务测试均可通过 `npm test` 执行，真实模型验收另行记录。质量检查通过只表明格式、静态规则和 JSON 有效性满足配置要求。业务验收仍按 [评估](03-evaluation.md) 单独执行。

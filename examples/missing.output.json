@@ -1,0 +1,19 @@
+{
+  "status": "needs_input",
+  "reason": "missing_required_fields",
+  "mode": "offline",
+  "script": null,
+  "question": "请补充以下必填信息：platform",
+  "missing_fields": ["platform"],
+  "issues": [],
+  "runtime": null,
+  "trace": [
+    {
+      "event": "input_validation",
+      "status": "needs_input",
+      "missing_fields": ["platform"]
+    }
+  ],
+  "tool_records": [],
+  "drafts": []
+}

@@ -33,7 +33,7 @@ Python 最低版本统一为 3.13，保留来源使用的类型别名和枚举�
 
 ## 程序接入示例
 
-下面展示业务代码如何接入基础运行时。`registered_tools` 应由后续短视频工具实现提供。真实调用需提前配置进程环境中的 `MODEL` 和 `API_KEY`；`.env` 不会被自动读取。
+下面展示业务代码如何接入基础运行时。`registered_tools` 由上层工具实现提供；当前业务接入见 `src/video/service.py`。真实调用需提前配置进程环境中的 `MODEL` 和 `API_KEY`；`.env` 不会被自动读取。
 
 ```python
 from src.agent.runner import AgentRunner
