@@ -1,0 +1,57 @@
+{
+  "request": {
+    "topic": "介绍字幕编辑功能",
+    "audience": "首次制作短视频的创作者",
+    "platform": "短视频平台",
+    "duration_seconds": 30,
+    "style": "简洁直观",
+    "product_id": "P404"
+  },
+  "materials": {
+    "synthetic": true,
+    "materials": [
+      {
+        "id": "M01",
+        "product_id": "P01",
+        "title": "演示产品的字幕功能",
+        "facts": ["支持生成字幕草稿", "支持手动修改字幕文本"],
+        "source": "项目合成测试资料"
+      }
+    ]
+  },
+  "policy": {
+    "synthetic": true,
+    "rules": [
+      {
+        "id": "R01",
+        "description": "产品事实必须能追溯到所引用的素材。"
+      },
+      {
+        "id": "R02",
+        "description": "资料未提供量化效果时，不添加效率提升或收益数字。"
+      },
+      {
+        "id": "R03",
+        "description": "缺少证据时，不使用绝对保证或效果承诺。"
+      }
+    ],
+    "neutral_copy": [
+      "功能小演示",
+      "创作小技巧",
+      "一起看看",
+      "先看这里",
+      "接下来",
+      "操作演示",
+      "试试看",
+      "请按实际需求选择"
+    ],
+    "prohibited_phrases": ["保证", "百分之百", "100%", "行业第一", "绝对有效", "零风险", "稳赚"],
+    "timing": {
+      "speech_units_per_second": 4.0,
+      "subtitle_units_per_second": 6.0,
+      "punctuation_pause_seconds": 0.15,
+      "transition_seconds": 0.4
+    }
+  },
+  "injected_tool_failures": {}
+}

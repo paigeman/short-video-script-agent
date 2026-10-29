@@ -1,0 +1,11 @@
+{
+  "recorded_at": "2026-10-29T16:52:03+08:00",
+  "time_basis": "The user reported that the three-hour mark had been reached; this is the recording time, not an inferred exam start time.",
+  "committed_base": "874a033fce0a4ee7b4a2b0e7c00157749ecba3e6",
+  "uncommitted_files_sha256": {
+    "src/video/service.py": "16ff3a5140cf0b45b26866a8f589e91941ea99767bdb0b6e3b66f216cafe013d",
+    "scripts/live_acceptance.py": "5156439fe513a6c6902a516cb484de4043505d96733e9c9ccb6d00829207cc02",
+    "tests/test_live_acceptance.py": "a1c9ac6223555ced26393b663d4431b9de6ccfc42b9ecc5449019cc8197ba80c"
+  },
+  "read_only_checkpoint": true
+}

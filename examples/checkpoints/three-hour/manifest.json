@@ -1,0 +1,130 @@
+{
+  "started_at": "2026-10-29T08:46:48.413461+00:00",
+  "source_version": {
+    "base_commit": "874a033fce0a4ee7b4a2b0e7c00157749ecba3e6",
+    "files_sha256": {
+      "pyproject.toml": "de1085acf08447d2cbb8c4ea449ad1abb7af5041f16dea6cb88146cc3a94d25f",
+      "scripts/live_acceptance.py": "856c7adc50333db5c751038c7a221e1f7df4fa7096d0e176c87d832328307765",
+      "src/__init__.py": "1b0fb1a60b133bc2bc767c0839a68d0879273d7116920dd922520bf3b1b32de2",
+      "src/agent/__init__.py": "7f18e1ca2618ccb022eaef7d576c8d82d972866e6e731f983085767d7c64fbdd",
+      "src/agent/control.py": "fa0d4a0c0e20e391580d0b6f0a1453fd204ad1aec9aaa6d7dec4ed79a948a2f5",
+      "src/agent/demo.py": "5ca593ec1d8a90080c41da736d062a2fbe9533ad2d65ad2bf80b74a910b864de",
+      "src/agent/runner.py": "d0c46d0cf134202056775b388b067b96f840bc0fff44169a63732d3094e24737",
+      "src/agent/state.py": "f58c6cd04d38ca8925565d54aed8c5fbb8c6b0643b2caf171f287bdb78557712",
+      "src/config.py": "46aca52e6066e40d52e947552d98320db915932b1832bef9e604770b665543d3",
+      "src/llm/__init__.py": "714cb97e56bf5135f3cbc44722fde3ae6583c07bd30afb4d1f8c88a05606ceaa",
+      "src/llm/responses.py": "176c16f737d97d2586b0896b6c7dce1baf2b7956183bfda3c67ee9c863eee271",
+      "src/llm/types.py": "f27a48819425c90d81236354cc4984887e19c023814a460a563ce68cabeadf37",
+      "src/main.py": "e184df6af726c5afbde52b4717d6b84c43a41c89c86fe20d39c5d10a22cc2f08",
+      "src/tools/__init__.py": "0e75c5097e58f78f3140edcb26124076033848861e7182d5ac1066e297decef2",
+      "src/tools/definition.py": "85a22286c36b29e59b0eafe6928b08086a202ec16439797b3560cc7f69c857a5",
+      "src/tools/errors.py": "60ea221bdcbd1dc5410b9b54e528f32440d2da1060ebcf8fa54942042170fb93",
+      "src/tools/executor.py": "dd6bb8113cc7607bf95262c3ddb336874746c7fd437b84124688f098dea58794",
+      "src/tools/limits.py": "62db06f1fbccc99608a1bbdf522db9f5b6b727b09293d20d31cf99351a221d9a",
+      "src/tools/protocol.py": "fdba0d52741b503d19fd948a392705d72c9d60bc4ef79fa750bb7024d48c6015",
+      "src/tools/registry.py": "3f701c5b9895f7fb54af21a547ef79beb2d0b1ef11db24e6b64eb592a52e36eb",
+      "src/validation.py": "1edde742319a5a262fdf1e2f9ce4246ef199345aedb3290dfa44d6cc2a07ad58",
+      "src/video/__init__.py": "4342dfe76ced9259b7874a2a53853b8c3f556a1e994ade2cba3228e638b5a954",
+      "src/video/catalog.py": "50c8407d7fbdaf0d72a014314da00cb628c043f72470d4cd38947ea7371d260d",
+      "src/video/checks.py": "f5efda6e5e927923297e24a918d93b04a928427b952beb1d1b039eb1694afe15",
+      "src/video/offline.py": "31d75b59857f0f4dd820f18b1182bb4e15677ab5bccc9b927140e55752ec9579",
+      "src/video/schemas.py": "0a552dafcb82661b8fd9cadac5340387b01976b2cef797930895dc1890e596dc",
+      "src/video/service.py": "16ff3a5140cf0b45b26866a8f589e91941ea99767bdb0b6e3b66f216cafe013d",
+      "src/video/tools.py": "e64b7a3875de359ecdab860e1e25f06edd111b876afe389ed66d45b1676997ca",
+      "uv.lock": "c064f82e642de63e2022d6782d3cadd4dc82ed831eed8fc14fd98bf2bf53d9a8"
+    },
+    "note": "Hashes identify executed files, including changes after base_commit."
+  },
+  "model_settings": {
+    "api": "responses",
+    "model": "deepseek-flash",
+    "endpoint": "custom",
+    "timeout_seconds": 120.0,
+    "max_output_tokens": 8192,
+    "reasoning_effort": "high",
+    "max_run_seconds": 600.0
+  },
+  "cases": [
+    {
+      "case": "normal",
+      "started_at": "2026-10-29T08:46:48.437082+00:00",
+      "finished_at": "2026-10-29T08:47:02.729481+00:00",
+      "status": "completed",
+      "reason": "validated_script",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "case": "missing",
+      "started_at": "2026-10-29T08:47:02.730554+00:00",
+      "finished_at": "2026-10-29T08:47:02.731268+00:00",
+      "status": "needs_input",
+      "reason": "missing_required_fields",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "case": "no-materials",
+      "started_at": "2026-10-29T08:47:02.732252+00:00",
+      "finished_at": "2026-10-29T08:47:07.984801+00:00",
+      "status": "needs_input",
+      "reason": "user_input_required",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "case": "short-duration",
+      "started_at": "2026-10-29T08:47:07.986358+00:00",
+      "finished_at": "2026-10-29T08:47:17.954192+00:00",
+      "status": "model_error",
+      "reason": "http_400",
+      "passed": false,
+      "failures": ["Expected a completed script"]
+    },
+    {
+      "case": "unrepairable",
+      "started_at": "2026-10-29T08:47:17.956843+00:00",
+      "finished_at": "2026-10-29T08:47:33.124552+00:00",
+      "status": "incomplete",
+      "reason": "cannot_meet_constraints",
+      "passed": false,
+      "failures": ["Expected an observed duration failure"]
+    },
+    {
+      "case": "unsupported-claim",
+      "started_at": "2026-10-29T08:47:33.125854+00:00",
+      "finished_at": "2026-10-29T08:47:37.473566+00:00",
+      "status": "needs_input",
+      "reason": "user_input_required",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "case": "tool-failure",
+      "started_at": "2026-10-29T08:47:37.475984+00:00",
+      "finished_at": "2026-10-29T08:47:46.499570+00:00",
+      "status": "completed",
+      "reason": "validated_script",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "case": "persistent-failure",
+      "started_at": "2026-10-29T08:47:46.500545+00:00",
+      "finished_at": "2026-10-29T08:47:52.021616+00:00",
+      "status": "incomplete",
+      "reason": "tool_failure",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "case": "changed-materials",
+      "started_at": "2026-10-29T08:47:52.023008+00:00",
+      "finished_at": "2026-10-29T08:47:59.605060+00:00",
+      "status": "needs_input",
+      "reason": "user_input_required",
+      "passed": false,
+      "failures": ["Expected a completed script"]
+    }
+  ]
+}
