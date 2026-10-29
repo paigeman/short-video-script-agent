@@ -2,7 +2,7 @@
 
 第 4 题「短视频脚本 Agent」项目。已实现输入校验、素材检索、草稿估时、引用与品牌规则检查，以及模型根据工具结果修订脚本的业务入口。
 
-已完成 DeepSeek `deepseek-flash` 的九场景验收（八条真实模型路径与一条本地缺字段路径）及 136 项离线测试。结果与限制见 [截点后验收](docs/12-post-checkpoint-acceptance.md)。用户报告达到 3 小时时的进度另存于 [冻结快照](docs/11-three-hour-checkpoint.md)，后续成果不计入该截点。
+已完成 DeepSeek `deepseek-flash` 的十二场景验收（十一条真实模型路径与一条本地缺字段路径）及 145 项离线测试。最新补强验证了已有稿件从 14.2 秒压缩到 8.3 秒，并交付不同教学与速览结构。原始判定、更正记录和限制见 [审核补强](docs/13-review-strengthening.md)，此前九场景保留于 [截点后验收](docs/12-post-checkpoint-acceptance.md)。用户报告达到 3 小时时的进度另存于 [冻结快照](docs/11-three-hour-checkpoint.md)，后续成果不计入该截点。
 
 ## 安装与快速运行
 
@@ -15,9 +15,11 @@ uv run --locked python -m src.main --mode offline --input examples/duration-repa
 uv run --locked python -m src.main --mode offline --input examples/tool-failure.input.json
 ```
 
-输出为 JSON，包含业务状态、可编辑脚本、每个分镜的估计时长、素材 ID、实际检查记录和 Trace。示例记录及预期结果见 [评估](docs/03-evaluation.md)。
+输出为 JSON，包含业务状态、可编辑脚本、每个分镜的估计时长与起止时间、素材 ID、实际检查记录和 Trace。示例记录及预期结果见 [评估](docs/03-evaluation.md)。
 
 输入字段为 `topic`、`audience`、`platform`、`duration_seconds`、`style`、`product_id`。目标时长是 1–300 的整数秒上限；本项目额外使用 `product_id` 隔离产品素材。缺字段返回 `needs_input`，字段类型错误返回 `invalid_input`。完整规则见 [业务说明](docs/09-business-rules.md)。
+
+可选 `initial_draft` 用于修改已有稿件。原稿必须重新检索依据、诊断和检查，模型再依据反馈选择压缩或重写。可直接运行 [已有稿件输入](examples/revise-existing.input.json)，或使用 [新手教学](examples/style-tutorial.input.json)与 [功能速览](examples/style-teaser.input.json)输入比较结构。
 
 ## 真实模型入口
 
@@ -50,7 +52,7 @@ Python 不会自动读取 `.env`，可在上述 `uv run` 命令中显式增加 `
 
 每份候选脚本有按内容计算的 `draft_id`。只有同一份草稿的估时与规则检查均实际通过，程序才组装 `script` 并返回业务 `completed`。模型自行声称成功、伪造检查字段或提交未检查的修改稿都不会绕过最后检查。
 
-首版采用保守的文案规则：产品表述使用引用素材的完整原文，可以组合获准过渡语和标点；不接受任意自由改写。画面描述由三种可编辑镜头类型映射生成。它能明确检查引用覆盖与数值变造，但限制创意表达，不是通用语义事实核查器。
+采用保守的文案规则：产品表述使用引用素材的完整原文，可以组合获准过渡语和标点；不接受任意自由改写。画面描述由六种可编辑镜头类型映射生成，包括界面特写、步骤卡和回顾卡。它能明确检查引用覆盖与数值变造，但限制创意表达，不是通用语义事实核查器。
 
 时长使用口播单位、字幕阅读、画面停留与转场进行确定性估算，不代表实际录制时长。本轮已核对合成案例的主题与引用，受众、风格及创意质量仍缺少独立人工评估。
 
@@ -79,12 +81,12 @@ src/
 
 ```shell
 npm ci --ignore-scripts
-npm run format
+npm exec -- prettier --write README.md
 npm run check
 npm test
 ```
 
-质量工具使用本地 Prettier、markdownlint-cli2 和 Ruff。基础运行时仍可单独执行 `python -m src.agent.demo --scenario capabilities`；它与短视频业务入口分开。
+质量工具使用本地 Prettier、markdownlint-cli2 和 Ruff。按修改范围格式化，不能对冻结快照执行写入式格式化；完整命令见 [开发指南](docs/06-development.md)。基础运行时仍可单独执行 `python -m src.agent.demo --scenario capabilities`；它与短视频业务入口分开。
 
 | 内容                  | 入口                                              |
 | --------------------- | ------------------------------------------------- |
@@ -100,6 +102,7 @@ npm test
 | 真实模型配置与执行    | [验收指南](docs/10-live-validation.md)            |
 | 3 小时进度与未完成项  | [冻结快照](docs/11-three-hour-checkpoint.md)      |
 | 截点后修复及真实结果  | [后续验收](docs/12-post-checkpoint-acceptance.md) |
+| 压缩与风格补强证据    | [审核补强](docs/13-review-strengthening.md)       |
 
 目录组织参考 [agent-campus-submission-example](https://github.com/lwz1357/agent-campus-submission-example)，基础运行时按需迁移自 [FadeDemo/AI-demo](https://github.com/FadeDemo/AI-demo)。迁移文档记录固定 commit 与文件映射；本轮业务实现独立编写。
 

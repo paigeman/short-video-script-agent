@@ -218,6 +218,8 @@ class VideoTools:
                     "visual": VISUALS[scene["visual"]],
                     "visual_kind": scene["visual"],
                     "estimated_seconds": timing["estimated_seconds"],
+                    "start_seconds": timing["start_seconds"],
+                    "end_seconds": timing["end_seconds"],
                     "source_ids": sorted(
                         {facts[key]["source_id"] for key in scene["fact_ids"]}
                     ),

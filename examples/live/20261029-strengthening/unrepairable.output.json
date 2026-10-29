@@ -1,0 +1,349 @@
+{
+  "status": "incomplete",
+  "reason": "cannot_meet_constraints",
+  "mode": "live",
+  "script": null,
+  "question": null,
+  "missing_fields": [],
+  "issues": [],
+  "runtime": {
+    "status": "completed",
+    "reason": "model_finished",
+    "text": "{\"status\": \"incomplete\", \"reason\": \"cannot_meet_constraints\"}",
+    "model_requests": 3,
+    "tool_rounds": 2,
+    "tool_executions": 3,
+    "run_id": "dc283cc1-2cdf-436a-8c23-11541cae92d8",
+    "data": {
+      "status": "incomplete",
+      "reason": "cannot_meet_constraints"
+    },
+    "question": null,
+    "model_retries": 0,
+    "output_repairs": 0,
+    "elapsed_seconds": 18.683373416773975,
+    "usage": {
+      "input_tokens": 9283,
+      "output_tokens": 2769,
+      "total_tokens": 12052
+    },
+    "usage_complete": true,
+    "model": "deepseek-flash",
+    "limits": {
+      "max_tool_rounds": 10,
+      "max_model_requests": 14,
+      "max_tool_executions": 16,
+      "max_model_retries": 2,
+      "max_output_repairs": 2,
+      "max_context_bytes": 128000,
+      "max_tool_output_bytes": 32000,
+      "max_run_seconds": 600.0,
+      "retry_base_seconds": 0.5,
+      "max_retry_delay_seconds": 30.0
+    }
+  },
+  "trace": [
+    {
+      "event": "model",
+      "request": 1,
+      "reason": "completed",
+      "summary": "",
+      "summary_truncated": false,
+      "calls": [
+        {
+          "call_id": "call_00_YTCvukCNeTNWliqHQ3zz5899",
+          "name": "search_materials",
+          "arguments": "{\"query\": \"字幕编辑功能\", \"reason\": \"检索字幕编辑相关的可用素材事实\"}",
+          "arguments_truncated": false
+        },
+        {
+          "call_id": "call_01_2VLkNRPVsFUQHcr5Awtn7980",
+          "name": "search_materials",
+          "arguments": "{\"query\": \"P01\", \"reason\": \"按产品 ID 检索产品素材总览\"}",
+          "arguments_truncated": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 2099,
+        "output_tokens": 173,
+        "total_tokens": 2272
+      },
+      "elapsed_seconds": 1.351227874867618
+    },
+    {
+      "event": "tool",
+      "round": 1,
+      "call_id": "call_00_YTCvukCNeTNWliqHQ3zz5899",
+      "name": "search_materials",
+      "arguments": "{\"query\": \"字幕编辑功能\", \"reason\": \"检索字幕编辑相关的可用素材事实\"}",
+      "arguments_truncated": false,
+      "output_summary": "{\"query\": \"\\u5b57\\u5e55\\u7f16\\u8f91\\u529f\\u80fd\", \"product_id\": \"P01\", \"materials\": [{\"source_id\": \"M01\", \"product_id\": \"P01\", \"title\": \"\\u6f14\\u793a\\u4ea7\\u54c1\\u7684\\u5b57\\u5e55\\u529f\\u80fd\", \"source\": \"\\u9879\\u76ee\\u5408\\u6210\\u6d4b\\u8bd5\\u8d44\\u6599\", \"facts\": [{\"fact_id\": \"M01:F1\", \"source_id\": \"M01\", \"product_id\": \"P01\", \"text\": \"\\u652f\\u6301\\u751f\\u6210\\u5b57\\u5e55\\u8349\\u7a3f\"}, {\"fact_id\": \"M01:F2\", \"source_id\": \"M01\", \"product_id\": \"P01\", \"text\": \"\\u652f\\u6301\\u624b\\u52a8\\u4fee\\u6539\\u5b57\\u5e55\\u6587\\u672c\"}]}], \"count\": 1, \"truncated\": false, \"synthetic\": true}",
+      "output_summary_truncated": false,
+      "output_bytes": 579,
+      "elapsed_seconds": 0.00012208241969347
+    },
+    {
+      "event": "tool",
+      "round": 1,
+      "call_id": "call_01_2VLkNRPVsFUQHcr5Awtn7980",
+      "name": "search_materials",
+      "arguments": "{\"query\": \"P01\", \"reason\": \"按产品 ID 检索产品素材总览\"}",
+      "arguments_truncated": false,
+      "output_summary": "{\"query\": \"P01\", \"product_id\": \"P01\", \"materials\": [{\"source_id\": \"M01\", \"product_id\": \"P01\", \"title\": \"\\u6f14\\u793a\\u4ea7\\u54c1\\u7684\\u5b57\\u5e55\\u529f\\u80fd\", \"source\": \"\\u9879\\u76ee\\u5408\\u6210\\u6d4b\\u8bd5\\u8d44\\u6599\", \"facts\": [{\"fact_id\": \"M01:F1\", \"source_id\": \"M01\", \"product_id\": \"P01\", \"text\": \"\\u652f\\u6301\\u751f\\u6210\\u5b57\\u5e55\\u8349\\u7a3f\"}, {\"fact_id\": \"M01:F2\", \"source_id\": \"M01\", \"product_id\": \"P01\", \"text\": \"\\u652f\\u6301\\u624b\\u52a8\\u4fee\\u6539\\u5b57\\u5e55\\u6587\\u672c\"}]}], \"count\": 1, \"truncated\": false, \"synthetic\": true}",
+      "output_summary_truncated": false,
+      "output_bytes": 546,
+      "elapsed_seconds": 5.0166621804237366e-5
+    },
+    {
+      "event": "model",
+      "request": 2,
+      "reason": "completed",
+      "summary": "",
+      "summary_truncated": false,
+      "calls": [
+        {
+          "call_id": "call_00_pZCMVdvsyH8hFj62v8OQ8037",
+          "name": "estimate_duration",
+          "arguments": "{\"reason\": \"用最短可行单镜头试探 1 秒时长上限\", \"script\": {\"title\": \"支持生成字幕草稿\", \"scenes\": [{\"id\": \"s1\", \"visual\": \"screen_demo\", \"narration\": \"\", \"subtitle\": \"支持生成字幕草稿\", \"hold_seconds\": 0, \"fact_ids\": [\"M01:F1\"]}]}}",
+          "arguments_truncated": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 2820,
+        "output_tokens": 1078,
+        "total_tokens": 3898
+      },
+      "elapsed_seconds": 6.3909715404734015
+    },
+    {
+      "event": "tool",
+      "round": 2,
+      "call_id": "call_00_pZCMVdvsyH8hFj62v8OQ8037",
+      "name": "estimate_duration",
+      "arguments": "{\"reason\": \"用最短可行单镜头试探 1 秒时长上限\", \"script\": {\"title\": \"支持生成字幕草稿\", \"scenes\": [{\"id\": \"s1\", \"visual\": \"screen_demo\", \"narration\": \"\", \"subtitle\": \"支持生成字幕草稿\", \"hold_seconds\": 0, \"fact_ids\": [\"M01:F1\"]}]}}",
+      "arguments_truncated": false,
+      "output_summary": "{\"draft_id\": \"874d0053b9e1282e1aa77389cc3ba45b9ac95d7adcc7d817e3086738d060c26c\", \"passed\": false, \"target_seconds\": 1, \"estimated_total_seconds\": 1.4, \"over_by_seconds\": 0.4, \"transition_seconds\": 0.0, \"scenes\": [{\"scene_id\": \"s1\", \"spoken_units\": 0, \"subtitle_units\": 8, \"narration_seconds\": 0.0, \"subtitle_seconds\": 1.4, \"hold_seconds\": 0, \"estimated_seconds\": 1.4, \"start_seconds\": 0.0, \"end_seconds\": 1.4}], \"assumptions\": {\"speech_units_per_second\": 4.0, \"subtitle_units_per_second\": 6.0, \"punctuation_pause_seconds\": 0.15, \"transition_seconds\": 0.4, \"unit_definition\": \"\\u6bcf\\u4e2a\\u4e2d\\u6587\\u7b49\\u975e ASCII \\u5b57\\u6bcd\\u3001\\u6bcf\\u4f4d\\u6570\\u5b57\\u8ba1 1 \\u5355\\u4f4d\\uff1b\\u8fde\\u7eed\\u82f1\\u6587\\u5b57\\u6bcd\\u8ba1 1 \\u5355\\u8bcd\\u5355\\u4f4d\", \"scene_duration\": \"max(\\u53e3\\u64ad\\u4f30\\u7b97, \\u5b57\\u5e55\\u9605\\u8bfb\\u4f30\\u7b97, \\u753b\\u9762\\u505c\\u7559)\\uff0c\\u6700\\u540e\\u52a0\\u955c\\u5934\\u95f4\\u8f6c\\u573a\"}}",
+      "output_summary_truncated": false,
+      "output_bytes": 929,
+      "elapsed_seconds": 0.0006737504154443741
+    },
+    {
+      "event": "model",
+      "request": 3,
+      "reason": "completed",
+      "summary": "{\"status\": \"incomplete\", \"reason\": \"cannot_meet_constraints\"}",
+      "summary_truncated": false,
+      "calls": [],
+      "usage": {
+        "input_tokens": 4364,
+        "output_tokens": 1518,
+        "total_tokens": 5882
+      },
+      "elapsed_seconds": 10.807112124748528
+    },
+    {
+      "event": "stop",
+      "status": "completed",
+      "reason": "model_finished"
+    },
+    {
+      "event": "business_final_gate",
+      "status": "incomplete",
+      "reason": "cannot_meet_constraints",
+      "issues": []
+    }
+  ],
+  "tool_records": [
+    {
+      "tool": "search_materials",
+      "reason": "检索字幕编辑相关的可用素材事实",
+      "arguments": {
+        "query": "字幕编辑功能",
+        "reason": "检索字幕编辑相关的可用素材事实"
+      },
+      "status": "returned",
+      "result": {
+        "query": "字幕编辑功能",
+        "product_id": "P01",
+        "materials": [
+          {
+            "source_id": "M01",
+            "product_id": "P01",
+            "title": "演示产品的字幕功能",
+            "source": "项目合成测试资料",
+            "facts": [
+              {
+                "fact_id": "M01:F1",
+                "source_id": "M01",
+                "product_id": "P01",
+                "text": "支持生成字幕草稿"
+              },
+              {
+                "fact_id": "M01:F2",
+                "source_id": "M01",
+                "product_id": "P01",
+                "text": "支持手动修改字幕文本"
+              }
+            ]
+          }
+        ],
+        "count": 1,
+        "truncated": false,
+        "synthetic": true
+      }
+    },
+    {
+      "tool": "search_materials",
+      "reason": "按产品 ID 检索产品素材总览",
+      "arguments": {
+        "query": "P01",
+        "reason": "按产品 ID 检索产品素材总览"
+      },
+      "status": "returned",
+      "result": {
+        "query": "P01",
+        "product_id": "P01",
+        "materials": [
+          {
+            "source_id": "M01",
+            "product_id": "P01",
+            "title": "演示产品的字幕功能",
+            "source": "项目合成测试资料",
+            "facts": [
+              {
+                "fact_id": "M01:F1",
+                "source_id": "M01",
+                "product_id": "P01",
+                "text": "支持生成字幕草稿"
+              },
+              {
+                "fact_id": "M01:F2",
+                "source_id": "M01",
+                "product_id": "P01",
+                "text": "支持手动修改字幕文本"
+              }
+            ]
+          }
+        ],
+        "count": 1,
+        "truncated": false,
+        "synthetic": true
+      }
+    },
+    {
+      "tool": "estimate_duration",
+      "reason": "用最短可行单镜头试探 1 秒时长上限",
+      "arguments": {
+        "reason": "用最短可行单镜头试探 1 秒时长上限",
+        "script": {
+          "title": "支持生成字幕草稿",
+          "scenes": [
+            {
+              "id": "s1",
+              "visual": "screen_demo",
+              "narration": "",
+              "subtitle": "支持生成字幕草稿",
+              "hold_seconds": 0,
+              "fact_ids": ["M01:F1"]
+            }
+          ]
+        }
+      },
+      "status": "returned",
+      "result": {
+        "draft_id": "874d0053b9e1282e1aa77389cc3ba45b9ac95d7adcc7d817e3086738d060c26c",
+        "passed": false,
+        "target_seconds": 1,
+        "estimated_total_seconds": 1.4,
+        "over_by_seconds": 0.4,
+        "transition_seconds": 0.0,
+        "scenes": [
+          {
+            "scene_id": "s1",
+            "spoken_units": 0,
+            "subtitle_units": 8,
+            "narration_seconds": 0.0,
+            "subtitle_seconds": 1.4,
+            "hold_seconds": 0,
+            "estimated_seconds": 1.4,
+            "start_seconds": 0.0,
+            "end_seconds": 1.4
+          }
+        ],
+        "assumptions": {
+          "speech_units_per_second": 4.0,
+          "subtitle_units_per_second": 6.0,
+          "punctuation_pause_seconds": 0.15,
+          "transition_seconds": 0.4,
+          "unit_definition": "每个中文等非 ASCII 字母、每位数字计 1 单位；连续英文字母计 1 单词单位",
+          "scene_duration": "max(口播估算, 字幕阅读估算, 画面停留)，最后加镜头间转场"
+        }
+      }
+    }
+  ],
+  "drafts": [
+    {
+      "draft_id": "874d0053b9e1282e1aa77389cc3ba45b9ac95d7adcc7d817e3086738d060c26c",
+      "script": {
+        "title": "支持生成字幕草稿",
+        "scenes": [
+          {
+            "id": "s1",
+            "visual": "screen_demo",
+            "narration": "",
+            "subtitle": "支持生成字幕草稿",
+            "hold_seconds": 0,
+            "fact_ids": ["M01:F1"]
+          }
+        ]
+      },
+      "duration_check": {
+        "passed": false,
+        "target_seconds": 1,
+        "estimated_total_seconds": 1.4,
+        "over_by_seconds": 0.4,
+        "transition_seconds": 0.0,
+        "scenes": [
+          {
+            "scene_id": "s1",
+            "spoken_units": 0,
+            "subtitle_units": 8,
+            "narration_seconds": 0.0,
+            "subtitle_seconds": 1.4,
+            "hold_seconds": 0,
+            "estimated_seconds": 1.4,
+            "start_seconds": 0.0,
+            "end_seconds": 1.4
+          }
+        ],
+        "assumptions": {
+          "speech_units_per_second": 4.0,
+          "subtitle_units_per_second": 6.0,
+          "punctuation_pause_seconds": 0.15,
+          "transition_seconds": 0.4,
+          "unit_definition": "每个中文等非 ASCII 字母、每位数字计 1 单位；连续英文字母计 1 单词单位",
+          "scene_duration": "max(口播估算, 字幕阅读估算, 画面停留)，最后加镜头间转场"
+        }
+      },
+      "rules_check": null
+    }
+  ],
+  "input": {
+    "topic": "介绍字幕编辑功能",
+    "audience": "首次制作短视频的创作者",
+    "platform": "短视频平台",
+    "duration_seconds": 1,
+    "style": "简洁直观",
+    "product_id": "P01"
+  },
+  "model_settings": {
+    "api": "responses",
+    "model": "deepseek-flash",
+    "endpoint": "custom",
+    "timeout_seconds": 120.0,
+    "max_output_tokens": 8192,
+    "reasoning_effort": "high",
+    "max_run_seconds": 600.0,
+    "output_format": "json_object"
+  }
+}

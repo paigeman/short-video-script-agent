@@ -1,0 +1,77 @@
+{
+  "started_at": "2026-10-29T09:27:40.090671+00:00",
+  "source_version": {
+    "base_commit": "154bb8e39dd33ec8308a5bc85e14f2575d065d5d",
+    "files_sha256": {
+      "pyproject.toml": "de1085acf08447d2cbb8c4ea449ad1abb7af5041f16dea6cb88146cc3a94d25f",
+      "scripts/live_acceptance.py": "942109c78370f7bcd18b6ba52d9911638cf385c689dd135c9bcd7718d76a625b",
+      "src/__init__.py": "1b0fb1a60b133bc2bc767c0839a68d0879273d7116920dd922520bf3b1b32de2",
+      "src/agent/__init__.py": "7f18e1ca2618ccb022eaef7d576c8d82d972866e6e731f983085767d7c64fbdd",
+      "src/agent/control.py": "fa0d4a0c0e20e391580d0b6f0a1453fd204ad1aec9aaa6d7dec4ed79a948a2f5",
+      "src/agent/demo.py": "5ca593ec1d8a90080c41da736d062a2fbe9533ad2d65ad2bf80b74a910b864de",
+      "src/agent/runner.py": "d8c4a3db5bc7bd8b8f3fcd90008d18e6c2f2e1ea8cfe6980ad8b53d540d0db7b",
+      "src/agent/state.py": "f58c6cd04d38ca8925565d54aed8c5fbb8c6b0643b2caf171f287bdb78557712",
+      "src/config.py": "46aca52e6066e40d52e947552d98320db915932b1832bef9e604770b665543d3",
+      "src/llm/__init__.py": "714cb97e56bf5135f3cbc44722fde3ae6583c07bd30afb4d1f8c88a05606ceaa",
+      "src/llm/responses.py": "06b214cde86c793b465c90ec1828a9cee38960670211b54ced25efa9bc2a7b2a",
+      "src/llm/types.py": "5fddba064d94edd64b826e84c4e7a7b1895d96133823cf39c2d91b059cfa9685",
+      "src/main.py": "e184df6af726c5afbde52b4717d6b84c43a41c89c86fe20d39c5d10a22cc2f08",
+      "src/tools/__init__.py": "0e75c5097e58f78f3140edcb26124076033848861e7182d5ac1066e297decef2",
+      "src/tools/definition.py": "85a22286c36b29e59b0eafe6928b08086a202ec16439797b3560cc7f69c857a5",
+      "src/tools/errors.py": "60ea221bdcbd1dc5410b9b54e528f32440d2da1060ebcf8fa54942042170fb93",
+      "src/tools/executor.py": "dd6bb8113cc7607bf95262c3ddb336874746c7fd437b84124688f098dea58794",
+      "src/tools/limits.py": "62db06f1fbccc99608a1bbdf522db9f5b6b727b09293d20d31cf99351a221d9a",
+      "src/tools/protocol.py": "fdba0d52741b503d19fd948a392705d72c9d60bc4ef79fa750bb7024d48c6015",
+      "src/tools/registry.py": "3f701c5b9895f7fb54af21a547ef79beb2d0b1ef11db24e6b64eb592a52e36eb",
+      "src/validation.py": "1edde742319a5a262fdf1e2f9ce4246ef199345aedb3290dfa44d6cc2a07ad58",
+      "src/video/__init__.py": "4342dfe76ced9259b7874a2a53853b8c3f556a1e994ade2cba3228e638b5a954",
+      "src/video/catalog.py": "50c8407d7fbdaf0d72a014314da00cb628c043f72470d4cd38947ea7371d260d",
+      "src/video/checks.py": "52aec5016e71aaabe14f56242fac597e55e8177e7d45da76b9b305b651c95828",
+      "src/video/offline.py": "18e41d24c66c8bb1c8615a3a9c4a2293a4671897a42ef0f095681bb71a350a66",
+      "src/video/schemas.py": "0d6c6bd669a729ffd77c60399298e7dfe99d937812c12bb2a1d09acd603542c5",
+      "src/video/service.py": "0d6b0f66d3aac682f0c2e90a11da8080b4a89fc52d42148276d71e4dc1e00121",
+      "src/video/tools.py": "e54f89f557dc1b58472dfc8e122de5fd06bd5e244023189ec02899f17576aacb",
+      "uv.lock": "c064f82e642de63e2022d6782d3cadd4dc82ed831eed8fc14fd98bf2bf53d9a8"
+    },
+    "note": "Hashes identify executed files, including changes after base_commit."
+  },
+  "model_settings": {
+    "api": "responses",
+    "model": "deepseek-flash",
+    "endpoint": "custom",
+    "timeout_seconds": 120.0,
+    "max_output_tokens": 8192,
+    "reasoning_effort": "high",
+    "max_run_seconds": 600.0,
+    "output_format": "json_object"
+  },
+  "cases": [
+    {
+      "case": "duration-repair",
+      "started_at": "2026-10-29T09:27:40.118757+00:00",
+      "finished_at": "2026-10-29T09:27:53.588034+00:00",
+      "status": "completed",
+      "reason": "validated_script",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "case": "style-tutorial",
+      "started_at": "2026-10-29T09:27:53.589793+00:00",
+      "finished_at": "2026-10-29T09:28:10.832014+00:00",
+      "status": "completed",
+      "reason": "validated_script",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "case": "style-teaser",
+      "started_at": "2026-10-29T09:28:10.833178+00:00",
+      "finished_at": "2026-10-29T09:28:24.333470+00:00",
+      "status": "completed",
+      "reason": "validated_script",
+      "passed": true,
+      "failures": []
+    }
+  ]
+}

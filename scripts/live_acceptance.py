@@ -25,7 +25,11 @@ CASES = (
     "tool-failure",
     "persistent-failure",
     "changed-materials",
+    "duration-repair",
+    "style-tutorial",
+    "style-teaser",
 )
+SEED_REPORT = "examples/live/20261029-post-checkpoint/normal.output.json"
 
 
 def scenario(name: str) -> tuple[dict, dict, dict, dict]:
@@ -49,6 +53,29 @@ def scenario(name: str) -> tuple[dict, dict, dict, dict]:
         failures = {"search_materials": 100}
     elif name == "changed-materials":
         materials["materials"][0]["facts"] = ["支持调整字幕显示位置"]
+    elif name == "duration-repair":
+        prior = json.loads((ROOT / SEED_REPORT).read_text())
+        request["initial_draft"] = next(
+            deepcopy(item["script"])
+            for item in prior["drafts"]
+            if item["draft_id"] == prior["script"]["draft_id"]
+        )
+        request["duration_seconds"] = 10
+        request["style"] = (
+            "保持事实与主题\uff0c压缩现有稿件到时长上限\uff0c避免重复口播。"
+        )
+    elif name == "style-tutorial":
+        request["audience"] = "第一次剪辑视频的新手"
+        request["platform"] = "竖屏教学短视频"
+        request["style"] = (
+            "耐心的新手教学\uff1a用步骤提示卡组织内容\uff0c展示操作画面\uff0c最后做要点回顾。"
+        )
+    elif name == "style-teaser":
+        request["audience"] = "熟悉剪辑工具的创作者"
+        request["platform"] = "竖屏短视频信息流"
+        request["style"] = (
+            "快节奏功能速览\uff1a直接用字幕区域特写突出事实\uff0c短字幕\uff0c省去逐步教学和冗长片头。"
+        )
     return request, materials, policy, failures
 
 
@@ -67,7 +94,15 @@ def assess(name: str, report: dict, request: dict, catalog: Catalog) -> list[str
         runtime.get("model_requests", 0) > 0 or name == "missing",
         "Expected actual model requests",
     )
-    if name in {"normal", "short-duration", "tool-failure", "changed-materials"}:
+    if name in {
+        "normal",
+        "short-duration",
+        "tool-failure",
+        "changed-materials",
+        "duration-repair",
+        "style-tutorial",
+        "style-teaser",
+    }:
         require(report["status"] == "completed", "Expected a completed script")
     elif name == "missing":
         require(report["status"] == "needs_input", "Expected a clarification")
@@ -118,6 +153,45 @@ def assess(name: str, report: dict, request: dict, catalog: Catalog) -> list[str
     if not isinstance(script, dict):
         return [*failures, "Missing completed script"]
     key = script["draft_id"]
+    if name == "duration-repair":
+        estimates = [
+            r["result"]
+            for r in records
+            if r["tool"] == "estimate_duration" and r["status"] == "returned"
+        ]
+        initial = request["initial_draft"]
+        original_id = draft_id(initial)
+        expected_first = {
+            "draft_id": original_id,
+            **estimate_duration(
+                initial, request["duration_seconds"], catalog.policy["timing"]
+            ),
+        }
+        require(
+            len(estimates) >= 2
+            and estimates[0] == expected_first
+            and not estimates[0]["passed"]
+            and key != original_id
+            and any(e["draft_id"] == key and e["passed"] for e in estimates[1:]),
+            "Expected an unchanged overlong input, then a different passing revision",
+        )
+    visual_kinds = {scene["visual_kind"] for scene in script["scenes"]}
+    if name == "style-tutorial":
+        require(
+            {"step_card", "recap_card"} <= visual_kinds
+            and bool({"screen_demo", "screen_closeup"} & visual_kinds),
+            "Tutorial must honor the requested steps, demonstration, and recap",
+        )
+    elif name == "style-teaser":
+        require(
+            "screen_closeup" in visual_kinds and "step_card" not in visual_kinds,
+            "Teaser must honor the requested close-up without step-by-step teaching",
+        )
+        fact_uses = [fact for scene in script["scenes"] for fact in scene["fact_ids"]]
+        require(
+            len(script["scenes"]) <= 4 and len(fact_uses) == len(set(fact_uses)),
+            "Teaser must stay concise without repeating facts across scenes",
+        )
     drafts = {d["draft_id"]: d["script"] for d in report["drafts"]}
     if key not in drafts:
         return [*failures, "Final draft has no stored candidate"]
@@ -167,7 +241,10 @@ def assess(name: str, report: dict, request: dict, catalog: Catalog) -> list[str
                 scene[field] == candidate[field]
                 for field in ("id", "narration", "subtitle", "hold_seconds", "fact_ids")
             )
+            and scene["visual_kind"] == candidate["visual"]
             and scene["estimated_seconds"] == timing["estimated_seconds"]
+            and scene["start_seconds"] == timing["start_seconds"]
+            and scene["end_seconds"] == timing["end_seconds"]
             and scene["source_ids"]
             == sorted(
                 {
@@ -228,6 +305,14 @@ def main(argv: list[str] | None = None) -> int:
             "policy": policy,
             "injected_tool_failures": injected,
         }
+        if name == "duration-repair":
+            inputs["initial_draft_origin"] = {
+                "report": SEED_REPORT,
+                "report_sha256": hashlib.sha256(
+                    (ROOT / SEED_REPORT).read_bytes()
+                ).hexdigest(),
+                "note": "Reuse a real model's earlier draft under a newly shortened limit; no draft or tool result is fabricated.",
+            }
         write_json(args.output_dir / f"{name}.input.json", inputs)
         started = datetime.now(UTC).isoformat()
         report = run_script(

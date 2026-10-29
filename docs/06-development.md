@@ -27,7 +27,7 @@ uv sync --locked
 ## 常用命令
 
 ```shell
-# 格式化 Markdown、JSON、JSONC 和 Python
+# 全仓格式化；仅用于没有冻结记录且全部文件属于修改范围的情况
 npm run format
 
 # 只检查格式
@@ -43,7 +43,7 @@ npm run check
 npm run lint:python:fix
 ```
 
-提交前先执行 `npm run format`，再执行 `npm run check`，随后检查并暂存自动修改。需要缩小范围时，可直接向本地工具传入文件名：
+本仓库已有冻结记录，提交前应仅格式化当前修改文件，再执行只读的 `npm run check`，随后检查并暂存自动修改。不要对 `docs/11-three-hour-checkpoint.md` 或 `examples/checkpoints/three-hour/` 执行写入式格式化。按文件运行示例：
 
 ```shell
 npm exec -- prettier --write README.md

@@ -1,0 +1,284 @@
+{
+  "status": "incomplete",
+  "reason": "tool_failure",
+  "mode": "live",
+  "script": null,
+  "question": null,
+  "missing_fields": [],
+  "issues": [],
+  "runtime": {
+    "status": "completed",
+    "reason": "model_finished",
+    "text": "{\"status\":\"incomplete\",\"reason\":\"tool_failure\"}",
+    "model_requests": 4,
+    "tool_rounds": 3,
+    "tool_executions": 5,
+    "run_id": "91da3ffe-c27c-41a0-b6b8-452ea5d7e3e7",
+    "data": {
+      "status": "incomplete",
+      "reason": "tool_failure"
+    },
+    "question": null,
+    "model_retries": 0,
+    "output_repairs": 0,
+    "elapsed_seconds": 4.702313208952546,
+    "usage": {
+      "input_tokens": 9556,
+      "output_tokens": 406,
+      "total_tokens": 9962
+    },
+    "usage_complete": true,
+    "model": "deepseek-flash",
+    "limits": {
+      "max_tool_rounds": 10,
+      "max_model_requests": 14,
+      "max_tool_executions": 16,
+      "max_model_retries": 2,
+      "max_output_repairs": 2,
+      "max_context_bytes": 128000,
+      "max_tool_output_bytes": 32000,
+      "max_run_seconds": 600.0,
+      "retry_base_seconds": 0.5,
+      "max_retry_delay_seconds": 30.0
+    }
+  },
+  "trace": [
+    {
+      "event": "model",
+      "request": 1,
+      "reason": "completed",
+      "summary": "                       ",
+      "summary_truncated": false,
+      "calls": [
+        {
+          "call_id": "call_00_ET_mw36gOnKQItigMegguDY7541",
+          "name": "search_materials",
+          "arguments": "{\"query\": \"P01 字幕编辑功能\", \"reason\": \"检索产品 P01 字幕编辑功能的可用事实素材\"}",
+          "arguments_truncated": false
+        },
+        {
+          "call_id": "call_01_ET_DdRbyXYK5BgM9JOHDBdl8971",
+          "name": "search_materials",
+          "arguments": "{\"query\": \"字幕 添加 编辑 样式 导出\", \"reason\": \"补充检索字幕相关操作事实\"}",
+          "arguments_truncated": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 2099,
+        "output_tokens": 140,
+        "total_tokens": 2239
+      },
+      "elapsed_seconds": 1.6818009996786714
+    },
+    {
+      "event": "tool",
+      "round": 1,
+      "call_id": "call_00_ET_mw36gOnKQItigMegguDY7541",
+      "name": "search_materials",
+      "arguments": "{\"query\": \"P01 字幕编辑功能\", \"reason\": \"检索产品 P01 字幕编辑功能的可用事实素材\"}",
+      "arguments_truncated": false,
+      "output_summary": "{\"error\": {\"category\": \"execution_failed\", \"message\": \"Execution of tool 'search_materials' failed.\"}}",
+      "output_summary_truncated": false,
+      "output_bytes": 102,
+      "elapsed_seconds": 0.0010385829955339432
+    },
+    {
+      "event": "tool",
+      "round": 1,
+      "call_id": "call_01_ET_DdRbyXYK5BgM9JOHDBdl8971",
+      "name": "search_materials",
+      "arguments": "{\"query\": \"字幕 添加 编辑 样式 导出\", \"reason\": \"补充检索字幕相关操作事实\"}",
+      "arguments_truncated": false,
+      "output_summary": "{\"error\": {\"category\": \"execution_failed\", \"message\": \"Execution of tool 'search_materials' failed.\"}}",
+      "output_summary_truncated": false,
+      "output_bytes": 102,
+      "elapsed_seconds": 0.00016870908439159393
+    },
+    {
+      "event": "model",
+      "request": 2,
+      "reason": "completed",
+      "summary": "",
+      "summary_truncated": false,
+      "calls": [
+        {
+          "call_id": "call_00_pF4ZMVcBGSXMAIze3ylM7462",
+          "name": "search_materials",
+          "arguments": "{\"query\": \"字幕编辑\", \"reason\": \"重试检索字幕编辑功能素材\"}",
+          "arguments_truncated": false
+        },
+        {
+          "call_id": "call_01_OexTbtsPz6rNFiN6PtrN3669",
+          "name": "search_materials",
+          "arguments": "{\"query\": \"P01\", \"reason\": \"用产品 ID 重试查询素材\"}",
+          "arguments_truncated": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 2300,
+        "output_tokens": 122,
+        "total_tokens": 2422
+      },
+      "elapsed_seconds": 1.0638527506962419
+    },
+    {
+      "event": "tool",
+      "round": 2,
+      "call_id": "call_00_pF4ZMVcBGSXMAIze3ylM7462",
+      "name": "search_materials",
+      "arguments": "{\"query\": \"字幕编辑\", \"reason\": \"重试检索字幕编辑功能素材\"}",
+      "arguments_truncated": false,
+      "output_summary": "{\"error\": {\"category\": \"execution_failed\", \"message\": \"Execution of tool 'search_materials' failed.\"}}",
+      "output_summary_truncated": false,
+      "output_bytes": 102,
+      "elapsed_seconds": 0.0002150004729628563
+    },
+    {
+      "event": "tool",
+      "round": 2,
+      "call_id": "call_01_OexTbtsPz6rNFiN6PtrN3669",
+      "name": "search_materials",
+      "arguments": "{\"query\": \"P01\", \"reason\": \"用产品 ID 重试查询素材\"}",
+      "arguments_truncated": false,
+      "output_summary": "{\"error\": {\"category\": \"execution_failed\", \"message\": \"Execution of tool 'search_materials' failed.\"}}",
+      "output_summary_truncated": false,
+      "output_bytes": 102,
+      "elapsed_seconds": 8.175056427717209e-5
+    },
+    {
+      "event": "model",
+      "request": 3,
+      "reason": "completed",
+      "summary": "",
+      "summary_truncated": false,
+      "calls": [
+        {
+          "call_id": "call_00_24Sp4XAPEzHuqjGmsxJz7055",
+          "name": "search_materials",
+          "arguments": "{\"query\": \"视频字幕文本编辑\", \"reason\": \"最后一次重试检索素材，确认是否为持续故障\"}",
+          "arguments_truncated": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 2494,
+        "output_tokens": 131,
+        "total_tokens": 2625
+      },
+      "elapsed_seconds": 1.1140790423378348
+    },
+    {
+      "event": "tool",
+      "round": 3,
+      "call_id": "call_00_24Sp4XAPEzHuqjGmsxJz7055",
+      "name": "search_materials",
+      "arguments": "{\"query\": \"视频字幕文本编辑\", \"reason\": \"最后一次重试检索素材，确认是否为持续故障\"}",
+      "arguments_truncated": false,
+      "output_summary": "{\"error\": {\"category\": \"execution_failed\", \"message\": \"Execution of tool 'search_materials' failed.\"}}",
+      "output_summary_truncated": false,
+      "output_bytes": 102,
+      "elapsed_seconds": 0.00021454226225614548
+    },
+    {
+      "event": "model",
+      "request": 4,
+      "reason": "completed",
+      "summary": "{\"status\":\"incomplete\",\"reason\":\"tool_failure\"}",
+      "summary_truncated": false,
+      "calls": [],
+      "usage": {
+        "input_tokens": 2663,
+        "output_tokens": 13,
+        "total_tokens": 2676
+      },
+      "elapsed_seconds": 0.8297095000743866
+    },
+    {
+      "event": "stop",
+      "status": "completed",
+      "reason": "model_finished"
+    },
+    {
+      "event": "business_final_gate",
+      "status": "incomplete",
+      "reason": "tool_failure",
+      "issues": []
+    }
+  ],
+  "tool_records": [
+    {
+      "tool": "search_materials",
+      "reason": "检索产品 P01 字幕编辑功能的可用事实素材",
+      "arguments": {
+        "query": "P01 字幕编辑功能",
+        "reason": "检索产品 P01 字幕编辑功能的可用事实素材"
+      },
+      "status": "error",
+      "error": "simulated_tool_failure"
+    },
+    {
+      "tool": "search_materials",
+      "reason": "补充检索字幕相关操作事实",
+      "arguments": {
+        "query": "字幕 添加 编辑 样式 导出",
+        "reason": "补充检索字幕相关操作事实"
+      },
+      "status": "error",
+      "error": "simulated_tool_failure"
+    },
+    {
+      "tool": "search_materials",
+      "reason": "重试检索字幕编辑功能素材",
+      "arguments": {
+        "query": "字幕编辑",
+        "reason": "重试检索字幕编辑功能素材"
+      },
+      "status": "error",
+      "error": "simulated_tool_failure"
+    },
+    {
+      "tool": "search_materials",
+      "reason": "用产品 ID 重试查询素材",
+      "arguments": {
+        "query": "P01",
+        "reason": "用产品 ID 重试查询素材"
+      },
+      "status": "error",
+      "error": "simulated_tool_failure"
+    },
+    {
+      "tool": "search_materials",
+      "reason": "最后一次重试检索素材，确认是否为持续故障",
+      "arguments": {
+        "query": "视频字幕文本编辑",
+        "reason": "最后一次重试检索素材，确认是否为持续故障"
+      },
+      "status": "error",
+      "error": "simulated_tool_failure"
+    }
+  ],
+  "drafts": [],
+  "input": {
+    "topic": "介绍字幕编辑功能",
+    "audience": "首次制作短视频的创作者",
+    "platform": "短视频平台",
+    "duration_seconds": 30,
+    "style": "简洁直观",
+    "product_id": "P01"
+  },
+  "model_settings": {
+    "api": "responses",
+    "model": "deepseek-flash",
+    "endpoint": "custom",
+    "timeout_seconds": 120.0,
+    "max_output_tokens": 8192,
+    "reasoning_effort": "high",
+    "max_run_seconds": 600.0,
+    "output_format": "json_object"
+  },
+  "evaluation": {
+    "injected_tool_failures": {
+      "search_materials": 100
+    },
+    "scope": "local_tools_only"
+  }
+}

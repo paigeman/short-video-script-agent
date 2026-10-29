@@ -1,0 +1,80 @@
+{
+  "reviewed_at": "2026-10-29T09:34:42.354927+00:00",
+  "reason": "A real UI close-up also satisfies the requested operation demonstration. Keep required step/recap cards and actual UI demonstration; preserve the original manifest and model outputs.",
+  "evaluator_sha256": "46ea1ae3eab4412f35e4e39620fe46ba9647a7e36d69394e50e62f35649bdd87",
+  "model_rerun": false,
+  "cases": [
+    {
+      "case": "normal",
+      "original_passed": true,
+      "review_passed": true,
+      "failures": []
+    },
+    {
+      "case": "missing",
+      "original_passed": true,
+      "review_passed": true,
+      "failures": []
+    },
+    {
+      "case": "no-materials",
+      "original_passed": true,
+      "review_passed": true,
+      "failures": []
+    },
+    {
+      "case": "short-duration",
+      "original_passed": true,
+      "review_passed": true,
+      "failures": []
+    },
+    {
+      "case": "unrepairable",
+      "original_passed": true,
+      "review_passed": true,
+      "failures": []
+    },
+    {
+      "case": "unsupported-claim",
+      "original_passed": true,
+      "review_passed": true,
+      "failures": []
+    },
+    {
+      "case": "tool-failure",
+      "original_passed": true,
+      "review_passed": true,
+      "failures": []
+    },
+    {
+      "case": "persistent-failure",
+      "original_passed": true,
+      "review_passed": true,
+      "failures": []
+    },
+    {
+      "case": "changed-materials",
+      "original_passed": true,
+      "review_passed": true,
+      "failures": []
+    },
+    {
+      "case": "duration-repair",
+      "original_passed": true,
+      "review_passed": true,
+      "failures": []
+    },
+    {
+      "case": "style-tutorial",
+      "original_passed": false,
+      "review_passed": true,
+      "failures": []
+    },
+    {
+      "case": "style-teaser",
+      "original_passed": true,
+      "review_passed": true,
+      "failures": []
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 
 ## 当前状态
 
-已完成 DeepSeek `deepseek-flash` 的实际接入与九场景验收，原始结果、失败修复及限制见 [截点后验收](12-post-checkpoint-acceptance.md)。3 小时截止时的未完成部分单独冻结，不被后续结果覆盖。运行时由 uv 加载用户填写的凭据，Agent 不查看或输出密钥。
+已完成 DeepSeek `deepseek-flash` 的实际接入。最新十二场景经复核符合预期，既有稿件压缩、教学与速览结果见 [审核补强](13-review-strengthening.md)；此前九场景与格式修复保留于 [截点后验收](12-post-checkpoint-acceptance.md)。3 小时截止时的未完成部分单独冻结，不被后续结果覆盖。运行时由 uv 加载用户填写的凭据，Agent 不查看或输出密钥。
 
 ## 最小配置
 
@@ -44,6 +44,16 @@ uv run --locked --env-file .env python -m src.main --mode live --input examples/
 
 第一条检查正常检索、估时和规则检查；第二条观察模型在无素材时是否改写查询、追问或明确停止；第三条使用 10 秒上限，观察真实模型是否需要修订。第三条不保证首稿超限，只有 Trace 确实出现失败后修改和复检时，才能记为真实修订路径。不要在真实模式使用 `--offline-scenario` 制造模型行为。
 
+已有稿件压缩和两种风格可直接运行：
+
+```shell
+uv run --locked --env-file .env python -m src.main --mode live --input examples/revise-existing.input.json
+uv run --locked --env-file .env python -m src.main --mode live --input examples/style-tutorial.input.json
+uv run --locked --env-file .env python -m src.main --mode live --input examples/style-teaser.input.json
+```
+
+`revise-existing` 携带此前真实生成的原稿，将上限从 30 秒缩短到 10 秒。原稿估时为 14.2 秒，模型需检查后修订或明确无法完成；最新真实结果为 8.3 秒。这个输入验证已有稿件的改写，不伪造模型首稿或工具结果。
+
 缺字段会在本地直接返回，不算一条真实模型执行路径。`needs_input` 退出码为 3，未完成或模型失败为 1，不应因为退出码非零就丢弃验收记录。需要交互时增加 `--interactive`；用户回答不会直接成为可信产品素材。
 
 ## 核对记录
@@ -54,9 +64,11 @@ uv run --locked --env-file .env python -m src.main --mode live --input examples/
 uv run --locked --env-file .env python -m scripts.live_acceptance --output-dir .agent-tmp/my-live-acceptance
 ```
 
-默认执行九个合成场景，可使用 `--case normal` 或 `--case tool-failure` 单独复验，参数可重复指定。宿主参数 `evaluation_failures` 仅用于这个明确标记的故障验收，普通业务 CLI 的输入不能开启它。真实模型根据实际错误决定重试或停止，验收器不会提供模型答案。`*.input.json` 为包含 request、materials、policy 和故障计划的快照；直接运行业务 CLI 时需分别提供其中的请求和资料，不能把包装快照当成普通 brief。
+默认执行十二个合成场景，可使用 `--case normal`、`--case duration-repair`、`--case style-tutorial` 或 `--case style-teaser` 单独复验，参数可重复指定。宿主参数 `evaluation_failures` 仅用于这个明确标记的故障验收，普通业务 CLI 的输入不能开启它。真实模型根据实际错误决定重试或停止，验收器不会提供模型答案。`*.input.json` 为包含 request、materials、policy 和故障计划的快照；直接运行业务 CLI 时需分别提供其中的请求和资料，不能把包装快照当成普通 brief。
 
-入口逐次保存输入、输出与清单，进程退出码 0 代表所选用例符合各自预期；合理的 `needs_input` 和 `incomplete` 可以是通过结果。脚本对已交付结果重算检查，并核对版本、时间、引用、分镜和工具回执，不为获得通过而规定固定调用顺序。
+真实验收的 `duration-repair` 从历史真实结果读取原稿，输入快照额外记录来源文件及 SHA-256；它与离线替身的同名场景不同。验收必须观察原稿真实超限、不同稿件通过复检，首稿直接通过不能算作压缩成功。风格用例检查请求中的镜头结构，不能替代独立人工质量评价。
+
+入口逐次保存输入、输出与清单，进程退出码 0 代表所选用例符合各自预期；合理的 `needs_input` 和 `incomplete` 可以是通过结果。脚本对已交付结果重算检查，并核对版本、时间轴、引用、镜头类型和工具回执。已有稿件用例额外核对原稿先被诊断，后续具体修订和调用由模型选择。
 
 - `model_settings` 保存请求模型、推理强度、输出上限、超时和整轮时限。完整服务地址不导出，只记录 `custom` 或 `sdk_default`；服务身份需在本机另行确认，公开前再审查。
 - 业务模式额外记录 `output_format=json_object`；这只约束 JSON 格式，本地 Schema 和事实检查仍然必需。

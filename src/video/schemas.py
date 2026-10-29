@@ -31,7 +31,16 @@ SCENE_SCHEMA = {
     "required": ["id", "visual", "narration", "subtitle", "hold_seconds", "fact_ids"],
     "properties": {
         "id": {"type": "string", "pattern": r"^[A-Za-z0-9_-]{1,30}$"},
-        "visual": {"enum": ["title_card", "screen_demo", "closing_card"]},
+        "visual": {
+            "enum": [
+                "title_card",
+                "screen_demo",
+                "screen_closeup",
+                "step_card",
+                "recap_card",
+                "closing_card",
+            ]
+        },
         "narration": {"type": "string", "maxLength": 2000},
         "subtitle": {"type": "string", "maxLength": 2000},
         "hold_seconds": {"type": "number", "minimum": 0, "maximum": 300},
@@ -58,6 +67,7 @@ DRAFT_SCHEMA = {
     },
     "additionalProperties": False,
 }
+BRIEF_SCHEMA["properties"]["initial_draft"] = DRAFT_SCHEMA
 FINAL_SCHEMA = {
     "oneOf": [
         {

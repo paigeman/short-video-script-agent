@@ -135,7 +135,7 @@ class OfflineModel:
                 )
             return self.call(
                 "estimate_duration",
-                {"script": self.draft()},
+                {"script": deepcopy(self.brief.get("initial_draft")) or self.draft()},
                 "根据实际检索到的事实编写首稿并估时。",
             )
         if self.last_call == "estimate_duration":

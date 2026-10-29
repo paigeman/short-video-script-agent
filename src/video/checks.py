@@ -9,6 +9,9 @@ from src.video.catalog import Catalog
 VISUALS = {
     "title_card": "显示标题卡",
     "screen_demo": "展示操作界面\uff08示意\uff0c制作时替换为实际画面\uff09",
+    "screen_closeup": "字幕区域特写\uff08以实际界面为准\uff0c突出本分镜引用的事实\uff09",
+    "step_card": "步骤提示卡\uff08按本分镜字幕排版\uff0c不添加未提供的按钮或操作\uff09",
+    "recap_card": "要点回顾卡\uff08只展示本分镜已引用事实与获准过渡语\uff09",
     "closing_card": "显示结束卡",
 }
 
@@ -58,6 +61,12 @@ def estimate_duration(draft: dict, target_seconds: int, timing: dict) -> dict:
         _decimal(len(scenes) - 1) * _decimal(timing["transition_seconds"])
     )
     total = sum((_decimal(scene["estimated_seconds"]) for scene in scenes), transitions)
+    elapsed = Decimal(0)
+    for index, scene in enumerate(scenes):
+        offset = _ceil(_decimal(index) * _decimal(timing["transition_seconds"]))
+        scene["start_seconds"] = float(elapsed + offset)
+        elapsed += _decimal(scene["estimated_seconds"])
+        scene["end_seconds"] = float(elapsed + offset)
     return {
         "passed": total <= target_seconds,
         "target_seconds": target_seconds,

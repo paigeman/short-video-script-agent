@@ -1,0 +1,731 @@
+{
+  "status": "completed",
+  "reason": "validated_script",
+  "mode": "live",
+  "script": {
+    "draft_id": "64a95ad6e3f3049dbe5dac0da2669d31a84bb7daaec42b2db3c8da845d07fa6a",
+    "title": "功能小演示",
+    "scenes": [
+      {
+        "id": "s1",
+        "visual": "显示标题卡",
+        "narration": "功能小演示",
+        "subtitle": "功能小演示",
+        "hold_seconds": 1.2,
+        "fact_ids": [],
+        "visual_kind": "title_card",
+        "estimated_seconds": 1.3,
+        "start_seconds": 0.0,
+        "end_seconds": 1.3,
+        "source_ids": []
+      },
+      {
+        "id": "s2",
+        "visual": "步骤提示卡（按本分镜字幕排版，不添加未提供的按钮或操作）",
+        "narration": "先看这里，支持生成字幕草稿。",
+        "subtitle": "支持生成字幕草稿",
+        "hold_seconds": 3.5,
+        "fact_ids": ["M01:F1"],
+        "visual_kind": "step_card",
+        "estimated_seconds": 3.5,
+        "start_seconds": 1.7,
+        "end_seconds": 5.2,
+        "source_ids": ["M01"]
+      },
+      {
+        "id": "s3",
+        "visual": "字幕区域特写（以实际界面为准，突出本分镜引用的事实）",
+        "narration": "接下来，支持手动修改字幕文本。",
+        "subtitle": "支持手动修改字幕文本",
+        "hold_seconds": 4,
+        "fact_ids": ["M01:F2"],
+        "visual_kind": "screen_closeup",
+        "estimated_seconds": 4.0,
+        "start_seconds": 5.6,
+        "end_seconds": 9.6,
+        "source_ids": ["M01"]
+      },
+      {
+        "id": "s4",
+        "visual": "要点回顾卡（只展示本分镜已引用事实与获准过渡语）",
+        "narration": "",
+        "subtitle": "支持生成字幕草稿；支持手动修改字幕文本",
+        "hold_seconds": 3,
+        "fact_ids": ["M01:F1", "M01:F2"],
+        "visual_kind": "recap_card",
+        "estimated_seconds": 3.0,
+        "start_seconds": 10.0,
+        "end_seconds": 13.0,
+        "source_ids": ["M01"]
+      },
+      {
+        "id": "s5",
+        "visual": "显示结束卡",
+        "narration": "轮到你了",
+        "subtitle": "轮到你了",
+        "hold_seconds": 1.5,
+        "fact_ids": [],
+        "visual_kind": "closing_card",
+        "estimated_seconds": 1.5,
+        "start_seconds": 13.4,
+        "end_seconds": 14.9,
+        "source_ids": []
+      }
+    ],
+    "estimated_total_seconds": 14.9,
+    "target_duration_seconds": 30,
+    "sources": [
+      {
+        "id": "M01",
+        "title": "演示产品的字幕功能",
+        "source": "项目合成测试资料",
+        "facts": [
+          {
+            "fact_id": "M01:F1",
+            "source_id": "M01",
+            "product_id": "P01",
+            "text": "支持生成字幕草稿"
+          },
+          {
+            "fact_id": "M01:F2",
+            "source_id": "M01",
+            "product_id": "P01",
+            "text": "支持手动修改字幕文本"
+          }
+        ]
+      }
+    ],
+    "checks": {
+      "duration": {
+        "passed": true,
+        "target_seconds": 30,
+        "estimated_total_seconds": 14.9,
+        "over_by_seconds": 0.0,
+        "transition_seconds": 1.6,
+        "scenes": [
+          {
+            "scene_id": "s1",
+            "spoken_units": 5,
+            "subtitle_units": 5,
+            "narration_seconds": 1.3,
+            "subtitle_seconds": 0.9,
+            "hold_seconds": 1.2,
+            "estimated_seconds": 1.3,
+            "start_seconds": 0.0,
+            "end_seconds": 1.3
+          },
+          {
+            "scene_id": "s2",
+            "spoken_units": 12,
+            "subtitle_units": 8,
+            "narration_seconds": 3.3,
+            "subtitle_seconds": 1.4,
+            "hold_seconds": 3.5,
+            "estimated_seconds": 3.5,
+            "start_seconds": 1.7,
+            "end_seconds": 5.2
+          },
+          {
+            "scene_id": "s3",
+            "spoken_units": 13,
+            "subtitle_units": 10,
+            "narration_seconds": 3.6,
+            "subtitle_seconds": 1.7,
+            "hold_seconds": 4,
+            "estimated_seconds": 4.0,
+            "start_seconds": 5.6,
+            "end_seconds": 9.6
+          },
+          {
+            "scene_id": "s4",
+            "spoken_units": 0,
+            "subtitle_units": 18,
+            "narration_seconds": 0.0,
+            "subtitle_seconds": 3.0,
+            "hold_seconds": 3,
+            "estimated_seconds": 3.0,
+            "start_seconds": 10.0,
+            "end_seconds": 13.0
+          },
+          {
+            "scene_id": "s5",
+            "spoken_units": 4,
+            "subtitle_units": 4,
+            "narration_seconds": 1.0,
+            "subtitle_seconds": 0.7,
+            "hold_seconds": 1.5,
+            "estimated_seconds": 1.5,
+            "start_seconds": 13.4,
+            "end_seconds": 14.9
+          }
+        ],
+        "assumptions": {
+          "speech_units_per_second": 4.0,
+          "subtitle_units_per_second": 6.0,
+          "punctuation_pause_seconds": 0.15,
+          "transition_seconds": 0.4,
+          "unit_definition": "每个中文等非 ASCII 字母、每位数字计 1 单位；连续英文字母计 1 单词单位",
+          "scene_duration": "max(口播估算, 字幕阅读估算, 画面停留)，最后加镜头间转场"
+        }
+      },
+      "rules": {
+        "passed": true,
+        "issues": [],
+        "citations": [
+          {
+            "fact_id": "M01:F1",
+            "source_id": "M01",
+            "product_id": "P01",
+            "text": "支持生成字幕草稿"
+          },
+          {
+            "fact_id": "M01:F2",
+            "source_id": "M01",
+            "product_id": "P01",
+            "text": "支持手动修改字幕文本"
+          }
+        ]
+      }
+    },
+    "risks": ["素材为合成演示资料。", "时长按公开的本地估算规则计算，录制后仍需复核实际时长。"]
+  },
+  "question": null,
+  "missing_fields": [],
+  "issues": [],
+  "runtime": {
+    "status": "completed",
+    "reason": "model_finished",
+    "text": "{\"status\": \"completed\", \"draft_id\": \"64a95ad6e3f3049dbe5dac0da2669d31a84bb7daaec42b2db3c8da845d07fa6a\"}",
+    "model_requests": 4,
+    "tool_rounds": 3,
+    "tool_executions": 4,
+    "run_id": "b0d6fa9d-20f9-4094-86ab-34f9cd76a372",
+    "data": {
+      "status": "completed",
+      "draft_id": "64a95ad6e3f3049dbe5dac0da2669d31a84bb7daaec42b2db3c8da845d07fa6a"
+    },
+    "question": null,
+    "model_retries": 0,
+    "output_repairs": 0,
+    "elapsed_seconds": 7.490278500132263,
+    "usage": {
+      "input_tokens": 13144,
+      "output_tokens": 1118,
+      "total_tokens": 14262
+    },
+    "usage_complete": true,
+    "model": "deepseek-flash",
+    "limits": {
+      "max_tool_rounds": 10,
+      "max_model_requests": 14,
+      "max_tool_executions": 16,
+      "max_model_retries": 2,
+      "max_output_repairs": 2,
+      "max_context_bytes": 128000,
+      "max_tool_output_bytes": 32000,
+      "max_run_seconds": 600.0,
+      "retry_base_seconds": 0.5,
+      "max_retry_delay_seconds": 30.0
+    }
+  },
+  "trace": [
+    {
+      "event": "model",
+      "request": 1,
+      "reason": "completed",
+      "summary": "                ",
+      "summary_truncated": false,
+      "calls": [
+        {
+          "call_id": "call_00_ET_0y4WQOZy5EZ2DMZtJe4r3189",
+          "name": "search_materials",
+          "arguments": "{\"query\": \"字幕编辑功能\", \"reason\": \"查找字幕编辑功能的产品事实素材\"}",
+          "arguments_truncated": false
+        },
+        {
+          "call_id": "call_01_ET_K7RejcmLlBwbzzjPrj6e7482",
+          "name": "search_materials",
+          "arguments": "{\"query\": \"P01\", \"reason\": \"按产品 ID 检索素材作为补充\"}",
+          "arguments_truncated": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 2099,
+        "output_tokens": 123,
+        "total_tokens": 2222
+      },
+      "elapsed_seconds": 1.1160227498039603
+    },
+    {
+      "event": "tool",
+      "round": 1,
+      "call_id": "call_00_ET_0y4WQOZy5EZ2DMZtJe4r3189",
+      "name": "search_materials",
+      "arguments": "{\"query\": \"字幕编辑功能\", \"reason\": \"查找字幕编辑功能的产品事实素材\"}",
+      "arguments_truncated": false,
+      "output_summary": "{\"error\": {\"category\": \"execution_failed\", \"message\": \"Execution of tool 'search_materials' failed.\"}}",
+      "output_summary_truncated": false,
+      "output_bytes": 102,
+      "elapsed_seconds": 0.0012424169108271599
+    },
+    {
+      "event": "tool",
+      "round": 1,
+      "call_id": "call_01_ET_K7RejcmLlBwbzzjPrj6e7482",
+      "name": "search_materials",
+      "arguments": "{\"query\": \"P01\", \"reason\": \"按产品 ID 检索素材作为补充\"}",
+      "arguments_truncated": false,
+      "output_summary": "{\"query\": \"P01\", \"product_id\": \"P01\", \"materials\": [{\"source_id\": \"M01\", \"product_id\": \"P01\", \"title\": \"\\u6f14\\u793a\\u4ea7\\u54c1\\u7684\\u5b57\\u5e55\\u529f\\u80fd\", \"source\": \"\\u9879\\u76ee\\u5408\\u6210\\u6d4b\\u8bd5\\u8d44\\u6599\", \"facts\": [{\"fact_id\": \"M01:F1\", \"source_id\": \"M01\", \"product_id\": \"P01\", \"text\": \"\\u652f\\u6301\\u751f\\u6210\\u5b57\\u5e55\\u8349\\u7a3f\"}, {\"fact_id\": \"M01:F2\", \"source_id\": \"M01\", \"product_id\": \"P01\", \"text\": \"\\u652f\\u6301\\u624b\\u52a8\\u4fee\\u6539\\u5b57\\u5e55\\u6587\\u672c\"}]}], \"count\": 1, \"truncated\": false, \"synthetic\": true}",
+      "output_summary_truncated": false,
+      "output_bytes": 546,
+      "elapsed_seconds": 0.0004270840436220169
+    },
+    {
+      "event": "model",
+      "request": 2,
+      "reason": "completed",
+      "summary": "",
+      "summary_truncated": false,
+      "calls": [
+        {
+          "call_id": "call_00_09L3Avj1G9ARh7tKUKY70087",
+          "name": "estimate_duration",
+          "arguments": "{\"reason\": \"存储字幕功能演示脚本并估算时长\", \"script\": {\"title\": \"功能小演示\", \"scenes\": [{\"id\": \"s1\", \"visual\": \"title_card\", \"narration\": \"功能小演示\", \"subtitle\": \"功能小演示\", \"hold_seconds\": 1.2, \"fact_ids\": []}, {\"id\": \"s2\", \"visual\": \"step_card\", \"narration\": \"先看这里，支持生成字幕草稿。\", \"subtitle\": \"支持生成字幕草稿\", \"hold_seconds\": 3.5, \"fact_ids\": [\"M01:F1\"]}, {\"id\": \"s3\", \"visual\": \"screen_closeup\", \"narration\": \"接下来，支持手动修改字幕文本。\", \"subtitle\": \"支持手动修改字幕文本\", \"hold_seconds\": 4, \"fact_ids\": [\"M01:F2\"]}, {\"id\": \"s4\", \"visual\": \"recap_card\", \"narration\": \"\", \"subtitle\": \"支持生成字幕草稿；支持手动修改字幕文本\", \"hold_seconds\": 3, \"fact_ids\": [\"M01:F1\", \"M01:F2\"]}, {\"id\": \"s5\", \"visual\": \"closing_card\", \"narration\": \"轮到你了\", \"subtitle\": \"轮到你了\", \"hold_seconds\": 1.5, \"fact_ids\": []}]}}",
+          "arguments_truncated": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 2516,
+        "output_tokens": 833,
+        "total_tokens": 3349
+      },
+      "elapsed_seconds": 4.1884590005502105
+    },
+    {
+      "event": "tool",
+      "round": 2,
+      "call_id": "call_00_09L3Avj1G9ARh7tKUKY70087",
+      "name": "estimate_duration",
+      "arguments": "{\"reason\": \"存储字幕功能演示脚本并估算时长\", \"script\": {\"title\": \"功能小演示\", \"scenes\": [{\"id\": \"s1\", \"visual\": \"title_card\", \"narration\": \"功能小演示\", \"subtitle\": \"功能小演示\", \"hold_seconds\": 1.2, \"fact_ids\": []}, {\"id\": \"s2\", \"visual\": \"step_card\", \"narration\": \"先看这里，支持生成字幕草稿。\", \"subtitle\": \"支持生成字幕草稿\", \"hold_seconds\": 3.5, \"fact_ids\": [\"M01:F1\"]}, {\"id\": \"s3\", \"visual\": \"screen_closeup\", \"narration\": \"接下来，支持手动修改字幕文本。\", \"subtitle\": \"支持手动修改字幕文本\", \"hold_seconds\": 4, \"fact_ids\": [\"M01:F2\"]}, {\"id\": \"s4\", \"visual\": \"recap_card\", \"narration\": \"\", \"subtitle\": \"支持生成字幕草稿；支持手动修改字幕文本\", \"hold_seconds\": 3, \"fact_ids\": [\"M01:F1\", \"M01:F2\"]}, {\"id\": \"s5\", \"visual\": \"closing_card\", \"narration\": \"轮到你了\", \"subtitle\": \"轮到你了\", \"hold_seconds\": 1.5, \"fact_ids\": []}]}}",
+      "arguments_truncated": false,
+      "output_summary": "{\"draft_id\": \"64a95ad6e3f3049dbe5dac0da2669d31a84bb7daaec42b2db3c8da845d07fa6a\", \"passed\": true, \"target_seconds\": 30, \"estimated_total_seconds\": 14.9, \"over_by_seconds\": 0.0, \"transition_seconds\": 1.6, \"scenes\": [{\"scene_id\": \"s1\", \"spoken_units\": 5, \"subtitle_units\": 5, \"narration_seconds\": 1.3, \"subtitle_seconds\": 0.9, \"hold_seconds\": 1.2, \"estimated_seconds\": 1.3, \"start_seconds\": 0.0, \"end_seconds\": 1.3}, {\"scene_id\": \"s2\", \"spoken_units\": 12, \"subtitle_units\": 8, \"narration_seconds\": 3.3, \"subtitle_seconds\": 1.4, \"hold_seconds\": 3.5, \"estimated_seconds\": 3.5, \"start_seconds\": 1.7, \"end_seconds\": 5.2}, {\"scene_id\": \"s3\", \"spoken_units\": 13, \"subtitle_units\": 10, \"narration_seconds\": 3.6, \"subtitle_seconds\": 1.7, \"hold_seconds\": 4, \"estimated_seconds\": 4.0, \"start_seconds\": 5.6, \"end_seconds\": 9.6}, {\"scene_id\": \"s4\", \"spoken_units\": 0, \"subtitle_units\": 18, \"narration_seconds\": 0.0, \"subtitle_seconds\": 3.0, \"hold_seconds\": 3, \"estimated_seconds\": 3.0, \"start_seconds\": 10.0, \"end_s",
+      "output_summary_truncated": true,
+      "output_bytes": 1736,
+      "elapsed_seconds": 0.004380750469863415
+    },
+    {
+      "event": "model",
+      "request": 3,
+      "reason": "completed",
+      "summary": "",
+      "summary_truncated": false,
+      "calls": [
+        {
+          "call_id": "call_00_ET_24NkVfRcXZxI3zleks5A7823",
+          "name": "check_rules",
+          "arguments": "{\"draft_id\": \"64a95ad6e3f3049dbe5dac0da2669d31a84bb7daaec42b2db3c8da845d07fa6a\", \"reason\": \"核对草稿的素材引用与品牌规则\"}",
+          "arguments_truncated": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 4165,
+        "output_tokens": 106,
+        "total_tokens": 4271
+      },
+      "elapsed_seconds": 1.178448042832315
+    },
+    {
+      "event": "tool",
+      "round": 3,
+      "call_id": "call_00_ET_24NkVfRcXZxI3zleks5A7823",
+      "name": "check_rules",
+      "arguments": "{\"draft_id\": \"64a95ad6e3f3049dbe5dac0da2669d31a84bb7daaec42b2db3c8da845d07fa6a\", \"reason\": \"核对草稿的素材引用与品牌规则\"}",
+      "arguments_truncated": false,
+      "output_summary": "{\"draft_id\": \"64a95ad6e3f3049dbe5dac0da2669d31a84bb7daaec42b2db3c8da845d07fa6a\", \"passed\": true, \"issues\": [], \"issue_count\": 0, \"fact_ids\": [\"M01:F1\", \"M01:F2\"]}",
+      "output_summary_truncated": false,
+      "output_bytes": 162,
+      "elapsed_seconds": 0.0005607903003692627
+    },
+    {
+      "event": "model",
+      "request": 4,
+      "reason": "completed",
+      "summary": "{\"status\": \"completed\", \"draft_id\": \"64a95ad6e3f3049dbe5dac0da2669d31a84bb7daaec42b2db3c8da845d07fa6a\"}",
+      "summary_truncated": false,
+      "calls": [],
+      "usage": {
+        "input_tokens": 4364,
+        "output_tokens": 56,
+        "total_tokens": 4420
+      },
+      "elapsed_seconds": 0.9909243751317263
+    },
+    {
+      "event": "stop",
+      "status": "completed",
+      "reason": "model_finished"
+    },
+    {
+      "event": "business_final_gate",
+      "status": "completed",
+      "reason": "validated_script",
+      "issues": []
+    }
+  ],
+  "tool_records": [
+    {
+      "tool": "search_materials",
+      "reason": "查找字幕编辑功能的产品事实素材",
+      "arguments": {
+        "query": "字幕编辑功能",
+        "reason": "查找字幕编辑功能的产品事实素材"
+      },
+      "status": "error",
+      "error": "simulated_tool_failure"
+    },
+    {
+      "tool": "search_materials",
+      "reason": "按产品 ID 检索素材作为补充",
+      "arguments": {
+        "query": "P01",
+        "reason": "按产品 ID 检索素材作为补充"
+      },
+      "status": "returned",
+      "result": {
+        "query": "P01",
+        "product_id": "P01",
+        "materials": [
+          {
+            "source_id": "M01",
+            "product_id": "P01",
+            "title": "演示产品的字幕功能",
+            "source": "项目合成测试资料",
+            "facts": [
+              {
+                "fact_id": "M01:F1",
+                "source_id": "M01",
+                "product_id": "P01",
+                "text": "支持生成字幕草稿"
+              },
+              {
+                "fact_id": "M01:F2",
+                "source_id": "M01",
+                "product_id": "P01",
+                "text": "支持手动修改字幕文本"
+              }
+            ]
+          }
+        ],
+        "count": 1,
+        "truncated": false,
+        "synthetic": true
+      }
+    },
+    {
+      "tool": "estimate_duration",
+      "reason": "存储字幕功能演示脚本并估算时长",
+      "arguments": {
+        "reason": "存储字幕功能演示脚本并估算时长",
+        "script": {
+          "title": "功能小演示",
+          "scenes": [
+            {
+              "id": "s1",
+              "visual": "title_card",
+              "narration": "功能小演示",
+              "subtitle": "功能小演示",
+              "hold_seconds": 1.2,
+              "fact_ids": []
+            },
+            {
+              "id": "s2",
+              "visual": "step_card",
+              "narration": "先看这里，支持生成字幕草稿。",
+              "subtitle": "支持生成字幕草稿",
+              "hold_seconds": 3.5,
+              "fact_ids": ["M01:F1"]
+            },
+            {
+              "id": "s3",
+              "visual": "screen_closeup",
+              "narration": "接下来，支持手动修改字幕文本。",
+              "subtitle": "支持手动修改字幕文本",
+              "hold_seconds": 4,
+              "fact_ids": ["M01:F2"]
+            },
+            {
+              "id": "s4",
+              "visual": "recap_card",
+              "narration": "",
+              "subtitle": "支持生成字幕草稿；支持手动修改字幕文本",
+              "hold_seconds": 3,
+              "fact_ids": ["M01:F1", "M01:F2"]
+            },
+            {
+              "id": "s5",
+              "visual": "closing_card",
+              "narration": "轮到你了",
+              "subtitle": "轮到你了",
+              "hold_seconds": 1.5,
+              "fact_ids": []
+            }
+          ]
+        }
+      },
+      "status": "returned",
+      "result": {
+        "draft_id": "64a95ad6e3f3049dbe5dac0da2669d31a84bb7daaec42b2db3c8da845d07fa6a",
+        "passed": true,
+        "target_seconds": 30,
+        "estimated_total_seconds": 14.9,
+        "over_by_seconds": 0.0,
+        "transition_seconds": 1.6,
+        "scenes": [
+          {
+            "scene_id": "s1",
+            "spoken_units": 5,
+            "subtitle_units": 5,
+            "narration_seconds": 1.3,
+            "subtitle_seconds": 0.9,
+            "hold_seconds": 1.2,
+            "estimated_seconds": 1.3,
+            "start_seconds": 0.0,
+            "end_seconds": 1.3
+          },
+          {
+            "scene_id": "s2",
+            "spoken_units": 12,
+            "subtitle_units": 8,
+            "narration_seconds": 3.3,
+            "subtitle_seconds": 1.4,
+            "hold_seconds": 3.5,
+            "estimated_seconds": 3.5,
+            "start_seconds": 1.7,
+            "end_seconds": 5.2
+          },
+          {
+            "scene_id": "s3",
+            "spoken_units": 13,
+            "subtitle_units": 10,
+            "narration_seconds": 3.6,
+            "subtitle_seconds": 1.7,
+            "hold_seconds": 4,
+            "estimated_seconds": 4.0,
+            "start_seconds": 5.6,
+            "end_seconds": 9.6
+          },
+          {
+            "scene_id": "s4",
+            "spoken_units": 0,
+            "subtitle_units": 18,
+            "narration_seconds": 0.0,
+            "subtitle_seconds": 3.0,
+            "hold_seconds": 3,
+            "estimated_seconds": 3.0,
+            "start_seconds": 10.0,
+            "end_seconds": 13.0
+          },
+          {
+            "scene_id": "s5",
+            "spoken_units": 4,
+            "subtitle_units": 4,
+            "narration_seconds": 1.0,
+            "subtitle_seconds": 0.7,
+            "hold_seconds": 1.5,
+            "estimated_seconds": 1.5,
+            "start_seconds": 13.4,
+            "end_seconds": 14.9
+          }
+        ],
+        "assumptions": {
+          "speech_units_per_second": 4.0,
+          "subtitle_units_per_second": 6.0,
+          "punctuation_pause_seconds": 0.15,
+          "transition_seconds": 0.4,
+          "unit_definition": "每个中文等非 ASCII 字母、每位数字计 1 单位；连续英文字母计 1 单词单位",
+          "scene_duration": "max(口播估算, 字幕阅读估算, 画面停留)，最后加镜头间转场"
+        }
+      }
+    },
+    {
+      "tool": "check_rules",
+      "reason": "核对草稿的素材引用与品牌规则",
+      "arguments": {
+        "draft_id": "64a95ad6e3f3049dbe5dac0da2669d31a84bb7daaec42b2db3c8da845d07fa6a",
+        "reason": "核对草稿的素材引用与品牌规则"
+      },
+      "status": "returned",
+      "result": {
+        "draft_id": "64a95ad6e3f3049dbe5dac0da2669d31a84bb7daaec42b2db3c8da845d07fa6a",
+        "passed": true,
+        "issues": [],
+        "issue_count": 0,
+        "fact_ids": ["M01:F1", "M01:F2"]
+      }
+    }
+  ],
+  "drafts": [
+    {
+      "draft_id": "64a95ad6e3f3049dbe5dac0da2669d31a84bb7daaec42b2db3c8da845d07fa6a",
+      "script": {
+        "title": "功能小演示",
+        "scenes": [
+          {
+            "id": "s1",
+            "visual": "title_card",
+            "narration": "功能小演示",
+            "subtitle": "功能小演示",
+            "hold_seconds": 1.2,
+            "fact_ids": []
+          },
+          {
+            "id": "s2",
+            "visual": "step_card",
+            "narration": "先看这里，支持生成字幕草稿。",
+            "subtitle": "支持生成字幕草稿",
+            "hold_seconds": 3.5,
+            "fact_ids": ["M01:F1"]
+          },
+          {
+            "id": "s3",
+            "visual": "screen_closeup",
+            "narration": "接下来，支持手动修改字幕文本。",
+            "subtitle": "支持手动修改字幕文本",
+            "hold_seconds": 4,
+            "fact_ids": ["M01:F2"]
+          },
+          {
+            "id": "s4",
+            "visual": "recap_card",
+            "narration": "",
+            "subtitle": "支持生成字幕草稿；支持手动修改字幕文本",
+            "hold_seconds": 3,
+            "fact_ids": ["M01:F1", "M01:F2"]
+          },
+          {
+            "id": "s5",
+            "visual": "closing_card",
+            "narration": "轮到你了",
+            "subtitle": "轮到你了",
+            "hold_seconds": 1.5,
+            "fact_ids": []
+          }
+        ]
+      },
+      "duration_check": {
+        "passed": true,
+        "target_seconds": 30,
+        "estimated_total_seconds": 14.9,
+        "over_by_seconds": 0.0,
+        "transition_seconds": 1.6,
+        "scenes": [
+          {
+            "scene_id": "s1",
+            "spoken_units": 5,
+            "subtitle_units": 5,
+            "narration_seconds": 1.3,
+            "subtitle_seconds": 0.9,
+            "hold_seconds": 1.2,
+            "estimated_seconds": 1.3,
+            "start_seconds": 0.0,
+            "end_seconds": 1.3
+          },
+          {
+            "scene_id": "s2",
+            "spoken_units": 12,
+            "subtitle_units": 8,
+            "narration_seconds": 3.3,
+            "subtitle_seconds": 1.4,
+            "hold_seconds": 3.5,
+            "estimated_seconds": 3.5,
+            "start_seconds": 1.7,
+            "end_seconds": 5.2
+          },
+          {
+            "scene_id": "s3",
+            "spoken_units": 13,
+            "subtitle_units": 10,
+            "narration_seconds": 3.6,
+            "subtitle_seconds": 1.7,
+            "hold_seconds": 4,
+            "estimated_seconds": 4.0,
+            "start_seconds": 5.6,
+            "end_seconds": 9.6
+          },
+          {
+            "scene_id": "s4",
+            "spoken_units": 0,
+            "subtitle_units": 18,
+            "narration_seconds": 0.0,
+            "subtitle_seconds": 3.0,
+            "hold_seconds": 3,
+            "estimated_seconds": 3.0,
+            "start_seconds": 10.0,
+            "end_seconds": 13.0
+          },
+          {
+            "scene_id": "s5",
+            "spoken_units": 4,
+            "subtitle_units": 4,
+            "narration_seconds": 1.0,
+            "subtitle_seconds": 0.7,
+            "hold_seconds": 1.5,
+            "estimated_seconds": 1.5,
+            "start_seconds": 13.4,
+            "end_seconds": 14.9
+          }
+        ],
+        "assumptions": {
+          "speech_units_per_second": 4.0,
+          "subtitle_units_per_second": 6.0,
+          "punctuation_pause_seconds": 0.15,
+          "transition_seconds": 0.4,
+          "unit_definition": "每个中文等非 ASCII 字母、每位数字计 1 单位；连续英文字母计 1 单词单位",
+          "scene_duration": "max(口播估算, 字幕阅读估算, 画面停留)，最后加镜头间转场"
+        }
+      },
+      "rules_check": {
+        "passed": true,
+        "issues": [],
+        "citations": [
+          {
+            "fact_id": "M01:F1",
+            "source_id": "M01",
+            "product_id": "P01",
+            "text": "支持生成字幕草稿"
+          },
+          {
+            "fact_id": "M01:F2",
+            "source_id": "M01",
+            "product_id": "P01",
+            "text": "支持手动修改字幕文本"
+          }
+        ]
+      }
+    }
+  ],
+  "input": {
+    "topic": "介绍字幕编辑功能",
+    "audience": "首次制作短视频的创作者",
+    "platform": "短视频平台",
+    "duration_seconds": 30,
+    "style": "简洁直观",
+    "product_id": "P01"
+  },
+  "model_settings": {
+    "api": "responses",
+    "model": "deepseek-flash",
+    "endpoint": "custom",
+    "timeout_seconds": 120.0,
+    "max_output_tokens": 8192,
+    "reasoning_effort": "high",
+    "max_run_seconds": 600.0,
+    "output_format": "json_object"
+  },
+  "evaluation": {
+    "injected_tool_failures": {
+      "search_materials": 1
+    },
+    "scope": "local_tools_only"
+  }
+}

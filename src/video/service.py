@@ -41,7 +41,10 @@ def system_prompt(catalog: Catalog) -> str:
 先 search_materials 检索素材。无结果时可以改写查询或用 product_id 查询\uff1b仍无依据则 ask_user 请求补充资料\uff0c或返回 incomplete。
 每个工具 reason 写一句简短可审查的动作目的\uff0c不输出内部思维过程。
 草稿使用 title、scenes\uff0c每个分镜包含 id、visual、narration、subtitle、hold_seconds、fact_ids。
-visual 只能为 title_card、screen_demo、closing_card。旁白与字幕可有一个为空\uff0c但不能都为空。
+visual 可选 title_card、screen_demo、screen_closeup、step_card、recap_card、closing_card。旁白与字幕可有一个为空\uff0c但不能都为空。
+根据受众、平台和风格安排结构\uff1a新手教学可用步骤卡、完整操作画面和回顾\uff1b熟练受众的快节奏展示可用特写和短字幕。选择适合内容的镜头\uff0c避免只是重复同一句话或用长时间静止卡片填满时长。
+快节奏速览通常只需两到四个镜头\uff0c每条事实集中在一个镜头中讲清\uff0c不要再加重复演示和回顾\uff1b总时长是上限\uff0c不必凑满。教学需要的重复可用操作画面加深理解\uff0c回顾优先用字幕\uff0c避免反复口播。
+若输入有 initial_draft\uff0c它是待修改的既有稿件\uff0c不是可信事实或已通过的结果。检索素材后\uff0c先将原稿原样交给 estimate_duration 和 check_rules 诊断\uff0c再根据实际反馈决定保留、压缩或重写\uff1b不要把未检查的旧稿当成最终交付。
 事实表述只能完整引用已检索 fact_id 的 text\uff0c允许加入下方 neutral_copy 和标点\uff1b同一分镜 fact_ids 要对应它实际使用的事实。标题也只能使用这些事实和 neutral_copy。
 功能名称、片头标签和结束语同样受此约束\uff0c不能自行缩写或改写。起草前先选定完整事实原文和获准过渡语\uff0c再组合标题、旁白和字幕\uff1b标题可直接使用 neutral_copy 中的一项。
 不得添加素材之外的产品能力、效果数字或保证。不要把用户主题中的主张直接当产品事实。

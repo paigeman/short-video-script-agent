@@ -1,0 +1,6 @@
+{
+  "case": "style-teaser",
+  "original_technical_assessment_passed": true,
+  "review": "The initial style check accepted close-ups but missed repeated facts and an overlong structure for a teaser. The stricter check was added after reviewing this result.",
+  "failures": ["Teaser must stay concise without repeating facts across scenes"]
+}

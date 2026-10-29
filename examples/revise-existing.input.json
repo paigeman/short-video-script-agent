@@ -1,0 +1,45 @@
+{
+  "topic": "介绍字幕编辑功能",
+  "audience": "首次制作短视频的创作者",
+  "platform": "短视频平台",
+  "duration_seconds": 10,
+  "style": "保持事实与主题，压缩现有稿件到时长上限，避免重复口播。",
+  "product_id": "P01",
+  "initial_draft": {
+    "title": "功能小演示",
+    "scenes": [
+      {
+        "id": "s1",
+        "visual": "title_card",
+        "narration": "功能小演示",
+        "subtitle": "功能小演示",
+        "hold_seconds": 3,
+        "fact_ids": []
+      },
+      {
+        "id": "s2",
+        "visual": "screen_demo",
+        "narration": "支持生成字幕草稿。",
+        "subtitle": "支持生成字幕草稿",
+        "hold_seconds": 3,
+        "fact_ids": ["M01:F1"]
+      },
+      {
+        "id": "s3",
+        "visual": "screen_demo",
+        "narration": "接下来，支持手动修改字幕文本。",
+        "subtitle": "支持手动修改字幕文本",
+        "hold_seconds": 4,
+        "fact_ids": ["M01:F2"]
+      },
+      {
+        "id": "s4",
+        "visual": "closing_card",
+        "narration": "请按实际需求选择",
+        "subtitle": "请按实际需求选择",
+        "hold_seconds": 3,
+        "fact_ids": []
+      }
+    ]
+  }
+}

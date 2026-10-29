@@ -2,11 +2,13 @@
 
 ## 当前结论
 
-已完成九场景真实接入验收，其中八条路径实际调用 DeepSeek `deepseek-flash`，一条为缺字段的本地校验。完整输入、输出、Trace、失败修复与限制见 [3 小时之后的真实验收](12-post-checkpoint-acceptance.md)。四个场景交付脚本，其余场景按预期追问或明确未完成，不把合理拒绝写成生成成功。
+最新验收覆盖十二场景，其中十一条路径实际调用 DeepSeek `deepseek-flash`，一条为缺字段的本地校验。七个场景交付脚本，其余按预期追问或明确未完成。原始判定为 11/12；更正教学镜头判定后，对同一批输出复核为 12/12，原始结果未覆盖。完整记录见 [审核补强](13-review-strengthening.md)，此前九场景结果保留于 [3 小时之后的真实验收](12-post-checkpoint-acceptance.md)。
 
 用户报告达到 3 小时的当时进度与未完成事项已保存为 [不可覆盖的快照](11-three-hour-checkpoint.md)。后续修复和验收不计入该时间点。
 
-当前 136 项离线测试通过，最新命令与结果见 [截点后测试记录](../examples/post-checkpoint-test-results.txt)。此前的 [125 项接入准备](../examples/live-readiness-test-results.txt)、[113 项业务阶段](../examples/business-test-results.txt)和 [80 项通用能力](../examples/runtime-test-results.txt)保持各自的历史证据性质。离线测试不会调用真实服务，不能代替真实模型决策证据。
+当前 145 项离线测试通过，最新命令与结果见 [补强测试记录](../examples/strengthening-final-test-results.txt)。此前的 [136 项截点后测试](../examples/post-checkpoint-test-results.txt)、[125 项接入准备](../examples/live-readiness-test-results.txt)、[113 项业务阶段](../examples/business-test-results.txt)和 [80 项通用能力](../examples/runtime-test-results.txt)保持各自的历史证据性质。离线测试不会调用真实服务，不能代替真实模型决策证据。
+
+本轮新增真实证据为已有稿件在更短上限下从 14.2 秒压缩到 8.3 秒，保留两条产品事实；新手教学为 17.8 秒，熟练受众速览为 15.2 秒。速览初稿冗长的问题和教学验收误判均单独保留于补强记录。风格检查针对明确的结构偏好，不等于独立人工创意评分。
 
 ## 离线业务验收结果
 
@@ -36,6 +38,8 @@
 - 不同草稿标识、未检查修订稿、失败记录复用与草稿内容被修改时都拒绝交付。
 - 模型最终声称成功但没有工具检查，运行时可以结束，业务状态必须仍为未完成。
 - 替换素材原文后，生成内容与引用随之改变。
+- 既有稿件仍须验证；首稿直接通过、虚构原稿超限、篡改镜头和起止时间均不能被记为有效修订证据。
+- 六种镜头保持同一事实规则，累计转场取整后时间轴末端与总时长一致；教学展示与速览去重有独立回归检查。
 - 真实 SDK 加模拟 HTTP 驱动完整业务工具链，验证超时长后再次提交草稿。
 - 真实 CLI 覆盖退出码、交互回答、错误路径不泄露本机路径，以及真实模式不会静默切换到 Mock。
 
