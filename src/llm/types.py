@@ -35,6 +35,7 @@ class ModelRequest:
     max_output_tokens: int = 2048
     timeout_seconds: float | None = None
     reasoning_effort: str | None = None
+    json_output: bool = False
 
 
 @dataclass

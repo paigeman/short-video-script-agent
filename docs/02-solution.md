@@ -46,4 +46,4 @@ flowchart TD
 
 输出保留 `trace`、完整 `tool_records` 和各版 `drafts`，用于逐条核对工具参数、目的、结果、修订与最终交付。模型内部思维过程不记录。
 
-离线替身根据真实本地工具的返回结果进入不同验收路径，它仍是确定性程序。真实模型入口已接入，但本轮未发起真实生成请求。详细规则见 [业务说明](09-business-rules.md)，通用超时与内存状态限制见 [Agent 能力](08-runtime-capabilities.md)。
+离线替身根据真实本地工具的返回结果进入不同验收路径，它仍是确定性程序。真实入口已用 DeepSeek `deepseek-flash` 完成验收，原始记录与失败修复见 [截点后验收](12-post-checkpoint-acceptance.md)。业务请求启用 JSON object 输出模式，格式错误的修复反馈启动新的 user 回合，仍需通过本地 Schema 与最终业务检查。详细规则见 [业务说明](09-business-rules.md)，通用超时与内存状态限制见 [Agent 能力](08-runtime-capabilities.md)。

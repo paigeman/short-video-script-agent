@@ -1,0 +1,8 @@
+{
+  "diagnostic_only": true,
+  "injection": "JSON mode disabled; force one repair after real tools to isolate user-turn repair fix. Not business acceptance.",
+  "status": "completed",
+  "reason": "validated_script",
+  "repairs": 1,
+  "requests": 7
+}

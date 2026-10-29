@@ -2,7 +2,7 @@
 
 ## 当前状态
 
-真实模型所需的配置和参数传递已接通，并通过本地工具、模型替身及模拟 HTTP 测试。本次没有读取真实模型密钥或发起真实生成请求，也没有生成真实模型通过记录。
+已完成 DeepSeek `deepseek-flash` 的实际接入与九场景验收，原始结果、失败修复及限制见 [截点后验收](12-post-checkpoint-acceptance.md)。3 小时截止时的未完成部分单独冻结，不被后续结果覆盖。运行时由 uv 加载用户填写的凭据，Agent 不查看或输出密钥。
 
 ## 最小配置
 
@@ -48,7 +48,18 @@ uv run --locked --env-file .env python -m src.main --mode live --input examples/
 
 ## 核对记录
 
+完整验收使用独立入口，输出目录必须不存在，避免覆盖旧记录：
+
+```shell
+uv run --locked --env-file .env python -m scripts.live_acceptance --output-dir .agent-tmp/my-live-acceptance
+```
+
+默认执行九个合成场景，可使用 `--case normal` 或 `--case tool-failure` 单独复验，参数可重复指定。宿主参数 `evaluation_failures` 仅用于这个明确标记的故障验收，普通业务 CLI 的输入不能开启它。真实模型根据实际错误决定重试或停止，验收器不会提供模型答案。`*.input.json` 为包含 request、materials、policy 和故障计划的快照；直接运行业务 CLI 时需分别提供其中的请求和资料，不能把包装快照当成普通 brief。
+
+入口逐次保存输入、输出与清单，进程退出码 0 代表所选用例符合各自预期；合理的 `needs_input` 和 `incomplete` 可以是通过结果。脚本对已交付结果重算检查，并核对版本、时间、引用、分镜和工具回执，不为获得通过而规定固定调用顺序。
+
 - `model_settings` 保存请求模型、推理强度、输出上限、超时和整轮时限。完整服务地址不导出，只记录 `custom` 或 `sdk_default`；服务身份需在本机另行确认，公开前再审查。
+- 业务模式额外记录 `output_format=json_object`；这只约束 JSON 格式，本地 Schema 和事实检查仍然必需。
 - `runtime` 保存请求次数、重试、工具轮次、用量、耗时和运行限制。`usage_complete=false` 表示用量信息不完整，不能据此声称完整成本。
 - `trace` 中模型事件会记录 `incomplete_reason`，目前保留 `max_output_tokens`、`content_filter`，其他值归为 `unknown`。不导出提供方原始错误文本或内部推理上下文。
 - 顶层 `status=completed` 还需通过同一草稿的业务最终检查；配置有效、HTTP 成功或运行时结束均不等于脚本交付成功。
@@ -58,6 +69,6 @@ uv run --locked --env-file .env python -m src.main --mode live --input examples/
 
 ## DeepSeek 与迁移边界
 
-DeepSeek 官方当前提供 Responses API，可复用本项目客户端；配置对应的 `BASE_URL` 和模型即可进入验证。其 `reasoning` 输入使用明文 `content`，不支持加密推理内容；`include` 等不支持的请求参数按其文档忽略。当前客户端会保留完整提供方输出供后续工具轮次使用，测试分别覆盖明文和加密上下文。真实服务兼容性仍需实际执行确认。参见 [DeepSeek 官方兼容性说明](https://api-docs.deepseek.com/guides/responses_api/)。
+DeepSeek 官方当前提供 Responses API，可复用本项目客户端；配置对应的 `BASE_URL` 和模型即可进入验证。其 `reasoning` 输入使用明文 `content`，不支持加密推理内容；`include` 等不支持的请求参数按其文档忽略。当前客户端会保留完整提供方输出供后续工具轮次使用，测试分别覆盖明文和加密上下文。本轮已验证该服务的实际工具调用与多轮兼容性。业务启用 `text.format=json_object`；格式修复反馈作为新的 user 回合发送，避免继续已结束工具回合时的推理内容校验错误。参见 [DeepSeek 官方兼容性说明](https://api-docs.deepseek.com/guides/responses_api/)。
 
 只迁移 AI-demo 的最小配置与请求参数处理，不引入模型档案、DeepSeek prompt encoder、HuggingFace Tokenizer、本地 Token 预算器或流式终端。配置来源和固定版本见 [迁移说明](07-migration.md)。

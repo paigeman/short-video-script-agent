@@ -48,7 +48,7 @@ def run_request(prompt, registered_tools):
         return runner.run(ModelRequest([Message("user", prompt)]))
 ```
 
-当前验证使用模型替身与模拟 HTTP，没有加载个人密钥或发起真实生成请求。业务场景仍需按 [评估计划](03-evaluation.md) 完成。
+迁移阶段使用模型替身与模拟 HTTP，没有加载个人密钥或发起真实生成请求。之后的业务与真实模型验收另见 [评估](03-evaluation.md)，不改变迁移阶段的证据性质。
 
 ## 后续通用扩展
 

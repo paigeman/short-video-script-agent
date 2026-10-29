@@ -245,7 +245,18 @@ class VideoServiceTests(unittest.TestCase):
             all(item["reasoning"] == {"effort": "high"} for item in requests)
         )
         self.assertTrue(all(item["max_output_tokens"] == 8192 for item in requests))
-        self.assertEqual(report["model_settings"], config.public_settings())
+        self.assertTrue(
+            all(
+                item["text"] == {"format": {"type": "json_object"}} for item in requests
+            )
+        )
+        self.assertEqual(
+            report["model_settings"],
+            {
+                **config.public_settings(),
+                "output_format": "json_object",
+            },
+        )
         self.assertTrue(
             {"search_materials", "estimate_duration", "check_rules"}
             <= {tool["name"] for tool in requests[0]["tools"]}

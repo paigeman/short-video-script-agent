@@ -371,7 +371,10 @@ class AgentRunner:
                         self._append_response(state, response)
                         state.request.input.append(
                             Message(
-                                "system",
+                                # Start a follow-up turn after the completed answer.
+                                # Thinking APIs may require reasoning on every assistant
+                                # item if feedback continues the previous tool turn.
+                                "user",
                                 "The final answer failed JSON validation: "
                                 f"{exc.category} at {exc.field_path}. Correct it using the supplied schema.",
                             )

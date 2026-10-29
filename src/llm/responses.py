@@ -123,6 +123,10 @@ class ResponsesClient:
             "store": False,
             "include": ["reasoning.encrypted_content"],
         }
+        if type(request.json_output) is not bool:
+            raise ValueError("json_output must be a boolean")
+        if request.json_output:
+            options["text"] = {"format": {"type": "json_object"}}
         if request.reasoning_effort is not None:
             if (
                 not isinstance(request.reasoning_effort, str)

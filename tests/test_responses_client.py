@@ -38,6 +38,78 @@ def text_item(text="Done"):
 
 
 class ResponsesClientTests(unittest.TestCase):
+    def test_output_repair_after_tools_starts_a_new_user_turn(self):
+        requests = []
+        reasoning = {
+            "type": "reasoning",
+            "id": "rs-test",
+            "summary": [],
+            "content": [{"type": "reasoning_text", "text": "synthetic reasoning"}],
+        }
+
+        def handle(request):
+            body = json.loads(request.content)
+            requests.append(body)
+            if len(requests) == 1:
+                return httpx.Response(
+                    200,
+                    json=response_body(
+                        [
+                            reasoning,
+                            {
+                                "type": "function_call",
+                                "id": "fc-test",
+                                "call_id": "c1",
+                                "name": "echo",
+                                "arguments": '{"value":1}',
+                                "status": "completed",
+                            },
+                        ]
+                    ),
+                )
+            if len(requests) == 2:
+                return httpx.Response(
+                    200, json=response_body([text_item('```json\n{"value":1}\n```')])
+                )
+            if body["input"][-1].get("role") != "user":
+                return httpx.Response(
+                    400, json={"error": {"code": "invalid_request_error"}}
+                )
+            return httpx.Response(200, json=response_body([text_item('{"value":1}')]))
+
+        runner = AgentRunner(self.make_client(handle), echo_registry([]))
+        result = runner.run(
+            ModelRequest([Message("user", "Return JSON")], json_output=True),
+            output_schema={"type": "object", "required": ["value"]},
+        )
+        self.assertEqual((result.status, result.output_repairs), ("completed", 1))
+        self.assertEqual(result.data, {"value": 1})
+        self.assertEqual(len(requests), 3)
+        self.assertIn(reasoning, requests[-1]["input"])
+        self.assertEqual(requests[-1]["input"][-1]["role"], "user")
+        self.assertTrue(
+            all(r["text"] == {"format": {"type": "json_object"}} for r in requests)
+        )
+
+    def test_json_output_is_opt_in_and_rejects_invalid_flags(self):
+        requests = []
+
+        def handle(request):
+            requests.append(json.loads(request.content))
+            return httpx.Response(200, json=response_body([text_item('{"ok":true}')]))
+
+        client = self.make_client(handle)
+        client.send(ModelRequest([Message("user", "Return JSON")], json_output=True))
+        client.send(ModelRequest([Message("user", "Return text")]))
+        self.assertEqual(requests[0]["text"], {"format": {"type": "json_object"}})
+        self.assertNotIn("text", requests[1])
+        for invalid in (1, "yes", None):
+            with self.subTest(invalid=invalid), self.assertRaises(ValueError):
+                client.send(
+                    ModelRequest([Message("user", "Return JSON")], json_output=invalid)
+                )
+        self.assertEqual(len(requests), 2)
+
     def make_client(self, handler):
         transport_client = httpx.Client(transport=httpx.MockTransport(handler))
         client = ResponsesClient(

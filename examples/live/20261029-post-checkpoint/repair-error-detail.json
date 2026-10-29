@@ -1,0 +1,13 @@
+{
+  "diagnostic_only": true,
+  "injection": "Pre-fix JSON mode disabled; force one format repair after live tools. Not business acceptance.",
+  "status": "model_error",
+  "reason": "http_400",
+  "repairs": 1,
+  "diagnostics": [
+    {
+      "http_status": 400,
+      "message": "The `reasoning_text` in the thinking mode must be passed back to the API. (request_id: [identifier])"
+    }
+  ]
+}

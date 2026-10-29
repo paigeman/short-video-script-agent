@@ -143,7 +143,11 @@ class LiveConfigTests(unittest.TestCase):
         client.close.assert_called_once()
         report = json.loads(output.getvalue())
         self.assertEqual(
-            report["model_settings"], ModelConfig.from_env(ENV).public_settings()
+            report["model_settings"],
+            {
+                **ModelConfig.from_env(ENV).public_settings(),
+                "output_format": "json_object",
+            },
         )
         self.assertEqual(report["runtime"]["limits"]["max_run_seconds"], 300)
         for call in client.send.call_args_list:

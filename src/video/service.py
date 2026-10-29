@@ -43,6 +43,7 @@ def system_prompt(catalog: Catalog) -> str:
 草稿使用 title、scenes\uff0c每个分镜包含 id、visual、narration、subtitle、hold_seconds、fact_ids。
 visual 只能为 title_card、screen_demo、closing_card。旁白与字幕可有一个为空\uff0c但不能都为空。
 事实表述只能完整引用已检索 fact_id 的 text\uff0c允许加入下方 neutral_copy 和标点\uff1b同一分镜 fact_ids 要对应它实际使用的事实。标题也只能使用这些事实和 neutral_copy。
+功能名称、片头标签和结束语同样受此约束\uff0c不能自行缩写或改写。起草前先选定完整事实原文和获准过渡语\uff0c再组合标题、旁白和字幕\uff1b标题可直接使用 neutral_copy 中的一项。
 不得添加素材之外的产品能力、效果数字或保证。不要把用户主题中的主张直接当产品事实。
 若主题要求素材不支持的能力或效果\uff0c应请求澄清或返回未完成\uff0c不要以其他事实冒充完成。
 调用 estimate_duration 存储并估时\uff1b返回 draft_id 是草稿内容标识。总时长超限时减少停留、压缩分镜或保留更少事实\uff0c再次估时\uff0c不能提高用户时长限制。
@@ -66,11 +67,23 @@ def run_script(
     limits: ToolLoopLimits | None = None,
     answer_provider: Callable[[str], str | None] | None = None,
     control: RunControl | None = None,
+    evaluation_failures: dict[str, int] | None = None,
 ) -> dict:
     if mode not in {"live", "offline"}:
         raise ValueError("Unknown run mode")
     if mode == "offline" and config is not None:
         raise ValueError("ModelConfig is only used in live mode")
+    if evaluation_failures is not None and (
+        mode != "live"
+        or not isinstance(evaluation_failures, dict)
+        or any(
+            name not in {"search_materials", "estimate_duration", "check_rules"}
+            or type(count) is not int
+            or not 1 <= count <= 100
+            for name, count in evaluation_failures.items()
+        )
+    ):
+        raise ValueError("Invalid live evaluation failure plan")
     brief, missing, errors = validate_brief(request)
     if mode == "live" and brief.get("simulate_tool_failure"):
         errors.append({"field": "simulate_tool_failure", "code": "offline_only"})
@@ -106,7 +119,7 @@ def run_script(
         )
     catalog = catalog if catalog is not None else Catalog.load()
     simulate_failure = brief.pop("simulate_tool_failure", False)
-    failures = {}
+    failures = dict(evaluation_failures or {})
     if mode == "offline" and (simulate_failure or offline_scenario == "tool-failure"):
         failures = {"search_materials": 1}
     if mode == "offline" and offline_scenario == "persistent-failure":
@@ -141,6 +154,7 @@ def run_script(
                 max_output_tokens=max_output_tokens,
                 reasoning_effort=config.reasoning_effort if config else None,
                 timeout_seconds=config.timeout_seconds if config else None,
+                json_output=True,
             ),
             output_schema=FINAL_SCHEMA,
             control=control,
@@ -175,7 +189,15 @@ def run_script(
         ],
     )
     if config is not None:
-        report["model_settings"] = config.public_settings()
+        report["model_settings"] = {
+            **config.public_settings(),
+            "output_format": "json_object",
+        }
+    if evaluation_failures:
+        report["evaluation"] = {
+            "injected_tool_failures": dict(evaluation_failures),
+            "scope": "local_tools_only",
+        }
     if result.status == "completed":
         decision = result.data
         if decision["status"] == "incomplete":
