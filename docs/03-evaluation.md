@@ -1,52 +1,67 @@
 # 测试与评估
 
-## 当前结论
+离线回归和真实模型验收分开记录。当前 145 项离线测试通过；最新十二场景中，十一条路径调用了 DeepSeek `deepseek-flash`，缺字段在本地返回。七个场景交付脚本，三个请求补充信息，两个明确未完成。
 
-最新验收覆盖十二场景，其中十一条路径实际调用 DeepSeek `deepseek-flash`，一条为缺字段的本地校验。七个场景交付脚本，其余按预期追问或明确未完成。原始判定为 11/12；更正教学镜头判定后，对同一批输出复核为 12/12，原始结果未覆盖。完整记录见 [审核补强](13-review-strengthening.md)，此前九场景结果保留于 [3 小时之后的真实验收](12-post-checkpoint-acceptance.md)。
+最新一轮的原始自动判定为 11/12。教学场景用了界面特写，验收器当时只接受完整界面镜头，造成误判。修正验收器后，对同一批输出复核为 12/12，模型结果没有重写。原始[清单](../examples/live/20261029-strengthening/manifest.json)与[更正记录](../examples/live/20261029-strengthening/assessment-review.json)分别保留。
 
-用户报告达到 3 小时的当时进度与未完成事项已保存为 [不可覆盖的快照](11-three-hour-checkpoint.md)。后续修复和验收不计入该时间点。
+## 测试预期
 
-当前 145 项离线测试通过，最新命令与结果见 [补强测试记录](../examples/strengthening-final-test-results.txt)。此前的 [136 项截点后测试](../examples/post-checkpoint-test-results.txt)、[125 项接入准备](../examples/live-readiness-test-results.txt)、[113 项业务阶段](../examples/business-test-results.txt)和 [80 项通用能力](../examples/runtime-test-results.txt)保持各自的历史证据性质。离线测试不会调用真实服务，不能代替真实模型决策证据。
+题目要求正常生成、缺关键信息、无素材、工具失败和超时长处理五类验收。本次另加更换素材、无依据效果数字、持续故障和风格结构等场景。
 
-本轮新增真实证据为已有稿件在更短上限下从 14.2 秒压缩到 8.3 秒，保留两条产品事实；新手教学为 17.8 秒，熟练受众速览为 15.2 秒。速览初稿冗长的问题和教学验收误判均单独保留于补强记录。风格检查针对明确的结构偏好，不等于独立人工创意评分。
+生成场景只有在脚本结构完整、来源成立、时长不超限且同稿件检查通过时才算交付。资料不足应追问或明确停止，无法满足约束应保留原因。工具失败须留下真实错误，不能伪造恢复或检查成功。次数上限另用离线测试核对。
 
-## 离线业务验收结果
+真实决策证据至少需要两条依据不同观察调整动作的路径。记录应能核对步骤、工具参数、返回摘要、后续动作和简短理由；固定离线分支不计作这类证据。
 
-以下命令均在项目根目录，以 `uv run --locked python -m src.main --mode offline` 开头。输出文件内同时包含实际 Trace、完整业务工具记录、候选草稿与最终检查结果。
+## 实际结果
 
-| 场景         | 命令后缀                                                                         | 实际结果                                                          | 输入                                           | 输出与 Trace                                       |
-| ------------ | -------------------------------------------------------------------------------- | ----------------------------------------------------------------- | ---------------------------------------------- | -------------------------------------------------- |
-| 正常生成     | `--input examples/normal.input.json`                                             | 通过，18.4 秒，不超过 30 秒；4 次模型请求、3 次工具执行           | [输入](../examples/normal.input.json)          | [记录](../examples/normal.output.json)             |
-| 缺关键信息   | `--input examples/missing.input.json`                                            | 请求补充 platform，0 次模型与工具调用                             | [输入](../examples/missing.input.json)         | [记录](../examples/missing.output.json)            |
-| 无素材       | `--input examples/no-materials.input.json`                                       | 改用产品 ID 再检索，仍为空后请求补充                              | [输入](../examples/no-materials.input.json)    | [记录](../examples/no-materials.output.json)       |
-| 工具失败     | `--input examples/tool-failure.input.json`                                       | 首次检索真实抛出模拟异常，观察错误后重试成功并交付                | [输入](../examples/tool-failure.input.json)    | [记录](../examples/tool-failure.output.json)       |
-| 超时长后修正 | `--input examples/duration-repair.input.json --offline-scenario duration-repair` | 首稿 24.4 秒超出 10 秒；修改后 2.0 秒并重新检查通过               | [输入](../examples/duration-repair.input.json) | [记录](../examples/duration-repair.output.json)    |
-| 品牌规则修正 | `--input examples/rules-repair.input.json --offline-scenario rules-repair`       | 首稿包含无依据的 80% 与保证表述，被拒绝后修改、重新估时和检查通过 | [输入](../examples/rules-repair.input.json)    | [记录](../examples/rules-repair.output.json)       |
-| 无法满足时长 | `--input examples/unrepairable.input.json --offline-scenario unrepairable`       | 4.9 秒修订为 2.0 秒，仍超过 1 秒上限，明确未完成                  | [输入](../examples/unrepairable.input.json)    | [记录](../examples/unrepairable.output.json)       |
-| 持续工具故障 | `--input examples/normal.input.json --offline-scenario persistent-failure`       | 两次检索故障后返回 tool_failure，保留错误记录                     | [输入](../examples/normal.input.json)          | [记录](../examples/persistent-failure.output.json) |
-| 达到调用上限 | `--input examples/normal.input.json --offline-scenario limit`                    | 10 个工具轮次后停止，返回 incomplete                              | [输入](../examples/normal.input.json)          | [记录](../examples/limit.output.json)              |
+下面每个输入快照都含请求、素材、规则和故障计划，每个输出都含实际状态与 Trace。需要直接运行业务 CLI 时使用根目录的普通输入，或从快照中取出 `request`；完整复现命令见 [README](../README.md) 与[验收指南](10-live-validation.md)。
 
-`needs_input` 和 `incomplete` 是这些场景的预期结果，不计为成功交付脚本。测试日志中的工具失败日志来自故障注入，测试套件结果以记录末尾为准。超时长修订示例优先保留可验证的事实并压缩内容，不证明叙事质量或目标时长利用率最优。
+| 场景         | 预期                         | 实际结果                                               | 输入                                                                          | 输出与 Trace                                                                   |
+| ------------ | ---------------------------- | ------------------------------------------------------ | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| 正常生成     | 来源与检查一致，时长不超限   | 交付 16.7 秒脚本，上限 30 秒                           | [输入](../examples/live/20261029-strengthening/normal.input.json)             | [记录](../examples/live/20261029-strengthening/normal.output.json)             |
+| 缺关键信息   | 指出缺失字段                 | 缺少 platform，返回 `needs_input`，没有模型调用        | [输入](../examples/live/20261029-strengthening/missing.input.json)            | [记录](../examples/live/20261029-strengthening/missing.output.json)            |
+| 无素材       | 改写检索或请求资料，不能编造 | 六次检索仍无依据，模型请求补充资料                     | [输入](../examples/live/20261029-strengthening/no-materials.input.json)       | [记录](../examples/live/20261029-strengthening/no-materials.output.json)       |
+| 一次工具故障 | 观察错误后恢复或明确停止     | 首次检索异常，模型改用 P01 查询，交付 14.9 秒脚本      | [输入](../examples/live/20261029-strengthening/tool-failure.input.json)       | [记录](../examples/live/20261029-strengthening/tool-failure.output.json)       |
+| 旧稿超时长   | 压缩后复检或明确失败         | 原稿 14.2 秒超过 10 秒，修订至 8.3 秒并通过复检        | [输入](../examples/live/20261029-strengthening/duration-repair.input.json)    | [记录](../examples/live/20261029-strengthening/duration-repair.output.json)    |
+| 缩短时长     | 遵守新的 10 秒上限           | 首稿 6.6 秒直接通过，单独记为时长变化用例              | [输入](../examples/live/20261029-strengthening/short-duration.input.json)     | [记录](../examples/live/20261029-strengthening/short-duration.output.json)     |
+| 1 秒上限     | 无法满足时明确未完成         | 返回 `cannot_meet_constraints`，未交付脚本             | [输入](../examples/live/20261029-strengthening/unrepairable.input.json)       | [记录](../examples/live/20261029-strengthening/unrepairable.output.json)       |
+| 无依据的 80% | 不添加没有资料支持的效果数字 | 请求澄清，未交付虚假文案                               | [输入](../examples/live/20261029-strengthening/unsupported-claim.input.json)  | [记录](../examples/live/20261029-strengthening/unsupported-claim.output.json)  |
+| 持续工具故障 | 停止并保留错误               | 返回 `tool_failure`，未伪造检查通过                    | [输入](../examples/live/20261029-strengthening/persistent-failure.input.json) | [记录](../examples/live/20261029-strengthening/persistent-failure.output.json) |
+| 替换素材     | 输出与来源随资料变化         | 使用“支持调整字幕显示位置”，修订检查后交付 13.1 秒脚本 | [输入](../examples/live/20261029-strengthening/changed-materials.input.json)  | [记录](../examples/live/20261029-strengthening/changed-materials.output.json)  |
+| 新手教学     | 步骤、界面展示和回顾         | 修正规则问题后交付 17.8 秒脚本，使用步骤卡、特写与回顾 | [输入](../examples/live/20261029-strengthening/style-tutorial.input.json)     | [记录](../examples/live/20261029-strengthening/style-tutorial.output.json)     |
+| 熟练受众速览 | 简短、突出功能，避免重复讲解 | 四镜头共 15.2 秒，两条事实各集中在一个镜头             | [输入](../examples/live/20261029-strengthening/style-teaser.input.json)       | [记录](../examples/live/20261029-strengthening/style-teaser.output.json)       |
 
-## 边界与回归检查
+工具异常由本地故障计划注入，模型回复来自真实服务。旧稿来自此前真实运行，在新时长要求下重新检查；原稿来源及摘要随输入保存。首稿直接通过的 6.6 秒案例不计作压缩成功。
 
-- 每个必填字段缺失、空值、非法类型及额外字段都单独验证；布尔值和字符串数字不会冒充时长。
-- 同一产品的中文查询、改写与 ID 查询，以及错误产品与无结果路径。
-- 口播、字幕、停留与转场逐项计算，向上取整及边界通过条件。
-- 伪造事实 ID、跨产品引用、未检索引用、引用未实际使用、无依据数字和保证表述。
-- 标题、旁白和字幕分别检查，数值变造与小数点差异不能被规范化掩盖。
-- 不同草稿标识、未检查修订稿、失败记录复用与草稿内容被修改时都拒绝交付。
-- 模型最终声称成功但没有工具检查，运行时可以结束，业务状态必须仍为未完成。
-- 替换素材原文后，生成内容与引用随之改变。
-- 既有稿件仍须验证；首稿直接通过、虚构原稿超限、篡改镜头和起止时间均不能被记为有效修订证据。
-- 六种镜头保持同一事实规则，累计转场取整后时间轴末端与总时长一致；教学展示与速览去重有独立回归检查。
-- 真实 SDK 加模拟 HTTP 驱动完整业务工具链，验证超时长后再次提交草稿。
-- 真实 CLI 覆盖退出码、交互回答、错误路径不泄露本机路径，以及真实模式不会静默切换到 Mock。
+## 怎样核对 ReAct 与交付
 
-## 通用运行时记录
+[方案](02-solution.md)列出了四条可直接查看的动作变化。记录中的 `reason` 是简短动作目的，`tool_records` 保存执行参数和完整回执，`trace` 记录步骤与后续动作。无素材时继续检索后追问、工具失败后改查产品 ID、超时长后修改并复检，都能沿记录核对。
 
-此前的 [正常运行](../examples/runtime-normal.output.json)、[工具恢复](../examples/runtime-tool-failure.output.json)、[上限停止](../examples/runtime-limit.output.json)和[通用能力串联](../examples/runtime-capabilities.output.json)仍可单独复现，见 [Agent 能力](08-runtime-capabilities.md)。这些记录不替代本页的业务验收。
+验收器重新计算时长与事实规则，并核对最终 `draft_id`、来源、镜头类型和起止时间。旧稿修订还要验证先检查的是原稿，后检查的是不同稿件。模型自己声称成功不能替代这些回执。
 
-## 尚未验证
+## 离线回归与复现
 
-实际口播时长、长期服务稳定性、多样真实素材上的泛化能力，以及独立人工评价的受众、风格和创意质量仍未验证。本轮对合成样例做了主题与来源一致性核对，不能由此推断商业效果。原始失败与真实复验均保留，不把离线替身记录改称为真实结果。
+```shell
+uv run --locked python -m unittest discover -s tests -v
+```
+
+不使用 uv 时，安装 `requirements.txt` 并激活 Python 环境，执行 `python -m unittest discover -s tests -v`。最新业务补强的 [145 项日志](../examples/strengthening-final-test-results.txt)保留；本次文档整理又核对两种运行入口，结果见[命令验证记录](../examples/documentation-command-checks.txt)。
+
+测试覆盖输入类型与缺失字段，检索产品隔离，以及时长、事实和品牌检查。还覆盖未检查修改稿、伪造成功、篡改时间轴、临时错误、模型协议、澄清继续和次数上限。具体模块见[测试索引](../tests/README.md)。SDK 集成测试使用模拟 HTTP，不能算真实模型调用。
+
+已有的离线证据包括[正常输入](../examples/normal.input.json)与[输出](../examples/normal.output.json)、[缺字段输入](../examples/missing.input.json)与[输出](../examples/missing.output.json)、[工具失败输入](../examples/tool-failure.input.json)与[输出](../examples/tool-failure.output.json)。[达到上限的记录](../examples/limit.output.json)验证十个工具轮次后返回未完成，[对应输入](../examples/normal.input.json)通过 `--offline-scenario limit` 运行。
+
+## 失败与修复
+
+| 发现的问题                     | 处理结果                                    | 保留的证据                                                                               |
+| ------------------------------ | ------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| 3h 时格式修复触发 HTTP 400     | 修改反馈回合并重跑真实诊断和业务场景        | [冻结检查点](11-three-hour-checkpoint.md) / [接入修复](12-post-checkpoint-acceptance.md) |
+| 验收器把合理停止判为失败       | 更正 1 秒上限等场景的判定边界，原始失败保留 | [阶段记录](12-post-checkpoint-acceptance.md)                                             |
+| 速览初稿用了七个镜头，重复事实 | 调整提示和去重验收，新稿收敛为四镜头        | [初稿问题记录](../examples/live/20261029-strengthening/initial/style-teaser.review.json) |
+| 教学特写未被验收器认可         | 接受两种实际界面展示，同批输出重新核对      | [判定更正](../examples/live/20261029-strengthening/assessment-review.json)               |
+
+上述更正没有覆盖原始输出和失败记录，过程见[审核补强](13-review-strengthening.md)。
+
+## 已知限制
+
+十二场景的结论只适用于这批合成资料和本次运行。实际口播时长、长期服务稳定性、多样真实资料上的表现，以及独立人工评价的创意质量都未验证。这些结果不用于推算商业收益或普遍成功率。最终用时和未完成清单见[完成记录](14-final-completion.md)。

@@ -43,7 +43,7 @@ npm run check
 npm run lint:python:fix
 ```
 
-本仓库已有冻结记录，提交前应仅格式化当前修改文件，再执行只读的 `npm run check`，随后检查并暂存自动修改。不要对 `docs/11-three-hour-checkpoint.md` 或 `examples/checkpoints/three-hour/` 执行写入式格式化。按文件运行示例：
+本仓库已有冻结记录，提交前应仅格式化当前修改文件，再执行只读的 `npm run check`，随后检查并暂存自动修改。不要对 `docs/11-three-hour-checkpoint.md` 或 `examples/checkpoints/three-hour/` 执行写入式格式化。按文件运行示例如下。
 
 ```shell
 npm exec -- prettier --write README.md
@@ -54,11 +54,11 @@ uv run --locked ruff check src/main.py
 
 ## 规则与配置
 
-- `.editorconfig`：UTF-8、LF、文件末尾换行和空格缩进；Python 使用四个空格，其他文件默认两个空格。
-- `.prettierrc.json`：沿用 100 列配置，保留中文段落现有换行，使用 LF。
-- `.markdownlint-cli2.jsonc`：开启默认规则，关闭中文不适用的固定行长检查；同级标题不能重复，使用围栏代码块和星号强调。
-- `pyproject.toml`：Ruff 以 Python 3.13 为目标，88 列、双引号，开启基础错误、导入排序、常见缺陷、现代语法、简化与 Ruff 规则。注释和文档字符串中的正常中文标点排除 `RUF002`、`RUF003`。
-- `scripts/check_json.py`：校验根目录 JSON 配置及 `data/`、`examples/` 下的 JSON，拒绝重复键与 `NaN`、`Infinity` 等非法 JSON 常量；不替代业务 Schema 验证。
+- `.editorconfig` 使用 UTF-8、LF、文件末尾换行和空格缩进；Python 使用四个空格，其他文件默认两个空格。
+- `.prettierrc.json` 沿用 100 列配置，保留中文段落现有换行，使用 LF。
+- `.markdownlint-cli2.jsonc` 开启默认规则，关闭中文不适用的固定行长检查；同级标题不能重复，使用围栏代码块和星号强调。
+- `pyproject.toml` 配置 Ruff 以 Python 3.13 为目标，88 列、双引号，开启基础错误、导入排序、常见缺陷、现代语法、简化与 Ruff 规则。注释和文档字符串中的正常中文标点排除 `RUF002`、`RUF003`。
+- `scripts/check_json.py` 校验根目录 JSON 配置及 `data/`、`examples/` 下的 JSON，拒绝重复键与 `NaN`、`Infinity` 等非法 JSON 常量；不替代业务 Schema 验证。
 - 忽略虚拟环境、依赖、缓存、构建产物和 `.agent-tmp/`，避免质量检查扫描生成文件。
 
 基础运行时与短视频业务测试均可通过 `npm test` 执行，真实模型验收另行记录。质量检查通过只表明格式、静态规则和 JSON 有效性满足配置要求。业务验收仍按 [评估](03-evaluation.md) 单独执行。

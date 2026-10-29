@@ -54,7 +54,7 @@ def run_task(client, registered_tools, prompt, output_schema, read_answer):
 
 `client` 可使用 `ResponsesClient.from_env()`；配置方式见 [README](../README.md)。传入 Schema 时，`completed` 表示最终 JSON 通过该 Schema 校验，解析后的数据位于 `data`。不传 Schema 时保留原有文本完成行为。事实正确性、创意质量和业务规则仍需上层工具与验收负责。
 
-内置 `ask_user` 只接受一个非空 `question` 字段。它可以出现在一批调用中：此前工具保留结果，后续工具留在队列；回答按对应 `call_id` 写回后，再执行剩余队列。暂停不会让已经执行的工具重跑。
+内置 `ask_user` 只接受一个非空 `question` 字段。它可以出现在一批调用中。此前工具保留结果，后续工具留在队列；回答按对应 `call_id` 写回后，再执行剩余队列。暂停不会让已经执行的工具重跑。
 
 继续执行句柄只保存在内存中，必须交给原来的 runner，且只能使用一次。空回答、过大回答、错误 runner 不会消费句柄。不要在暂停期间修改 runner 配置或注册表，不要并发执行同一个运行。导出的结果不包含句柄、完整模型上下文或提供方加密上下文；导出 JSON 不能用于进程重启后的恢复。
 

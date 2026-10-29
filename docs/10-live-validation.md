@@ -2,7 +2,7 @@
 
 ## 当前状态
 
-已完成 DeepSeek `deepseek-flash` 的实际接入。最新十二场景经复核符合预期，既有稿件压缩、教学与速览结果见 [审核补强](13-review-strengthening.md)；此前九场景与格式修复保留于 [截点后验收](12-post-checkpoint-acceptance.md)。3 小时截止时的未完成部分单独冻结，不被后续结果覆盖。运行时由 uv 加载用户填写的凭据，Agent 不查看或输出密钥。
+已完成 DeepSeek `deepseek-flash` 的实际接入。最新十二场景经复核符合预期，既有稿件压缩、教学与速览结果见 [审核补强](13-review-strengthening.md)；此前九场景与格式修复保留于 [截点后验收](12-post-checkpoint-acceptance.md)。3 小时截止时的未完成部分单独冻结，不被后续结果覆盖。运行时由 uv 加载本机凭据，AI 助手不查看或输出密钥。
 
 ## 最小配置
 
@@ -44,7 +44,7 @@ uv run --locked --env-file .env python -m src.main --mode live --input examples/
 
 第一条检查正常检索、估时和规则检查；第二条观察模型在无素材时是否改写查询、追问或明确停止；第三条使用 10 秒上限，观察真实模型是否需要修订。第三条不保证首稿超限，只有 Trace 确实出现失败后修改和复检时，才能记为真实修订路径。不要在真实模式使用 `--offline-scenario` 制造模型行为。
 
-已有稿件压缩和两种风格可直接运行：
+已有稿件压缩和两种风格可直接运行。
 
 ```shell
 uv run --locked --env-file .env python -m src.main --mode live --input examples/revise-existing.input.json
@@ -58,7 +58,7 @@ uv run --locked --env-file .env python -m src.main --mode live --input examples/
 
 ## 核对记录
 
-完整验收使用独立入口，输出目录必须不存在，避免覆盖旧记录：
+完整验收使用独立入口，输出目录必须不存在，避免覆盖旧记录。
 
 ```shell
 uv run --locked --env-file .env python -m scripts.live_acceptance --output-dir .agent-tmp/my-live-acceptance

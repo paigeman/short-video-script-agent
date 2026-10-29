@@ -1,109 +1,163 @@
 # Short Video Script Agent
 
-第 4 题「短视频脚本 Agent」项目。已实现输入校验、素材检索、草稿估时、引用与品牌规则检查，以及模型根据工具结果修订脚本的业务入口。
+项目选择第 4 题「短视频脚本 Agent」，用 CLI 接收创作要求，由模型调用素材检索、时长估算和规则检查工具，交付有来源依据的脚本。模型根据工具结果决定继续检索、修改稿件、请求补充信息或停止。
 
-已完成 DeepSeek `deepseek-flash` 的十二场景验收（十一条真实模型路径与一条本地缺字段路径）及 145 项离线测试。最新补强验证了已有稿件从 14.2 秒压缩到 8.3 秒，并交付不同教学与速览结构。原始判定、更正记录和限制见 [审核补强](docs/13-review-strengthening.md)，此前九场景保留于 [截点后验收](docs/12-post-checkpoint-acceptance.md)。用户报告达到 3 小时时的进度另存于 [冻结快照](docs/11-three-hour-checkpoint.md)，后续成果不计入该截点。
+本次总用时登记为 **3h55min**。3h 时的进度保存在[不可覆盖的检查点](docs/11-three-hour-checkpoint.md)，最终完成情况和未完成项另见[最终记录](docs/14-final-completion.md)。仓库公开，交付地址为 [paigeman/short-video-script-agent](https://github.com/paigeman/short-video-script-agent)。
 
-## 安装与快速运行
+当前有 145 项离线测试，以及十二场景的真实接入验收记录。其中十一条路径实际调用模型，缺字段在本地处理。原始判定为 11/12，更正教学镜头的判定后，同批输出复核为 12/12。具体预期、失败和证据集中在[评估文档](docs/03-evaluation.md)。
 
-使用 Python 3.13+ 和 `uv`：
+## 环境与安装
+
+需要 Python 3.13 或更高版本。运行程序和 Python 测试均不需要 Node.js；只有格式化与 lint 使用 Node.js 和 npm。以下命令按 macOS 或 Linux 的 Bash、Zsh 编写，均在仓库根目录执行。
+
+```shell
+git clone https://github.com/paigeman/short-video-script-agent.git
+cd short-video-script-agent
+```
+
+开发环境使用 uv，依赖版本锁定在 `uv.lock`。安装命令为
 
 ```shell
 uv sync --locked
+```
+
+没有 uv 时，可以用 Python 自带的 venv 和 pip。先确认 `python3 --version` 至少为 3.13，再执行
+
+```shell
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install -r requirements.txt
+```
+
+`requirements.txt` 由锁文件导出，包含固定版本的运行依赖，也足够执行 Python 测试。它不包含 Ruff 等开发工具。在 Windows PowerShell 中，创建环境可用 `py -3.13 -m venv .venv`，激活命令为 `.venv\Scripts\Activate.ps1`，之后同样使用 `python -m pip` 和 `python -m src.main`。
+
+## 不用密钥的离线运行
+
+用 uv 运行正常、缺字段和工具故障场景
+
+```shell
 uv run --locked python -m src.main --mode offline --input examples/normal.input.json
-uv run --locked python -m src.main --mode offline --input examples/duration-repair.input.json --offline-scenario duration-repair
+uv run --locked python -m src.main --mode offline --input examples/missing.input.json
 uv run --locked python -m src.main --mode offline --input examples/tool-failure.input.json
 ```
 
-输出为 JSON，包含业务状态、可编辑脚本、每个分镜的估计时长与起止时间、素材 ID、实际检查记录和 Trace。示例记录及预期结果见 [评估](docs/03-evaluation.md)。
-
-输入字段为 `topic`、`audience`、`platform`、`duration_seconds`、`style`、`product_id`。目标时长是 1–300 的整数秒上限；本项目额外使用 `product_id` 隔离产品素材。缺字段返回 `needs_input`，字段类型错误返回 `invalid_input`。完整规则见 [业务说明](docs/09-business-rules.md)。
-
-可选 `initial_draft` 用于修改已有稿件。原稿必须重新检索依据、诊断和检查，模型再依据反馈选择压缩或重写。可直接运行 [已有稿件输入](examples/revise-existing.input.json)，或使用 [新手教学](examples/style-tutorial.input.json)与 [功能速览](examples/style-teaser.input.json)输入比较结构。
-
-## 真实模型入口
-
-在进程环境中配置 `MODEL`、`API_KEY`，按需设置服务地址、推理强度、输出 Token 上限与超时。先做不调用模型的配置检查，再启动业务：
+不使用 uv 时，激活前面建立的环境，执行等价命令
 
 ```shell
-uv run --locked python -m src.config
-uv run --locked python -m src.main --mode live --input examples/normal.input.json
+python -m src.main --mode offline --input examples/normal.input.json
+python -m src.main --mode offline --input examples/missing.input.json
+python -m src.main --mode offline --input examples/tool-failure.input.json
 ```
 
-Python 不会自动读取 `.env`，可在上述 `uv run` 命令中显式增加 `--env-file .env`。无需安装 dotenv。变量与完整复现命令见 [真实模型验收指南](docs/10-live-validation.md)；不要把真实值提交到仓库。服务需要支持 Responses API。默认模式为 `live`，配置错误时明确失败，不会自动切换到 Mock。
+输出是 JSON，包含状态、脚本、检查记录和 Trace。缺字段场景返回 `needs_input`，退出码为 3，属于预期行为。离线入口使用明确标记的确定性模型替身，只验证本地流程，真实模型的决策证据另存于 `examples/live/`。
 
-运行输出的 `model_settings` 记录配置的模型、请求参数和 JSON 输出模式，不含密钥或完整服务地址。模型返回的 `max_output_tokens` 中断原因会保留在 Trace 中。配置检查与模拟 HTTP 测试都不代表真实模型验收通过。
+离线复现超时长后的修改，增加场景参数即可
 
-| CLI 参数                  | 用途                                                                                |
-| ------------------------- | ----------------------------------------------------------------------------------- |
-| `--input`                 | 必填，请求 JSON 路径                                                                |
-| `--mode live\|offline`    | 选择真实适配器或明确标记的离线替身                                                  |
-| `--offline-scenario`      | 离线验收场景，例如 `duration-repair`、`rules-repair`、`persistent-failure`、`limit` |
-| `--materials` / `--rules` | 指定替代合成素材与品牌规则文件，便于修改数据复验                                    |
-| `--interactive`           | 模型发起补充信息请求时，从 stdin 读取回答，提示写到 stderr                          |
-
-缺少必填字段时先修改输入文件再运行；`--interactive` 用于已经启动的模型循环。无素材时可补充合成资料文件后重新运行，用户口述内容不会自动成为已验证的产品事实。输入中的 `simulate_tool_failure` 仅供离线故障验收，真实模式不接受该开关。
-
-退出码：`0` 表示业务检查通过，`3` 表示等待补充信息，`2` 表示输入或配置错误，`1` 表示未完成、模型错误或取消。
-
-## 业务机制
-
-模型可以调用 `search_materials`、`estimate_duration`、`check_rules` 和通用 `ask_user`。程序没有为真实模型规定固定分支路径，模型依据实际观察选择改写检索、修订草稿、继续检查、追问或停止。
-
-每份候选脚本有按内容计算的 `draft_id`。只有同一份草稿的估时与规则检查均实际通过，程序才组装 `script` 并返回业务 `completed`。模型自行声称成功、伪造检查字段或提交未检查的修改稿都不会绕过最后检查。
-
-采用保守的文案规则：产品表述使用引用素材的完整原文，可以组合获准过渡语和标点；不接受任意自由改写。画面描述由六种可编辑镜头类型映射生成，包括界面特写、步骤卡和回顾卡。它能明确检查引用覆盖与数值变造，但限制创意表达，不是通用语义事实核查器。
-
-时长使用口播单位、字幕阅读、画面停留与转场进行确定性估算，不代表实际录制时长。本轮已核对合成案例的主题与引用，受众、风格及创意质量仍缺少独立人工评估。
-
-## 代码组织
-
-```text
-src/
-├── config.py            # 轻量真实模型配置、校验和脱敏参数记录
-├── main.py              # 业务 CLI，明确区分 live 和 offline
-├── video/
-│   ├── schemas.py       # 请求、草稿和最终动作结构
-│   ├── catalog.py       # 合成资料、规则加载及检索
-│   ├── checks.py        # 时长、事实引用、品牌规则
-│   ├── tools.py         # 工具、草稿与检查记录
-│   ├── service.py       # 模型接入、业务结果校验
-│   └── offline.py       # 明确标记的离线模型替身
-├── agent/               # 通用循环、恢复、预算与运行记录
-├── llm/                 # Responses API 与模型协议
-├── tools/               # 通用注册、参数校验与工具执行
-└── validation.py        # 严格 JSON 与 Schema 校验
+```shell
+uv run --locked python -m src.main --mode offline --input examples/duration-repair.input.json --offline-scenario duration-repair
 ```
 
-业务层没有新增第三方依赖。OpenAI SDK、HTTPX、jsonschema 和开发工具版本由 `pyproject.toml`、`uv.lock` 管理。`requirements.txt` 为锁文件导出的兼容清单。
+无 uv 时去掉命令开头的 `uv run --locked`。该场景由替身触发，不计入真实模型修订结果。
 
-## 开发与验证
+## 真实模型运行
+
+真实验收使用 DeepSeek V4.1 Flash，服务接收的模型 ID 为 `deepseek-flash`。公开配置模板是 [.env.example](.env.example)，包含模型、服务地址、推理强度和超时设置，密钥留空。首次配置时复制模板并在本机填写 `API_KEY`，已有 `.env` 不要覆盖。
+
+```shell
+cp -n .env.example .env
+```
+
+用 uv 显式加载 `.env`，先检查配置，再调用真实模型
+
+```shell
+uv run --locked --env-file .env python -m src.config
+uv run --locked --env-file .env python -m src.main --mode live --input examples/normal.input.json
+```
+
+不使用 uv 时，在已激活的环境中加载自己填写的 `.env`。模板中的变量带有 `export`，Bash、Zsh 可直接执行
+
+```shell
+. ./.env
+python -m src.config
+python -m src.main --mode live --input examples/normal.input.json
+```
+
+PowerShell 需将同一组变量配置到进程环境，例如通过 `$env:MODEL` 和 `$env:API_KEY` 设置，不能直接执行上述 shell 模板。Python 程序本身不会自动读取 `.env`，也没有安装 dotenv。配置检查不发起请求；live 命令会调用服务并产生用量。配置错误时程序明确失败，不会自动转为离线模式。
+
+| 输入文件                                               | 用途                               |
+| ------------------------------------------------------ | ---------------------------------- |
+| [normal](examples/normal.input.json)                   | 从素材生成脚本                     |
+| [revise-existing](examples/revise-existing.input.json) | 将已有 14.2 秒稿件压缩到 10 秒上限 |
+| [style-tutorial](examples/style-tutorial.input.json)   | 面向新手组织步骤、演示和回顾       |
+| [style-teaser](examples/style-teaser.input.json)       | 面向熟练创作者生成简短功能速览     |
+
+更换 `--input` 即可运行这些请求。完整十二场景验收使用独立入口，输出目录必须尚不存在
+
+```shell
+uv run --locked --env-file .env python -m scripts.live_acceptance --output-dir .agent-tmp/my-live-acceptance
+```
+
+无 uv 时，先加载环境变量，再执行 `python -m scripts.live_acceptance --output-dir .agent-tmp/my-live-acceptance`。可用重复的 `--case` 参数选择场景。验收快照包含请求、资料和规则，不能直接把它作为普通 CLI 输入。参数说明见[真实验收指南](docs/10-live-validation.md)。
+
+## 输入、输出与限制
+
+输入必填 `topic`、`audience`、`platform`、`duration_seconds`、`style`、`product_id`。时长是 1 至 300 的整数秒上限，`product_id` 用于隔离产品素材。可选 `initial_draft` 接收已有稿件，原稿仍需检索依据和重新检查。
+
+交付包含标题、分镜、旁白与字幕，各镜头有估计时长和起止时间，并附素材 ID、事实原文、风险及最终检查结果。只有同一 `draft_id` 的时长与规则检查都实际通过，业务状态才为 `completed`。
+
+`--materials`、`--rules` 可替换合成资料和品牌规则；`--interactive` 允许模型追问后从终端接收回答。缺少必填字段时，应先补齐输入文件。真实模式不接受输入中的 `simulate_tool_failure` 开关，真实故障验收由独立验收脚本明确注入。
+
+| 退出码 | 含义                   |
+| ------ | ---------------------- |
+| 0      | 业务检查通过           |
+| 3      | 等待补充信息           |
+| 2      | 输入或配置错误         |
+| 1      | 未完成、模型错误或取消 |
+
+产品文案限于素材原文与获准过渡语，便于逐项核对来源。六种镜头提供编辑示意，估时综合口播、字幕、停留和转场。自由改写、实际配音时长及独立人工创意评价仍有缺口，详见[最终记录](docs/14-final-completion.md)。
+
+## 测试与质量检查
+
+Python 测试全部离线，不需要真实密钥
+
+```shell
+uv run --locked python -m unittest discover -s tests -v
+```
+
+不使用 uv 时执行
+
+```shell
+python -m unittest discover -s tests -v
+```
+
+两种入口的实际运行检查保存在[命令验证记录](examples/documentation-command-checks.txt)。Python 直接运行复用了已安装依赖的项目环境，该记录没有宣称重新安装过一套干净的 pip 环境。
+
+开发质量工具另需 Node.js `^22.22.0` 或 `>=24.8.0` 以及 npm，仓库的统一检查命令依赖 uv
 
 ```shell
 npm ci --ignore-scripts
-npm exec -- prettier --write README.md
+uv sync --locked
 npm run check
 npm test
 ```
 
-质量工具使用本地 Prettier、markdownlint-cli2 和 Ruff。按修改范围格式化，不能对冻结快照执行写入式格式化；完整命令见 [开发指南](docs/06-development.md)。基础运行时仍可单独执行 `python -m src.agent.demo --scenario capabilities`；它与短视频业务入口分开。
+没有 uv 时仍可运行前面的业务和 Python 测试。格式化与 lint 的工具职责、按文件执行方法见[开发指南](docs/06-development.md)。冻结快照不参与写入式格式化。
 
-| 内容                  | 入口                                              |
-| --------------------- | ------------------------------------------------- |
-| 用户、范围和成功标准  | [需求](docs/01-requirements.md)                   |
-| 动态决策与实现结构    | [方案](docs/02-solution.md)                       |
-| 实际结果、失败与限制  | [评估](docs/03-evaluation.md)                     |
-| AI 辅助及个人贡献边界 | [AI 使用](docs/04-ai-usage.md)                    |
-| 取舍与后续工作        | [复盘](docs/05-retrospective.md)                  |
-| 开发工具              | [开发指南](docs/06-development.md)                |
-| 远程代码来源          | [迁移说明](docs/07-migration.md)                  |
-| 通用运行时接口        | [Agent 能力](docs/08-runtime-capabilities.md)     |
-| 检索、时长与品牌规则  | [业务说明](docs/09-business-rules.md)             |
-| 真实模型配置与执行    | [验收指南](docs/10-live-validation.md)            |
-| 3 小时进度与未完成项  | [冻结快照](docs/11-three-hour-checkpoint.md)      |
-| 截点后修复及真实结果  | [后续验收](docs/12-post-checkpoint-acceptance.md) |
-| 压缩与风格补强证据    | [审核补强](docs/13-review-strengthening.md)       |
+## 评审入口
 
-目录组织参考 [agent-campus-submission-example](https://github.com/lwz1357/agent-campus-submission-example)，基础运行时按需迁移自 [FadeDemo/AI-demo](https://github.com/FadeDemo/AI-demo)。迁移文档记录固定 commit 与文件映射；本轮业务实现独立编写。
+| 检查内容                       | 入口                                                                                                  |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| 服务对象、目标与成功标准       | [01 需求](docs/01-requirements.md)                                                                    |
+| ReAct 决策、调用流程与技术取舍 | [02 方案](docs/02-solution.md)                                                                        |
+| 预期、实测、失败与原始 Trace   | [03 评估](docs/03-evaluation.md)                                                                      |
+| 个人贡献与 AI 辅助范围         | [04 AI 使用](docs/04-ai-usage.md)                                                                     |
+| 最难的问题、学习与下一步       | [05 复盘](docs/05-retrospective.md)                                                                   |
+| 复用代码的远程来源和文件映射   | [迁移说明](docs/07-migration.md)                                                                      |
+| 运行限制与业务检查细节         | [运行时](docs/08-runtime-capabilities.md) / [业务规则](docs/09-business-rules.md)                     |
+| 3h 当时的进度与未完成项        | [冻结检查点](docs/11-three-hour-checkpoint.md)                                                        |
+| 截点后的两阶段验收             | [接入修复](docs/12-post-checkpoint-acceptance.md) / [压缩与风格补强](docs/13-review-strengthening.md) |
+| 3h55min 的最终状态与交付核对   | [最终完成记录](docs/14-final-completion.md)                                                           |
 
-最终交卷仍需填写题号、仓库 URL、最终 commit SHA、真实用时与个人贡献，并区分 3 小时截点和后续改进。不要提交真实密钥、个人信息或私有业务资料。
+实现与测试分别位于 `src/` 和 `tests/`，合成资料使用 `data/`，运行证据集中在 `examples/`。目录结构参考[示例仓库](https://github.com/lwz1357/agent-campus-submission-example)，选题编号按当前试卷记为第 4 题。代码复用来源及 AI 协作方式单独披露。
+
+交卷时填写第 4 题、上述公开仓库 URL 和最终 commit SHA。在最终版本根目录执行 `git rev-parse HEAD` 获取完整 SHA，提交后不再修改该版本。仓库记录与考试平台交卷是两个步骤，本文没有表示已经交卷。

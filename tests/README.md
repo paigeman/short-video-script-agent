@@ -1,17 +1,19 @@
 # 测试
 
-在仓库根目录执行 `npm test`，或：
+在仓库根目录执行以下命令。`npm test` 是同一套测试的快捷入口。
 
 ```shell
 uv run --locked python -m unittest discover -s tests -v
 ```
+
+不使用 uv 时，激活已安装 `requirements.txt` 的 Python 环境，执行 `python -m unittest discover -s tests -v`。实际直接运行结果见[命令验证记录](../examples/documentation-command-checks.txt)。
 
 全部测试离线，不需要真实密钥。当前 145 项测试包含配置、协议、故障注入及验收记录核对；实际记录见 [最新测试结果](../examples/strengthening-final-test-results.txt)。真实模型验收单独运行，不混入单元测试。
 
 | 测试模块                                                                | 验证范围                                                               |
 | ----------------------------------------------------------------------- | ---------------------------------------------------------------------- |
 | `test_live_acceptance.py`                                               | 宿主故障注入、拒绝伪造交付、资料变更与验收回执一致性                   |
-| `test_video_revision.py`                                                | 九项检查：既有稿件校验和修订、拒绝伪造证据、六种镜头、时间轴与风格判定 |
+| `test_video_revision.py`                                                | 九项检查，既有稿件校验和修订、拒绝伪造证据、六种镜头、时间轴与风格判定 |
 | `test_video_inputs.py`                                                  | 必填字段、类型、模拟开关边界、资料有效性                               |
 | `test_video_tools.py`                                                   | 产品检索、估时、事实覆盖、品牌规则、检查记录与草稿对应                 |
 | `test_video_service.py`                                                 | 全部业务路径、修订、最终业务校验、数据变更与 SDK 集成                  |
